@@ -9,16 +9,12 @@ void busca_em_largura_listas_adjascencia(std::list<Vertice*>& grafo, std::list<V
 		((struct Atributos*) (vertice_iterator->atributo))->cor = 0;
 		((struct Atributos*) (vertice_iterator->atributo))->distancia_fonte = -1;
 		((struct Atributos*) (vertice_iterator->atributo))->predecessor = 0;
-
 	}
 	
-	if (fonte->atributo) return;	//Fonte nao esta no grafo
-
 	((struct Atributos*) (fonte->atributo))->cor = 1;
 	((struct Atributos*) (fonte->atributo))->distancia_fonte = 0;
 	destino.clear();
 	destino.push_back(fonte);
-
 	while(!destino.empty()) 
 	{
 		elemento = destino.front();
@@ -37,7 +33,7 @@ void busca_em_largura_listas_adjascencia(std::list<Vertice*>& grafo, std::list<V
 	}
 
 	//coloca em destino os vertices coloridos
-	for(Vertice* vertice_iterator: elemento->adjs)
+	for(Vertice* vertice_iterator: grafo)
 	{
 		if (((struct Atributos*) (vertice_iterator->atributo))->cor)	//se nao e branco'
 		{		
@@ -171,4 +167,21 @@ void busca_componentes_conexas(int** grafo, int tamanho, std::list<std::list<int
 	}
 
 
+}
+
+Vertice::Vertice(){
+	adjs = std::list<Vertice*>();
+	id = 0;
+	atributo = 0;
+}
+
+Vertice::Vertice(int id_) {
+	adjs = std::list<Vertice*>();
+	id = id_;
+	atributo = 0;	
+}
+
+
+void Vertice::adicionar_aresta(Vertice* vertice) {
+	adjs.push_back(vertice);
 }

@@ -73,6 +73,36 @@ int main(int argc, char* argv[]) {
 	printf("\n");
 	
 
+	//testando busca em largura lista de adjascencia
+	std::list<Vertice*> grafo_lista;
+	std::list<Vertice*> destino_lista;
+	Vertice* aux_array[tamanho];
+	Vertice* busca_lista;
+	Vertice* aux;
+	for (int i = 0; i < tamanho; i++)
+	{	
+		aux = new Vertice(i);
+		if (i == busca){
+			busca_lista = aux;
+		}
+		grafo_lista.push_back(aux);
+		aux_array[i] = aux;
+	}
+	for (int i = 0; i < tamanho; i++)
+	{
+		for (int y = 0; y < tamanho; ++y)
+		{
+			if(a[i][y] == 1){
+				aux_array[i]->adicionar_aresta(aux_array[y]);
+			}
+		}
+	}
+	busca_em_largura_listas_adjascencia(grafo_lista, destino_lista, busca_lista);
+	printf("Busca por listas de adjascencia(%d): \n", busca);
+	for (Vertice* i: destino_lista)
+		printf("%d ", i->id);
+	printf("\n");
+
 	//teste componentes conexas
 	std::list<std::list<int>> destino_;
 
@@ -87,5 +117,7 @@ int main(int argc, char* argv[]) {
 		}
 		printf("\n");
 	}
+
 	return 0;
+
 }

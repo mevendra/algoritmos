@@ -6,7 +6,13 @@
 class Vertice {
 	public:
 		std::list<Vertice*> adjs;
+		int id;
 		void* atributo;
+	Vertice();
+	Vertice(int id_);
+
+	void adicionar_aresta(Vertice* vertice);
+
 };
 
 struct Atributos {

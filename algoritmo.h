@@ -3,44 +3,19 @@
 #include <queue>
 #include <stdlib.h>
 
-class Vertice {
-	public:
-		std::list<Vertice*> adjs;
-		int id;
-		void* atributo;
-	Vertice();
-	Vertice(int id_);
-
-	void adicionar_aresta(Vertice* vertice);
-
-};
-
-struct Atributos {
-	int cor;	//0=branco;	1=cinzento;	2=preto
-	int distancia_fonte;
-	Vertice* predecessor;
-};
-
-struct Atributos_largura {
-	int cor;	//0=branco;	1=cinzento;	2=preto
-	int distancia_fonte;
-	int predecessor;
-};
-struct Atributos_profundidade {
-	int cor;	//0=branco;	1=cinzento;	2=preto
-	int tempo_init;
-	int tempo_fim	;
-	int predecessor;
-};
-struct Atributos_componentes {
-	int tem_set;
-};
+#include "estrutura.h"
+using namespace std;
 
 static int tempo;
-void busca_em_profundidade_(int** grafo, int tamanho, Atributos_profundidade* atributos_vertices[], int vertice);
 
-extern void busca_em_largura_listas_adjascencia(std::list<Vertice*>& grafo, std::list<Vertice*>& destino, Vertice* fonte);
-extern void busca_em_largura(int** grafo, int tamanho, std::list<int>& destino, int fonte);
-extern void busca_em_profundidade(int** grafo, int tamanho, std::list<int>& destino, int fonte);
+void busca_em_profundidade_(int** grafo, int tamanho, Atributos_profundidade* atributos_vertices[], int vertice, int* arvore, list<int>& sem_set);
+void busca_em_largura_(int** grafo, int tamanho, list<int>& destino, int fonte);
 
-extern void busca_componentes_conexas(int** grafo, int tamanho, std::list<std::list<int>>& destino);
+extern void busca_em_largura_listas_adjascencia(list<Vertice*>& grafo, Arvore* raiz);
+extern void busca_em_profundidade_listas_adjascencia(list<Vertice*>& grafo, Arvore* raiz);
+
+extern void busca_em_largura(int**grafo, int tamanho, int* arvore);
+
+extern void busca_em_profundidade(int**grafo, int tamanho, int* arvore);
+
+extern void busca_componentes_conexas(int** grafo, int tamanho, list<list<int>>& destino);

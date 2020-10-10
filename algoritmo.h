@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "estrutura.h"
+
 using namespace std;
 
 static int tempo;

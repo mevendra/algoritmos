@@ -13,15 +13,20 @@ class Vertice {
 	void adicionar_aresta(Vertice* vertice);
 };
 
-class Arvore {
-	public:
-		int id;
+struct Atributos_vertice {
+	int id;
+	int numero;
+	char tipo;
+	list<char*> cor;
 };
-	
-struct Atributos {
+
+struct Atributos_largura_lista {
 	int cor;	//0=branco;	1=cinzento;	2=preto
 	int distancia_fonte;
 	Vertice* predecessor;
+};
+struct Atributos_profundidade_lista {
+
 };
 struct Atributos_largura {
 	int cor;	//0=branco;	1=cinzento;	2=preto
@@ -37,3 +42,25 @@ struct Atributos_profundidade {
 struct Atributos_componentes {
 	int tem_set;
 };
+
+class Grafo {
+	public:
+		int numero_vertices;
+		Atributos_vertice** atributos;
+		int** grafo;
+
+		Grafo(int numero_vertices_, Atributos_vertice** atributos_, int** grafo_);
+	void adicionar_aresta(int v1, int v2);
+	void adicionar_arco(int fonte, int destino);
+};
+
+class No {
+	int id;
+	No* proximo;
+	No* anterior;
+};
+
+class Arvore {
+	No* raiz;
+};
+

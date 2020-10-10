@@ -57,6 +57,7 @@ void busca_em_largura(int** grafo, int tamanho, int* arvore) {
 		free (atributos_vertices[i]);
 	}
 }
+
 void busca_em_profundidade(int**grafo, int tamanho, int* arvore) {
 	list<int> sem_set;
 	int vertice;

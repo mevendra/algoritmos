@@ -195,3 +195,82 @@ void busca_em_largura_(int** grafo, int tamanho, std::list<int>& destino, int fo
 	}
 	
 }
+
+void colorir_grafo(Grafo* g)
+{
+	int** grafo = g -> grafo;
+	if (grafo == NULL) return;
+
+	//Busca fontes
+	list<int> fontes;
+	busca_fontes(grafo, g -> numero_vertices, fontes);
+
+
+	//Colore apartir das fontes
+	for (int i: fontes)
+		colorir_apartir_de(g, i);
+}
+
+void busca_fontes(int** grafo, int tamanho, list<int>& destino)
+{
+	bool eh_fonte;
+	for (int i = 0; i < tamanho; i++)
+	{
+		eh_fonte = true;
+		for (int y = 0; y < tamanho; y++)
+		{
+			if (grafo[i][y] == 3) {eh_fonte = false; break;}
+		}
+		if (eh_fonte) {destino.push_back(i);}
+	}
+}
+
+void colorir_apartir_de(Grafo* g,int vertice)
+{
+	int** grafo = g -> grafo;
+	if (grafo == NULL) return;
+
+	queue<int> fila;
+	int tamanho = g -> numero_vertices;
+	int vertice_atual;
+	Atributos_largura* atributos_vertices[tamanho];
+	Atributos_largura* atributo;
+
+	for (int i = 0; i < tamanho; i++)
+	{
+		atributo = (struct Atributos_largura*) malloc(sizeof(struct Atributos_largura));
+		atributo->cor = 0;
+		atributos_vertices[i] = atributo;
+	}
+
+	atributos_vertices[vertice] -> cor = 1;
+	fila.push(vertice);
+
+	while(!fila.empty())
+	{
+		vertice_atual = fila.front();
+		fila.pop();
+		for (int i = 0; i < tamanho; i++)
+		{
+			if (grafo[vertice_atual][i] == 2) {
+				if (atributos_vertices[i] -> cor == 0)
+				{
+					atributos_vertices[i] -> cor = 1;
+					fila.push(i);
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < tamanho; i++)
+	{
+		if (atributos_vertices[i] -> cor == 1)
+		{
+			g -> encontrar_vertice(i) -> adicionar_cor(vertice);
+		}
+		free(atributos_vertices[i]);\
+	}
+}
+
+
+

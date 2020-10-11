@@ -1,5 +1,5 @@
 #include "teste.h"
-void testa_busca_largura(int** grafo, int tamanho) 
+void testar_busca_largura(int** grafo, int tamanho)
 {
 	printf("\nTestando busca em largura: \n");
 	int* arvore = new int[tamanho];
@@ -15,7 +15,7 @@ void testa_busca_largura(int** grafo, int tamanho)
 	}
 	printf("\nNumero de raizes: %d\n", num_raiz);
 }
-void testa_busca_profundidade(int** grafo, int tamanho)
+void testar_busca_profundidade(int** grafo, int tamanho)
 {
 	printf("\nTestando busca em profundidade: \n");
 	int* arvore = new int[tamanho];
@@ -31,9 +31,9 @@ void testa_busca_profundidade(int** grafo, int tamanho)
 	}
 	printf("\nNumero de raizes: %d\n", num_raiz);
 }
-void testa_busca_largura_listas(int** grafo, int tamanho) {}
-void testa_busca_largura_listas(std::list<Vertice*>& grafo) {}
-void testa_componentes_conexas(int** grafo, int tamanho) 
+void testar_busca_largura_listas(int** grafo, int tamanho) {}
+void testar_busca_largura_listas(std::list<Vertice*>& grafo) {}
+void testar_componentes_conexas(int** grafo, int tamanho)
 {
 	printf("\nTestando busca de componentes conexas\n");
 	list<list<int>> destino;
@@ -50,7 +50,23 @@ void testa_componentes_conexas(int** grafo, int tamanho)
 		printf("\n");
 	}
 }
+void testar_colorir_grafo(Grafo* grafo)
+{
+	printf("Testando colorir grafo\n");
+	colorir_grafo(grafo);
 
+
+	for (Atributos_vertice* a: grafo -> atributos)
+	{
+		printf("Id: %d, Numero: %d, Cores: ", a -> id, a -> numero);
+		for (int i: a -> cor)
+		{
+			printf("%d | ", i);
+			//a -> cor.remove(i);
+		}
+		printf("\n");
+	}
+}
 int** cria_matriz(int tamanho)
 {
 	int ** a= new int*[tamanho];
@@ -111,7 +127,7 @@ Grafo* trabalha_arquivo(char* caminho)
 	//Atributos de criacao de um grafo
 	int numero_vertices = 0;
 	int** grafo;
-	Atributos_vertice** atributos;
+	list<Atributos_vertice*> atributos;
 	Grafo* retorno = NULL;
 
 	//Define o que sera feito na leitura de arquivo
@@ -124,8 +140,10 @@ Grafo* trabalha_arquivo(char* caminho)
 	char segunda_coluna[MAX_COLUNA_ARQUIVO];
 	int indice_primeira_coluna = 0;
 	int indice_segunda_coluna = 0;
+	int id_vertice = -1;
+	int numero_vertice = -1;
+	char tipo_vertice = ' ';
 	Atributos_vertice* atributo;
-	queue<Atributos_vertice*> fila;
 
 	while (!feof(arquivo))
 	{
@@ -133,11 +151,10 @@ Grafo* trabalha_arquivo(char* caminho)
 		switch (estado) {
 			case VERTICE:		//Formate: ID ID_GERAL TIPO
 			{
-				numero_vertices++;
 				if (linha[1] == 'E') {estado = VERTICE_FIM; break;}
+				numero_vertices++;
 
 				//Reseta variaveis
-				atributo = (struct Atributos_vertice*) malloc(sizeof(Atributos_vertice));
 				esta_em_segunda_coluna = false;
 				esta_em_terceira_coluna = false;
 				for (int i = 0; i < indice_segunda_coluna; i++)
@@ -148,9 +165,10 @@ Grafo* trabalha_arquivo(char* caminho)
 				for (int i = 0; i < MAX_COLUNA_ARQUIVO; i++)
 				{
 					if (esta_em_terceira_coluna) {
-						if (linha[i] == 'e') {atributo -> tipo = 'e'; break;}
-						else if (linha[i] == 't') {atributo -> tipo = 't'; break;}
+						if (linha[i] == 'e') {tipo_vertice = 'e'; break;}
+						else if (linha[i] == 't') {tipo_vertice = 't'; break;}
 						printf("Erro ao ler arquivo, Vertices numero: %d\nLinha: %s", numero_vertices,linha);
+						break;
 					} else if (esta_em_segunda_coluna) {
 						if (linha[i] == ' ') {esta_em_terceira_coluna = true; continue;}
 						segunda_coluna[indice_segunda_coluna++] = linha[i];
@@ -160,9 +178,10 @@ Grafo* trabalha_arquivo(char* caminho)
 				}
 
 				//converte texto para numeros
-				atributo -> id = numero_vertices - 1;
-				atributo -> numero = atoi(segunda_coluna);
-				fila.push(atributo);
+				id_vertice = numero_vertices - 1;
+				numero_vertice = atoi(segunda_coluna);
+				atributo = new Atributos_vertice(id_vertice, numero_vertice, tipo_vertice);
+				atributos.push_back(atributo);
 				break;
 			}
 			case VERTICE_FIM:
@@ -174,14 +193,6 @@ Grafo* trabalha_arquivo(char* caminho)
 				for (int i = 0; i < numero_vertices; i++)
 					for (int y = 0; y < numero_vertices; y++)
 						grafo[i][y] = 0;
-
-				//Cria o array para os atributos
-				atributos = new Atributos_vertice*[numero_vertices];
-				for (int i = 0; i < numero_vertices; i++)
-				{
-					atributos[i] = fila.front();
-					fila.pop();
-				}
 
 				//Define o proximo estado a ser iterado
 				estado = ARESTA;
@@ -217,8 +228,8 @@ Grafo* trabalha_arquivo(char* caminho)
 				int aux_1, aux_2;
 				aux_1 = atoi(primeira_coluna);
 				aux_2 = atoi(segunda_coluna);
-				grafo[aux_1][aux_2] = 1;
-				grafo[aux_2][aux_1] = 1;
+				grafo[aux_1 - 1][aux_2 - 1] = 1;
+				grafo[aux_2 - 1][aux_1 - 1] = 1;
 
 				break;
 			}
@@ -249,8 +260,8 @@ Grafo* trabalha_arquivo(char* caminho)
 			int aux_1, aux_2;
 			aux_1 = atoi(primeira_coluna);
 			aux_2 = atoi(segunda_coluna);
-			grafo[aux_1][aux_2] = 2;
-			grafo[aux_2][aux_1] = 3;
+			grafo[aux_1 - 1][aux_2 - 1] = 2;
+			grafo[aux_2 - 1][aux_1 - 1] = 3;
 
 			break;
 			}
@@ -279,12 +290,13 @@ int main(int argc, char* argv[]) {
 		tamanho = atoi(argv[1]);
 	}
 
-	printf("Antes arquivo\n");
 	Grafo* graf = trabalha_arquivo("entrada/Arara4MaqPar.txt");
 	int** grafo = graf -> grafo;
-	testa_busca_largura(grafo, graf -> numero_vertices);
-	testa_busca_profundidade(grafo, graf -> numero_vertices);
-	testa_componentes_conexas(grafo, graf -> numero_vertices);
+	testar_busca_largura(grafo, graf -> numero_vertices);
+	testar_busca_profundidade(grafo, graf -> numero_vertices);
+	testar_componentes_conexas(grafo, graf -> numero_vertices);
+
+	testar_colorir_grafo(graf);
 
 	return 0;
 

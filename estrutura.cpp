@@ -16,10 +16,19 @@ void Vertice::adicionar_aresta(Vertice* vertice) {
 	adjs.push_back(vertice);
 }
 
-Grafo::Grafo(int numero_vertices_, Atributos_vertice** atributos_, int** grafo_) {
+Grafo::Grafo(int numero_vertices_, list<Atributos_vertice*> atributos_, int** grafo_) {
 	numero_vertices = numero_vertices_;
 	atributos = atributos_;
 	grafo = grafo_;
+}
+
+Atributos_vertice* Grafo::encontrar_vertice(int id) {
+	for (Atributos_vertice* a: atributos)
+	{
+		if (a -> id == id)
+			return a;
+	}
+	return NULL;
 }
 
 void Grafo::adicionar_aresta(int v1, int v2){
@@ -29,4 +38,14 @@ void Grafo::adicionar_aresta(int v1, int v2){
 void Grafo::adicionar_arco(int fonte, int destino) {
 	grafo[fonte][destino] = 2;
 	grafo[destino][fonte] = 3;
+}
+
+Atributos_vertice::Atributos_vertice (int id_, int numero_, char tipo_) {
+	id = id_;
+	numero = numero_;
+	tipo = tipo_;
+}
+
+void Atributos_vertice::adicionar_cor(int cor_) {
+	cor.push_back(cor_);
 }

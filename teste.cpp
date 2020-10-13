@@ -149,7 +149,7 @@ Grafo* trabalha_arquivo(char* caminho)
 	{
 		fgets(linha, MAX_COLUNA_ARQUIVO, arquivo);
 		switch (estado) {
-			case VERTICE:		//Formate: ID ID_GERAL TIPO
+			case VERTICE:		//Formato:ID ID_GERAL TIPO
 			{
 				if (linha[1] == 'E') {estado = VERTICE_FIM; break;}
 				numero_vertices++;
@@ -198,7 +198,7 @@ Grafo* trabalha_arquivo(char* caminho)
 				estado = ARESTA;
 				break;
 			}
-			case ARESTA:
+			case ARESTA:	//Formato:ID ID
 			{
 				//Chegou na linha dos arcos
 				if (linha[1] == 'A') {estado = ARCO; break;}
@@ -233,7 +233,7 @@ Grafo* trabalha_arquivo(char* caminho)
 
 				break;
 			}
-			case ARCO:
+			case ARCO:	//Formato:ID_fonte ID_destino
 			{
 			//Reseta variaveis
 			esta_em_segunda_coluna = false;
@@ -290,14 +290,15 @@ int main(int argc, char* argv[]) {
 		tamanho = atoi(argv[1]);
 	}
 
-	Grafo* graf = trabalha_arquivo("entrada/Arara4MaqPar.txt");
-	int** grafo = graf -> grafo;
-	testar_busca_largura(grafo, graf -> numero_vertices);
-	testar_busca_profundidade(grafo, graf -> numero_vertices);
-	testar_componentes_conexas(grafo, graf -> numero_vertices);
+	Grafo* g = trabalha_arquivo("entrada/Arara4MaqPar.txt");
+	int** grafo = g -> grafo;
+	testar_busca_largura(grafo, g -> numero_vertices);
+	testar_busca_profundidade(grafo, g -> numero_vertices);
+	testar_componentes_conexas(grafo, g -> numero_vertices);
 
-	testar_colorir_grafo(graf);
+	testar_colorir_grafo(g);
 
+	printf("%d %d\n",grafo[102][107] , grafo[107][102]);
 	return 0;
 
 }

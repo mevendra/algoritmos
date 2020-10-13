@@ -16,8 +16,8 @@ void busca_fontes(int** grafo, int tamanho, list<int>& destino);
 void colorir_apartir_de(Grafo* g,int vertice);
 
 //Metodos "Finais"
-extern void busca_em_largura_listas_adjascencia(list<Vertice*>& grafo, Arvore* raiz);
-extern void busca_em_profundidade_listas_adjascencia(list<Vertice*>& grafo, Arvore* raiz);
+extern void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz);
+extern void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz);
 
 extern void busca_em_largura(int**grafo, int tamanho, int* arvore);
 

@@ -1,7 +1,11 @@
 #include <list>
 using namespace std;
+class Nodo;
 
-struct Atributos_largura_lista {};
+struct Atributos_largura_lista {
+	int cor;
+	Nodo* nodo;
+};
 struct Atributos_profundidade_lista {};
 struct Atributos_largura {
 	int cor;	//0=branco;	1=cinzento;	2=preto
@@ -53,13 +57,16 @@ class Grafo {
 	void adicionar_arco(int fonte, int destino);
 };
 
-class No {
-	int id;
-	No* proximo;
-	No* anterior;
+class Nodo {
+	public:
+		int id;
+		list<Nodo*> proximo;
+		Nodo* anterior;
+
+		Nodo(int id_);
+		Nodo(int id_, Nodo* anterior_);
+		void adicionar_filho(Nodo* filho);
+	void adicionar_anterior(Nodo* anterior_);
 };
 
-class Arvore {
-	No* raiz;
-};
 

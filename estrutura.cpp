@@ -49,3 +49,22 @@ Atributos_vertice::Atributos_vertice (int id_, int numero_, char tipo_) {
 void Atributos_vertice::adicionar_cor(int cor_) {
 	cor.push_back(cor_);
 }
+
+Nodo::Nodo(int id_) {
+	id = id_;
+	anterior = NULL;
+}
+
+Nodo::Nodo(int id_, Nodo* anterior_) {
+	id = id_;
+	anterior = anterior_;
+}
+
+void Nodo::adicionar_filho (Nodo* filho) {
+	proximo.push_back(filho);
+}
+
+void Nodo::adicionar_anterior (Nodo* anterior_) {
+	if (anterior == NULL)
+		anterior = anterior_;
+}

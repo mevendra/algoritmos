@@ -134,7 +134,7 @@ void busca_componentes_conexas(int** grafo, int tamanho, list<list<int>>& destin
 		busca_em_largura_(grafo, tamanho, lista, vertice);
 
 		//cria componente
-		std::list<int> matriz;
+		list<int> matriz;
 
 		//insere vertices
 		for(int i: lista)
@@ -148,10 +148,10 @@ void busca_componentes_conexas(int** grafo, int tamanho, list<list<int>>& destin
 	}
 }
 
-void busca_em_largura_(int** grafo, int tamanho, std::list<int>& destino, int fonte) 
+void busca_em_largura_(int** grafo, int tamanho, list<int>& destino, int fonte)
 {
 	int vertice;
-	std::queue<int> fila;
+	queue<int> fila;
 	Atributos_largura* atributos_vertices[tamanho];
 	Atributos_largura* atributo;
 
@@ -196,6 +196,85 @@ void busca_em_largura_(int** grafo, int tamanho, std::list<int>& destino, int fo
 	
 }
 
+void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz)
+{
+	//Atributos
+	queue<Vertice*> fila;
+	list<Vertice*> sem_set;
+	Atributos_largura_lista* atributos;
+	Vertice* atual;
+	Nodo* aux;
+
+	//Alocacao do espaco para  os atributos
+	for (Vertice* v: grafo)
+	{
+		atributos = (Atributos_largura_lista*) malloc(sizeof(Atributos_largura_lista));
+		atributos -> cor = 0;
+		atributos -> nodo = new Nodo(v -> id);
+		v-> atributo = atributos;
+		sem_set.push_back(v);
+	}
+
+	while (!sem_set.empty())
+	{
+		//Primeiro vertice que nao esta em nenhuma arvore
+		atual = sem_set.front();
+		sem_set.pop_front();
+
+		//Vertice sera uma raiz
+		aux = ((Atributos_largura_lista* )atual -> atributo) -> nodo;
+		raiz.push_back(aux);
+
+		//Marca vertice
+		((Atributos_largura_lista* )atual -> atributo) -> cor = 1;
+		fila.push(atual);
+
+		//Procura os alcancaveis por ele
+		while (!fila.empty())
+		{
+			atual = fila.front();
+			fila.pop();
+			aux = ((Atributos_largura_lista* )atual -> atributo) -> nodo;
+			for (Vertice* v: atual -> adjs)
+			{
+				if (((Atributos_largura_lista* )v -> atributo) -> cor == 0) {
+					((Atributos_largura_lista* )v -> atributo) -> cor = 1;
+					((Atributos_largura_lista* )v -> atributo) -> nodo -> adicionar_anterior(aux);
+					fila.push(v);
+
+				}
+			}
+			sem_set.remove(atual);
+		}
+	}
+
+	//Liberacao do espaco alocado aos atributos
+	for (Vertice* v: grafo)
+	{
+		free(v -> atributo);
+	}
+}
+void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz)
+{
+	//Atributos
+	queue<Vertice*> fila;
+	Atributos_largura* atributos;
+
+	//Alocacao do espaco para  os atributos
+	for (Vertice* v: grafo)
+	{
+		atributos = (Atributos_largura*) malloc(sizeof(Atributos_largura));
+		atributos -> cor = 0;
+		v-> atributo = atributos;
+	}
+
+	//Liberacao do espaco alocado aos atributos
+	for (Vertice* v: grafo)
+	{
+		free(v -> atributo);
+	}
+}
+
 void colorir_grafo(Grafo* g)
 {
 	int** grafo = g -> grafo;
@@ -219,9 +298,9 @@ void busca_fontes(int** grafo, int tamanho, list<int>& destino)
 		eh_fonte = true;
 		for (int y = 0; y < tamanho; y++)
 		{
-			if (grafo[i][y] == 3) {eh_fonte = false; break;}
+			if (grafo[i][y] == 3) {eh_fonte = false; break;}	//Vertice i tem um arco chegando nele
 		}
-		if (eh_fonte) {destino.push_back(i);}
+		if (eh_fonte) {destino.push_back(i);}	//adiciona i como fonte na lista
 	}
 }
 
@@ -230,12 +309,14 @@ void colorir_apartir_de(Grafo* g,int vertice)
 	int** grafo = g -> grafo;
 	if (grafo == NULL) return;
 
+	//Atributos
 	queue<int> fila;
 	int tamanho = g -> numero_vertices;
 	int vertice_atual;
 	Atributos_largura* atributos_vertices[tamanho];
 	Atributos_largura* atributo;
 
+	//Alocacao do espaco para Atributos_largura
 	for (int i = 0; i < tamanho; i++)
 	{
 		atributo = (struct Atributos_largura*) malloc(sizeof(struct Atributos_largura));
@@ -243,17 +324,19 @@ void colorir_apartir_de(Grafo* g,int vertice)
 		atributos_vertices[i] = atributo;
 	}
 
+	//Vertice inicial
 	atributos_vertices[vertice] -> cor = 1;
 	fila.push(vertice);
 
 	while(!fila.empty())
 	{
+		//Remove primeiro da fila
 		vertice_atual = fila.front();
 		fila.pop();
 		for (int i = 0; i < tamanho; i++)
 		{
-			if (grafo[vertice_atual][i] == 2) {
-				if (atributos_vertices[i] -> cor == 0)
+			if (grafo[vertice_atual][i] == 2) {		//Arco da forma vertice_atual -> i
+				if (atributos_vertices[i] -> cor == 0)	//Se i nao esta marcado
 				{
 					atributos_vertices[i] -> cor = 1;
 					fila.push(i);
@@ -262,13 +345,14 @@ void colorir_apartir_de(Grafo* g,int vertice)
 		}
 	}
 
+	//Coloracao dos vertices alcancados e liberacao do espaco alocado
 	for (int i = 0; i < tamanho; i++)
 	{
 		if (atributos_vertices[i] -> cor == 1)
 		{
 			g -> encontrar_vertice(i) -> adicionar_cor(vertice);
 		}
-		free(atributos_vertices[i]);\
+		free(atributos_vertices[i]);
 	}
 }
 

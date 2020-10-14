@@ -25,6 +25,8 @@ struct Atributos_componentes {
 class Vertice {
 	public:
 		list<Vertice*> adjs;
+		list<Vertice*> filhos;
+		list<Vertice*> pais;
 		int id;
 		void* atributo;
 
@@ -32,6 +34,8 @@ class Vertice {
 	Vertice(int id_);
 
 	void adicionar_aresta(Vertice* vertice);
+	void adicionar_filho(Vertice* vertice);
+	void adicionar_pai(Vertice* vertice);
 };
 
 class Atributos_vertice {

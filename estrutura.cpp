@@ -2,18 +2,30 @@
 
 Vertice::Vertice(){
 	adjs = std::list<Vertice*>();
+	filhos = std::list<Vertice*>();
+	pais = std::list<Vertice*>();
 	id = 0;
 	atributo = 0;
 }
 
 Vertice::Vertice(int id_) {
 	adjs = std::list<Vertice*>();
+	filhos = std::list<Vertice*>();
+	pais = std::list<Vertice*>();
 	id = id_;
 	atributo = 0;	
 }
 
 void Vertice::adicionar_aresta(Vertice* vertice) {
 	adjs.push_back(vertice);
+}
+
+void Vertice::adicionar_filho(Vertice* vertice) {
+	filhos.push_back(vertice);
+}
+
+void Vertice::adicionar_pai(Vertice* vertice) {
+	pais.push_back(vertice);
 }
 
 Grafo::Grafo(int numero_vertices_, list<Atributos_vertice*> atributos_, int** grafo_) {

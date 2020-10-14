@@ -298,7 +298,8 @@ void busca_fontes(int** grafo, int tamanho, list<int>& destino)
 		eh_fonte = true;
 		for (int y = 0; y < tamanho; y++)
 		{
-			if (grafo[i][y] == 3) {eh_fonte = false; break;}	//Vertice i tem um arco chegando nele
+			if (grafo[i][y] == 3 || grafo[i][y] == 13)
+				{eh_fonte = false; break;}	//Vertice i tem um arco chegando nele
 		}
 		if (eh_fonte) {destino.push_back(i);}	//adiciona i como fonte na lista
 	}
@@ -335,7 +336,7 @@ void colorir_apartir_de(Grafo* g,int vertice)
 		fila.pop();
 		for (int i = 0; i < tamanho; i++)
 		{
-			if (grafo[vertice_atual][i] == 2) {		//Arco da forma vertice_atual -> i
+			if (grafo[vertice_atual][i] == 2 || grafo[vertice_atual][i] == 12) {		//Arco da forma vertice_atual -> i
 				if (atributos_vertices[i] -> cor == 0)	//Se i nao esta marcado
 				{
 					atributos_vertices[i] -> cor = 1;

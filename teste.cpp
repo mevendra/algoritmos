@@ -31,7 +31,77 @@ void testar_busca_profundidade(int** grafo, int tamanho)
 	}
 	printf("\nNumero de raizes: %d\n", num_raiz);
 }
-void testar_busca_largura_listas(int** grafo, int tamanho) {}
+void testar_busca_largura_listas(int** grafo, int tamanho) {
+	printf("\nTestando busca em largura: \n");
+	list<Nodo*> arvore;
+	list<Vertice*> g;
+	Vertice* a;
+	Vertice* b;
+
+	for (int i = 0; i < tamanho; i++) {
+		a = new Vertice(i);
+		g.push_back(a);
+	}
+
+	for (int i = 0; i < tamanho; i++)
+	{
+		for (int y = 0; y < tamanho; y++)
+		{
+			if (grafo[i][y] == 1) {
+
+				for (Vertice* v: g) {
+					if (v -> id == i)
+						a = v;
+					else if (v -> id == y)
+						b = v;
+				}
+				a -> adicionar_aresta(b);
+			} else if (grafo[i][y] == 2) {
+				for (Vertice* v: g) {
+					if (v -> id == i)
+							a = v;
+					else if (v -> id == y)
+						b = v;
+				}
+				a -> adicionar_filho(b);
+			} else if (grafo[i][y] == 3) {
+				for (Vertice* v: g) {
+					if (v -> id == i)
+						a = v;
+					else if (v -> id == y)
+						b = v;
+				}
+				a -> adicionar_pai(b);
+			} else if (grafo[i][y] == 12) {
+				for (Vertice* v: g) {
+					if (v -> id == i)
+						a = v;
+					else if (v -> id == y)
+						b = v;
+				}
+				a -> adicionar_filho(b);
+				a -> adicionar_aresta(b);
+			} else if (grafo[i][y] == 13) {
+				for (Vertice* v: g) {
+					if (v -> id == i)
+						a = v;
+					else if (v -> id == y)
+						b = v;
+				}
+				a -> adicionar_pai(b);
+				a -> adicionar_aresta(b);
+			}
+		}
+	}
+	busca_em_largura_listas_adjacencia(g, arvore);
+
+	printf("Vertices raiz: \n");
+	for (Nodo* n: arvore)
+	{	
+		printf("%d ", n -> id);
+	}
+	printf("\nNumero de raizes: %d\n", arvore.size());
+}
 void testar_busca_largura_listas(std::list<Vertice*>& grafo) {}
 void testar_componentes_conexas(int** grafo, int tamanho)
 {
@@ -260,6 +330,11 @@ Grafo* trabalha_arquivo(char* caminho)
 			int aux_1, aux_2;
 			aux_1 = atoi(primeira_coluna);
 			aux_2 = atoi(segunda_coluna);
+			if (grafo[aux_1 - 1][aux_2 - 1] == 1) {
+				printf("Casamento entre pais e filhos: %d e %d\n", aux_1 - 1, aux_2 - 1);
+				grafo[aux_1 - 1][aux_2 - 1] = 12;
+				grafo[aux_2 - 1][aux_1 - 1] = 13;
+			}
 			grafo[aux_1 - 1][aux_2 - 1] = 2;
 			grafo[aux_2 - 1][aux_1 - 1] = 3;
 
@@ -293,12 +368,11 @@ int main(int argc, char* argv[]) {
 	Grafo* g = trabalha_arquivo("entrada/Arara4MaqPar.txt");
 	int** grafo = g -> grafo;
 	testar_busca_largura(grafo, g -> numero_vertices);
-	testar_busca_profundidade(grafo, g -> numero_vertices);
+	testar_busca_profundidade(grafo, g -> numero_vertices);	//Testando somente arestas, com arcos e totalmente conexo
 	testar_componentes_conexas(grafo, g -> numero_vertices);
+	testar_busca_largura_listas(grafo, g -> numero_vertices);
 
 	testar_colorir_grafo(g);
-
-	printf("%d %d\n",grafo[102][107] , grafo[107][102]);
 	return 0;
 
 }

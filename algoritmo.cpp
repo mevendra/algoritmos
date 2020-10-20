@@ -257,21 +257,57 @@ void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz
 void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz)
 {
 	//Atributos
-	queue<Vertice*> fila;
-	Atributos_largura* atributos;
+	Atributos_profundidade_lista* atributos;
 
 	//Alocacao do espaco para  os atributos
 	for (Vertice* v: grafo)
 	{
-		atributos = (Atributos_largura*) malloc(sizeof(Atributos_largura));
+		atributos = (Atributos_profundidade_lista*) malloc(sizeof(Atributos_profundidade_lista));
 		atributos -> cor = 0;
 		v-> atributo = atributos;
+	}
+
+	Nodo* aux;
+
+	for (Vertice* v: grafo)
+	{
+		if (((Atributos_profundidade_lista*) v -> atributo) -> cor == 0) {
+			//Vertice sera uma raiz
+			aux = new Nodo(v -> id);
+			((Atributos_profundidade_lista* )v -> atributo) -> nodo = aux;
+			raiz.push_back(aux);
+
+
+			((Atributos_profundidade_lista* )v -> atributo) -> tempo = 0;
+			busca_em_profundidade_listas_adjacencia_(grafo, v);
+		}
 	}
 
 	//Liberacao do espaco alocado aos atributos
 	for (Vertice* v: grafo)
 	{
 		free(v -> atributo);
+	}
+}
+void busca_em_profundidade_listas_adjacencia_(list<Vertice*>& grafo, Vertice* v) {
+	((Atributos_profundidade_lista* )v -> atributo) -> cor = 1;
+	Nodo* aux;
+	Nodo* aux1;
+	Atributos_profundidade_lista* att_v = ((Atributos_profundidade_lista* )v -> atributo);
+	Atributos_profundidade_lista* att_vertice;
+
+	for (Vertice* vertice: v -> adjs)
+	{
+		att_vertice = (Atributos_profundidade_lista*) vertice -> atributo;
+		if (att_vertice -> cor == 0) {
+			aux1 = ((Atributos_profundidade_lista*) v -> atributo) -> nodo;
+			aux = new Nodo(vertice -> id, aux1);
+			aux1 -> adicionar_filho(aux);
+
+			att_vertice -> cor = 1;
+			att_vertice -> tempo = att_v ->tempo + 1;
+			busca_em_profundidade_listas_adjacencia_(grafo, vertice);
+		}
 	}
 }
 

@@ -12,6 +12,7 @@ static int tempo;
 
 //Metodos utilizados por outros metodos
 void busca_em_profundidade_(int** grafo, int tamanho, Atributos_profundidade* atributos_vertices[], int vertice, int* arvore, list<int>& sem_set);
+void busca_em_profundidade_listas_adjacencia_(list<Vertice*>& grafo, Vertice* v);
 void busca_em_largura_(int** grafo, int tamanho, list<int>& destino, int fonte);
 void busca_fontes(int** grafo, int tamanho, list<int>& destino);
 void colorir_apartir_de(Grafo* g,int vertice);

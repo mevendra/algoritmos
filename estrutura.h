@@ -13,7 +13,11 @@ struct Atributos_largura_lista {
 	int cor;
 	Nodo* nodo;
 };
-struct Atributos_profundidade_lista {};
+struct Atributos_profundidade_lista {
+	int cor;
+	int tempo;
+	Nodo* nodo;
+};
 struct Atributos_largura {
 	int cor;	//0=branco;	1=cinzento;	2=preto
 	int distancia_fonte;

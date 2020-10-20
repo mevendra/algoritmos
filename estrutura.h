@@ -1,4 +1,11 @@
+#ifndef ESTRUTURA_H
+#define ESTRUTURA_H
+
 #include <list>
+#include <iomanip>
+#include <sstream>
+#include <vector>
+
 using namespace std;
 class Nodo;
 
@@ -56,9 +63,9 @@ class Grafo {
 		list<Atributos_vertice*> atributos;
 
 		Grafo(int numero_vertices_, list<Atributos_vertice*> atributos_, int** grafo_);
-		Atributos_vertice* encontrar_vertice(int id);
-	void adicionar_aresta(int v1, int v2);
-	void adicionar_arco(int fonte, int destino);
+		void adicionar_aresta(int v1, int v2);
+		void adicionar_arco(int fonte, int destino);
+		Atributos_vertice* encontrar_atributo(int i);
 };
 
 class Nodo {
@@ -73,4 +80,29 @@ class Nodo {
 	void adicionar_anterior(Nodo* anterior_);
 };
 
+class Cor {
+	public:
+		Cor();
+		Cor(int r, int g, int b);
+		Cor(string rgb);
+		Cor(Cor* cor);
 
+		string rgb;
+		int r;
+		int g;
+		int b;
+		void soma(Cor* c);
+};
+
+class Hash {
+	vector<int> numeros;
+	vector<Cor*> cores;
+
+	public:
+		Hash();
+		~Hash();
+		Cor* encontrar_cor(int numero);
+		void adicionar_cor(int numero, Cor* cor);
+		void limpar();
+};
+#endif /* ESTRUTURA_H */

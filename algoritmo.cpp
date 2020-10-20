@@ -28,7 +28,7 @@ void busca_em_largura(int** grafo, int tamanho, int* arvore) {
 		atributos_vertices[vertice]->distancia_fonte = 0;
 		fila.push(vertice);
 		arvore[vertice] = -1;
-		while(!fila.empty()) 
+		while(!fila.empty())
 		{
 			vertice = fila.front();
 			fila.pop();
@@ -98,7 +98,7 @@ void busca_em_profundidade_(int** grafo, int tamanho, Atributos_profundidade* at
 	atributos_vertices[vertice]->tempo_init = ++tempo;
 	atributos_vertices[vertice]->cor = 1;
 
-	for(int i = 0; i < tamanho; i++) 
+	for(int i = 0; i < tamanho; i++)
 	{
 		if(grafo[vertice][i] == 1)
 		{
@@ -168,7 +168,7 @@ void busca_em_largura_(int** grafo, int tamanho, list<int>& destino, int fonte)
 	atributos_vertices[fonte]->distancia_fonte = 0;
 
 	fila.push(fonte);
-	while(!fila.empty()) 
+	while(!fila.empty())
 	{
 		vertice = fila.front();
 		fila.pop();
@@ -187,13 +187,13 @@ void busca_em_largura_(int** grafo, int tamanho, list<int>& destino, int fonte)
 		}
 	}
 
-	for(int i = 0; i < tamanho; i++) 
+	for(int i = 0; i < tamanho; i++)
 	{
 		if(atributos_vertices[i]->cor)
 			destino.push_back(i);
 		free(atributos_vertices[i]);
 	}
-	
+
 }
 
 void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz)
@@ -275,6 +275,13 @@ void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>&
 	}
 }
 
+void descolorir(Grafo* g)
+{
+	for (Atributos_vertice* v: g -> atributos)
+	{
+		v -> cor.clear();
+	}
+}
 void colorir_grafo(Grafo* g)
 {
 	int** grafo = g -> grafo;
@@ -351,11 +358,108 @@ void colorir_apartir_de(Grafo* g,int vertice)
 	{
 		if (atributos_vertices[i] -> cor == 1)
 		{
-			g -> encontrar_vertice(i) -> adicionar_cor(vertice);
+			g -> encontrar_atributo(i) -> adicionar_cor(vertice);
 		}
 		free(atributos_vertices[i]);
 	}
 }
 
+void colorir_grafo_mat(Grafo* g)
+{
+	int** grafo = g -> grafo;
+	if (grafo == NULL) return;
+
+	//Busca fontes
+	list<int> fontes;
+	busca_fontes_tipo(g, 'e', fontes);
 
 
+	//Colore apartir das fontes
+	for (int i: fontes)
+		colorir_apartir_de_tipo(g, i, 'e');
+
+}
+void colorir_grafo_pat(Grafo* g)
+{
+	int** grafo = g -> grafo;
+	if (grafo == NULL) return;
+
+	//Busca fontes
+	list<int> fontes;
+	busca_fontes_tipo(g, 't', fontes);
+
+
+	//Colore apartir das fontes
+	for (int i: fontes)
+		colorir_apartir_de_tipo(g, i, 't');
+}
+
+void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
+{
+	bool eh_fonte;
+	int tamanho = g -> numero_vertices;
+	int** grafo = g-> grafo;
+	for (int i = 0; i < tamanho; i++)
+	{
+		eh_fonte = true;
+		for (int y = 0; y < tamanho; y++)
+		{
+			if (grafo[i][y] == 3 || grafo[i][y] == 13)
+				{eh_fonte = false; break;}	//Vertice i tem um arco chegando nele
+		}
+		if (eh_fonte && g -> encontrar_atributo(i) -> tipo == tipo)
+			{destino.push_back(i);}	//adiciona i como fonte na lista
+	}
+}
+void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo)
+{
+	int** grafo = g -> grafo;
+	if (grafo == NULL) return;
+
+	//Atributos
+	queue<int> fila;
+	int tamanho = g -> numero_vertices;
+	int vertice_atual;
+	Atributos_largura* atributos_vertices[tamanho];
+	Atributos_largura* atributo;
+
+	//Alocacao do espaco para Atributos_largura
+	for (int i = 0; i < tamanho; i++)
+	{
+		atributo = (struct Atributos_largura*) malloc(sizeof(struct Atributos_largura));
+		atributo->cor = 0;
+		atributos_vertices[i] = atributo;
+	}
+
+	//Vertice inicial
+	atributos_vertices[vertice] -> cor = 1;
+	fila.push(vertice);
+
+	while(!fila.empty())
+	{
+		//Remove primeiro da fila
+		vertice_atual = fila.front();
+		fila.pop();
+		for (int i = 0; i < tamanho; i++)
+		{
+			if (grafo[vertice_atual][i] == 2 || grafo[vertice_atual][i] == 12) {		//Arco da forma vertice_atual -> i
+				if (atributos_vertices[i] -> cor == 0)	//Se i nao esta marcado
+				{
+					atributos_vertices[i] -> cor = 1;
+					if (g -> encontrar_atributo(i) -> tipo == tipo)
+						fila.push(i);
+				}
+			}
+		}
+	}
+
+	//Coloracao dos vertices alcancados e liberacao do espaco alocado
+	for (int i = 0; i < tamanho; i++)
+	{
+		if (atributos_vertices[i] -> cor == 1)
+		{
+			g -> encontrar_atributo(i) -> adicionar_cor(vertice);
+		}
+		free(atributos_vertices[i]);
+	}
+}

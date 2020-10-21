@@ -16,5 +16,6 @@ void testar_componentes_conexas(Grafo* grafo);
 void testar_colorir_grafo(Grafo *grafo);
 void testar_colorir_grafo_mat(Grafo* grafo);
 void testar_colorir_grafo_pat(Grafo* grafo);
+void testar_casamento_entre_irmaos(Grafo* g);
 
 #endif /* MAIN_H */

@@ -499,3 +499,37 @@ void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo)
 		free(atributos_vertices[i]);
 	}
 }
+bool verifica_irmaos(int** grafo,int tamanho,int a,int b) {
+	list<int> pais_a;
+	for (int i = 0; i < tamanho; i++)
+	{
+		if (grafo[a][i] == 3) {
+			pais_a.push_back(i);
+		}
+	}
+
+	for (int i: pais_a)
+	{
+		if (grafo[b][i] == 3) {
+			return true;
+		}
+	}
+
+	return false;
+}
+void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destino) {
+	list<int> casamento;
+	for (int i = 0; i < tamanho; i++) {
+		for (int y = 0; y < tamanho; y++) {
+			if (grafo[i][y] == 1) {
+				if (verifica_irmaos(grafo, tamanho, i, y)) {
+					casamento = list<int>();
+					casamento.push_back(i);
+					casamento.push_back(y);
+
+					destino.push_back(casamento);
+				}
+			}
+		}
+	}
+}

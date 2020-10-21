@@ -157,6 +157,17 @@ void testar_colorir_grafo_pat(Grafo* grafo) {
 
 	descolorir(grafo);
 }
+void testar_casamento_entre_irmaos(Grafo* g) {
+	list<list<int>> destino;
+	encontra_casamento_irmaos(g ->grafo, g -> numero_vertices, destino);
+	for (list<int> a: destino) {
+		printf("Casamento entre irmaos: ");
+		for (int i: a) {
+			printf("%d ", g -> encontrar_atributo(i) -> numero);
+		}
+		printf("\n");
+	}
+}
 
 int main(int argc, char *argv[]) {
 	srand(time(NULL));
@@ -171,6 +182,7 @@ int main(int argc, char *argv[]) {
 	testar_colorir_grafo_mat(g);
 	testar_colorir_grafo_mat(g);
 	testar_colorir_grafo(g);
+	testar_casamento_entre_irmaos(g);
 
 	escreve_grafo_graphviz(g, false, "entrada/grafo_normal.dot");
 
@@ -194,6 +206,12 @@ int main(int argc, char *argv[]) {
 	colorir_grafo_pat(g);
 	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido_pat.dot");
 	descolorir(g);
+
+	//casamento entre irmaos
+	list<list<int>> destino;
+	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
+	escreve_componentes_graphviz(g, destino, "entrada/casamento_irmaos.dot");
+
 	return 0;
 
 }

@@ -56,6 +56,7 @@ class Atributos_vertice {
 		char tipo;
 		list<int> cor;
 
+		int cores_ate_folha;
 		Atributos_vertice(int id, int numero, char tipo);
 		void adicionar_cor(int cor_);
 };

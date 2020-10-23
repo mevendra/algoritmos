@@ -54,6 +54,7 @@ Atributos_vertice::Atributos_vertice (int id_, int numero_, char tipo_) {
 	id = id_;
 	numero = numero_;
 	tipo = tipo_;
+	cores_ate_folha = -1;
 }
 
 void Atributos_vertice::adicionar_cor(int cor_) {
@@ -186,3 +187,5 @@ Cor* Hash::encontrar_cor(int numero) {
 	}
 	return NULL;
 }
+
+

@@ -6,6 +6,7 @@
 #include <queue>
 #include <stdlib.h>
 #include "estrutura.h"
+#include "lista.h"
 using namespace std;
 
 static int tempo;
@@ -33,5 +34,7 @@ void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destin
 void colorir_grafo(Grafo* g);
 void colorir_grafo_mat(Grafo* g);
 void colorir_grafo_pat(Grafo* g);
+
+void define_max_cores(Grafo* g);
 
 #endif /* ALGORITMO_H*/

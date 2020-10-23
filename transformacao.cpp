@@ -210,14 +210,27 @@ Grafo* trabalha_arquivo(char* caminho)
 	return retorno;
 }
 
-void instancia_vertices_graphviz(Grafo* g, FILE* arquivo) {
+void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenhar) {
 	//Atributos a serem utilizados
 	string lin;
 	int numero = g -> numero_vertices;
 
+	bool continuar = true;
 	//Percorre atributos do grafo e para cada um escreve no arquivo os atributos relacioados
 	for (Atributos_vertice* atributos: g -> atributos)
 	{
+		continuar = true;
+		if (!nao_desenhar.empty()) {
+			int id = atributos -> id;
+			for (int i: nao_desenhar)
+			{
+				if (i == id) {
+					continuar = false;
+					break;
+				}
+			}
+		}
+		if (!continuar) continue;
 		lin = "";
 
 		//Definicao do vertice
@@ -248,14 +261,25 @@ void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char* c
 	string lin;
 	arquivo = fopen(caminho, "w");
 
+	//Verificacao de quais vertices nao desenhar
+	list<int> nao_desenhar;
+	for (list<int> lista: componentes)
+	{
+		if (lista.size() == 1) {
+			int id = lista.front();
+			nao_desenhar.push_back(id);
+		}
+	}
+
 	//Inicio do grafo e Instanciacao de vertices
 	fputs("graph {\n", arquivo);
-	instancia_vertices_graphviz(g, arquivo);
+	instancia_vertices_graphviz(g, arquivo, nao_desenhar);
 
 	//Instancia componentes
 	int aux;
 	for (list<int> lista: componentes)
 	{
+		if (lista.size() <= 1) continue;
 		lin = "";
 		aux = lista.front();
 		lista.pop_front();
@@ -290,9 +314,23 @@ void escreve_arvore_graphviz(Grafo* g, int* arvore, char* caminho) {
 	int** grafo = g -> grafo;
 	Atributos_vertice* atributos;
 
+	//Escolha dos vertices que nao serao desenhados
+	list<int> aux;
+	list<int> nao_desenhar;
+	for (int i = 0; i < g -> numero_vertices; i++) {
+		if (arvore[i] != -1) {
+			aux.push_back(arvore[i]);
+		} else {
+			nao_desenhar.push_back(i);
+		}
+	}
+	for (int i: aux) {
+		nao_desenhar.remove(i);
+	}
+
 	//Inicio do grafo e Instanciacao de vertices
 	fputs("digraph {\n", arquivo);
-	instancia_vertices_graphviz(g, arquivo);
+	instancia_vertices_graphviz(g, arquivo, nao_desenhar);
 
 	//Instanciacao da arvore
 	for (int i = 0; i < g -> numero_vertices; i++)
@@ -325,8 +363,9 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char* caminho) {
 	Atributos_vertice* atributos;
 
 	//Inicio do grafo e instanciacao de vertices
+	list<int> nao_desenhar;
 	fputs("digraph {\n", arquivo);
-	instancia_vertices_graphviz(g, arquivo);
+	instancia_vertices_graphviz(g, arquivo, nao_desenhar);
 
 	//Colore os vertices
 	if (colorir) {
@@ -426,18 +465,7 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char* caminho) {
 
 void reinicia_cores() {
 	cores.clear();
-	cores.push_back("#FFFFFF");
-	cores.push_back("#0000FF");
-	cores.push_back("#FF0000");
-	cores.push_back("#00FF00");
-	cores.push_back("#FFFF00");
-	cores.push_back("#FF00FF");
-	cores.push_back("#00FFFF");
-	cores.push_back("#000000");
-	cores.push_back("#808080");
-	cores.push_back("#4682B4");
-	cores.push_back("#008080");
-	cores.push_back("#808000");
+
 	cores.push_back("#8B4513");
 	cores.push_back("#DEB887");
 	cores.push_back("#8B008B");
@@ -447,4 +475,15 @@ void reinicia_cores() {
 	cores.push_back("#FF8C00");
 	cores.push_back("#D8BFD8");
 	cores.push_back("#EEE8AA");
+
+	cores.push_back("#0000FF");
+		cores.push_back("#FF0000");
+		cores.push_back("#00FF00");
+		cores.push_back("#FFFF00");
+		cores.push_back("#FF00FF");
+		cores.push_back("#00FFFF");
+		cores.push_back("#808080");
+		cores.push_back("#4682B4");
+		cores.push_back("#008080");
+		cores.push_back("#808000");
 }

@@ -189,30 +189,40 @@ int main(int argc, char *argv[]) {
 	int* arv = new int[g -> numero_vertices];
 	busca_em_largura(grafo, g -> numero_vertices, arv);
 	escreve_arvore_graphviz(g, arv, "entrada/arvore.dot");
+	printf("Escreveu arvore\n");
 
 	list<list<int>> lista;
 	busca_componentes_conexas(grafo, g -> numero_vertices, lista);
 	escreve_componentes_graphviz(g, lista, "entrada/componentes.dot");
+	printf("Escreveu componentes\n");
 
 	//escrevendo e colorindo
 	colorir_grafo(g);
 	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido.dot");
 	descolorir(g);
+	printf("Escreveu e coloriu\n");
 
 	colorir_grafo_mat(g);
 	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido_mat.dot");
 	descolorir(g);
+	printf("Escreveu e coloriu mat\n");
 
 	colorir_grafo_pat(g);
 	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido_pat.dot");
 	descolorir(g);
+	printf("Escreveu e coloriu pat\n");
 
 	//casamento entre irmaos
 	list<list<int>> destino;
 	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
 	escreve_componentes_graphviz(g, destino, "entrada/casamento_irmaos.dot");
 
+	colorir_grafo(g);
+	define_max_cores(g);
+	for (Atributos_vertice* v: g -> atributos)
+	{
+		printf("%d: %d\n", v -> id, v -> cores_ate_folha);
+	}
 	return 0;
-
 }
 

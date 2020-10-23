@@ -533,3 +533,78 @@ void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destin
 		}
 	}
 }
+
+void define_max_cores(Grafo* g) {
+	queue<Atributos_vertice*> fila;
+	list<Lista_lista*> lista_cores[g -> numero_vertices];
+
+	for (Atributos_vertice* v: g -> atributos)
+	{
+		bool eh_folha = true;
+		int id = v -> id;
+		for (int i = 0; i < g -> numero_vertices; i++)
+		{
+			if (g -> grafo[id][i] == 2 || g -> grafo[id][i] == 12) {
+				eh_folha = false;
+			}
+		}
+		if (eh_folha) {
+			Lista_int* v_cor = new Lista_int();
+			for (int i: v -> cor) {
+				v_cor -> adicionar(i);
+			}
+			Lista_lista* nova_lista = new Lista_lista();
+			nova_lista -> adicionar(v_cor);
+
+			lista_cores[id].push_back(nova_lista);
+			fila.push(v);
+		}
+	}
+
+	Atributos_vertice* v;
+	while(!fila.empty())
+	{
+		v = fila.front();
+		fila.pop();
+		int v_id = v -> id;
+		for (int i = 0; i < g -> numero_vertices; i++)
+		{
+			Atributos_vertice* pai;
+			if (g -> grafo[v_id][i] == 3 || g -> grafo[v_id][i] == 13) {
+				pai = g -> encontrar_atributo(i);
+				Lista_int* pai_cor = new Lista_int();
+				for (int y: pai -> cor) {
+					pai_cor -> adicionar(y);
+				}
+				Lista_lista* nova_lista_pai;
+				for (Lista_lista* lista: lista_cores[v_id])
+				{
+					bool adicionar = true;
+					nova_lista_pai = lista -> copiar();
+					nova_lista_pai -> adicionar(pai_cor);
+					for (Lista_lista* l: lista_cores[i])
+					{
+						if (l -> eh_igual(nova_lista_pai)) {
+							adicionar = false;
+							break;
+						}
+					}
+					if (adicionar)
+						lista_cores[i].push_back(nova_lista_pai);
+				}
+				fila.push(pai);
+			}
+		}
+	}
+
+	int tamanho;
+	for (int i = 0; i < g -> numero_vertices; i++)
+	{
+		tamanho = 0;
+		for (Lista_lista* lista: lista_cores[i])
+		{
+			if (lista -> tamanho > tamanho) tamanho = lista -> tamanho;
+		}
+		g -> encontrar_atributo(i) -> cores_ate_folha = tamanho;
+	}
+}

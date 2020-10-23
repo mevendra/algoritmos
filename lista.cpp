@@ -1,29 +1,25 @@
 #include "lista.h"
-
+//Elemento_int
 Elemento_int::Elemento_int(int elemento_) {
 	elemento = elemento_;
 	proximo = NULL;
 }
-
-Elemento_int::~Elemento_int() {
-	if (proximo != NULL)
-		delete proximo;
+Elemento_int::~Elemento_int() {	//Verificar funcionamento
+	delete proximo;
 }
 
+//Lista_int
 Lista_int::Lista_int() {
 	primeiro = NULL;
 	tamanho = 0;
 }
-
-Lista_int::~Lista_int() {
+Lista_int::~Lista_int() {	//Verificar funcionamento
 	delete primeiro;
 }
-
 bool Lista_int::vazia() {
 	if (tamanho <= 0) return true;
 	else return false;
 }
-
 bool Lista_int::contem(int numero) {
 	Elemento_int* atual = primeiro;
 	for (int i = 0; i < tamanho; i++)
@@ -33,7 +29,6 @@ bool Lista_int::contem(int numero) {
 	}
 	return false;
 }
-
 bool Lista_int::eh_igual(Lista_int* lista) {
 	if (lista == NULL) return false;
 	if(tamanho != lista -> tamanho) return false;
@@ -51,7 +46,6 @@ bool Lista_int::eh_igual(Lista_int* lista) {
 	}
 	return true;
 }
-
 void Lista_int::adicionar(int numero) {
 	Elemento_int* atual = primeiro;
 	Elemento_int* aux = NULL;
@@ -71,7 +65,7 @@ void Lista_int::adicionar(int numero) {
 		primeiro = novo;
 	} else if ( atual == NULL) {	//chegou ao fim da lista
 		aux -> proximo = novo;
-	} else if (aux == NULL) {
+	} else if (aux == NULL) {	//Inserir no comeco
 		aux = primeiro;
 		primeiro = novo;
 		novo -> proximo = aux;
@@ -81,8 +75,7 @@ void Lista_int::adicionar(int numero) {
 	}
 	tamanho++;
 }
-
-void Lista_int::remover(int numero) {
+void Lista_int::remover(int numero) {	//Verificar funcionamento (delete atual)
 	Elemento_int* atual = primeiro;
 	Elemento_int* anterior = NULL;
 
@@ -94,8 +87,9 @@ void Lista_int::remover(int numero) {
 			} else {
 				primeiro = atual -> proximo;
 			}
-			tamanho--;
+			atual -> proximo = NULL;
 			delete atual;
+			tamanho--;
 		} else {
 			anterior = atual;
 			atual = atual -> proximo;
@@ -103,20 +97,19 @@ void Lista_int::remover(int numero) {
 	}
 }
 
-
+//Elemento_lista
 Elemento_lista::Elemento_lista(Lista_int* lista) {
 	elemento = lista;
 	proximo = NULL;
 }
-Elemento_lista::~Elemento_lista() {
+Elemento_lista::~Elemento_lista() {	//Verificar funcionamento
 	delete elemento;
-	if (proximo != NULL)
-		delete proximo;
+	delete proximo;
 }
-
 Lista_int* Elemento_lista::copiar_lista() {
 	Lista_int* nova = new Lista_int();
 	if (elemento == NULL) return nova;
+
 	Elemento_int* atual = elemento -> primeiro;
 	for (int i = 0; i < elemento -> tamanho; i++) {
 		nova -> adicionar(atual -> elemento);
@@ -125,11 +118,13 @@ Lista_int* Elemento_lista::copiar_lista() {
 
 	return nova;
 }
+
+//Lista_lista
 Lista_lista::Lista_lista() {
 	tamanho = 0;
 	primeiro = NULL;
 }
-Lista_lista::~Lista_lista() {
+Lista_lista::~Lista_lista() {	//Verificar funcionamento
 	delete primeiro;
 }
 bool Lista_lista::vazia() {
@@ -148,6 +143,7 @@ bool Lista_lista::contem(Lista_int* numero) {
 bool Lista_lista::eh_igual(Lista_lista* lista) {
 	if (lista == NULL) return false;
 	if (lista -> tamanho != tamanho) return false;
+
 	Elemento_lista* atual = primeiro;
 	for (int i = 0; i < tamanho; i++)
 	{
@@ -161,7 +157,6 @@ bool Lista_lista::eh_igual(Lista_lista* lista) {
 }
 void Lista_lista::adicionar(Lista_int* numero) {
 	Elemento_lista* atual = primeiro;
-	Elemento_lista* aux = NULL;
 	Elemento_lista* novo = new Elemento_lista(numero);
 
 	for (int i = 0; i < tamanho; i++)
@@ -176,13 +171,13 @@ void Lista_lista::adicionar(Lista_int* numero) {
 	novo -> proximo = atual;
 	tamanho++;
 }
-void Lista_lista::remover(Lista_int* numero) {
+void Lista_lista::remover(Lista_int* numero) {	//Verificar funcionamento
 	Elemento_lista* atual = primeiro;
 	Elemento_lista* anterior = NULL;
 
 	for (int i = 0; i < tamanho; i++)
 	{
-		if (atual -> elemento ->eh_igual(numero)) {
+		if (atual -> elemento -> eh_igual(numero)) {
 			if (!anterior == NULL) {
 				anterior -> proximo = atual -> proximo;
 			} else {
@@ -197,7 +192,6 @@ void Lista_lista::remover(Lista_int* numero) {
 		}
 	}
 }
-
 Lista_lista* Lista_lista::copiar() {
 	Lista_lista* nova = new Lista_lista();
 

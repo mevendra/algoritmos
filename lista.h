@@ -28,8 +28,8 @@ public:
 class Elemento_lista {
 	public:
 		Lista_int* elemento;
-
 		Elemento_lista* proximo;
+
 		Elemento_lista(Lista_int* elemento);
 		~Elemento_lista();
 		Lista_int* copiar_lista();

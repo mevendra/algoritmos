@@ -206,8 +206,35 @@ Grafo* trabalha_arquivo(char* caminho)
 	fclose(arquivo);
 
 
+	coloca_transicoes(grafo, numero_vertices, atributos);	//Para facilitar algoritmos depois
 	retorno = new Grafo(numero_vertices, atributos, grafo);
 	return retorno;
+}
+
+void coloca_transicoes(int** grafo, int tamanho, list<Atributos_vertice*> atributos) {
+	int id;
+	for (Atributos_vertice* v: atributos)
+	{
+		id = v -> id;
+		for (int i = 0; i < tamanho; i++)
+		{
+			if (grafo[id][i] == 0) {
+				continue;
+			} else if (grafo[id][i] == 1) {
+				v -> adicionar_casamento(i);
+			} else if (grafo[id][i] == 12) {
+				v -> adicionar_casamento(i);
+				v -> adicionar_filho(i);
+			} else if (grafo[id][i] == 13) {
+				v -> adicionar_casamento(i);
+				v -> adicionar_pais(i);
+			} else if (grafo[id][i] == 2) {
+				v -> adicionar_filho(i);
+			} else {	//grafo[id][i] == 3
+				v -> adicionar_pais(i);
+			}
+		}
+	}
 }
 
 void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenhar) {
@@ -253,6 +280,57 @@ void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenha
 		fputs(lin.c_str(), arquivo);
 		//Forma esperada: ID [label = NUMERO, forma = FORMA];\n
 	}
+}
+
+void escreve_componentes_sem_elementos_graphviz(Grafo* g, list<list<int>> componentes, char* caminho) {
+	//Atributos para leitura de arquivo
+		FILE* arquivo;
+		string lin;
+		arquivo = fopen(caminho, "w");
+
+		//Verificacao de quais vertices nao desenhar
+		list<int> nao_desenhar;
+		for (int i = 0; i < g -> numero_vertices; i++)
+		{
+			nao_desenhar.push_back(i);
+		}
+		for (list<int> lista: componentes)
+		{
+			for (int i: lista) {
+				nao_desenhar.remove(i);
+			}
+		}
+
+		//Inicio do grafo e Instanciacao de vertices
+		fputs("graph {\n", arquivo);
+		instancia_vertices_graphviz(g, arquivo, nao_desenhar);
+
+		//Instancia componentes
+		int aux;
+		for (list<int> lista: componentes)
+		{
+			if (lista.size() <= 1) continue;
+			lin = "";
+			aux = lista.front();
+			lista.pop_front();
+			lin += to_string(aux);
+
+			//Para cada elemento do componente adicionar uma aresta
+			for (int i: lista)
+			{
+				lin += " -- ";
+				lin += to_string(i);
+			}
+
+			//Fim do componente e insercao no arquivo
+			lin += ";\n";
+			fputs(lin.c_str(), arquivo);
+			//Forma esperada: ID (-- ID)^NUMERO_DE_ELEMENTOS_COMPONENTE;\n
+		}
+
+		//Fechamento do grafo e do arquivo
+		fputs("}", arquivo);
+		fclose(arquivo);
 }
 
 void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char* caminho) {
@@ -463,9 +541,148 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char* caminho) {
 	fclose(arquivo);
 }
 
+void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char* caminho) {
+	//Atributos para leitura de arquivo
+	FILE* arquivo;
+	string lin;
+	arquivo = fopen(caminho, "w");
+
+	//Atributos p ler grafo
+	int** grafo = g -> grafo;
+	Atributos_vertice* atributos;
+
+	//Inicio do grafo e instanciacao de vertices
+	list<int> nao_desenhar;
+	fputs("digraph {\n", arquivo);
+	instancia_vertices_graphviz(g, arquivo, nao_desenhar);
+
+	//Colore os vertices
+	Hash* map = new Hash();	//Hash que ira guardar as cores relacionadas com cada numero
+	reinicia_cores();	//Reinicia as cores em list<Cor*> cores
+
+	//Atributos para coloracao
+	Cor* cor;
+	Cor* aux;
+	string rgb;
+
+	//Percorre Vertices e escreve as cores
+	for (Atributos_vertice* a: g -> atributos)
+	{
+		cor = NULL;
+		//Para cada cor que coloriu o vertice
+		for (int cor_n: a -> cor)
+		{
+			aux = map -> encontrar_cor(cor_n);	//Encontra cor
+			//Se cor nao tiver sido encontrada ainda
+			if (aux == NULL) {
+				if (cores.empty()) //Se o numero de cores colocado na lista cores e muito pequeno
+				{ printf("Erro: falta cores\n"); return;}
+					//Pega a primeira cor
+				rgb = cores.front();
+				cores.pop_front();
+
+				//Inicia uma nova cor e a adiciona ao hash
+				aux = new Cor(rgb);
+				map -> adicionar_cor(cor_n, aux);
+			}
+
+			if (cor == NULL) {	//Se esta passando pela primeira vez copia a cor de aux
+				cor = new Cor(aux);
+			} else {	//Se ja tem cor definida realiza a soma da cor atual com a de aux
+				cor -> soma(aux);
+			}
+		}
+
+		if (cor == NULL) continue;	//Nao tem cor (a -> cor esta vazio)
+
+		lin = "";
+		lin += to_string(a -> id);
+		lin += " [color = \"";
+		lin += cor -> rgb;
+		lin += "\", style = \"filled\"];\n";
+		fputs(lin.c_str(), arquivo);
+		//Forma esperada: ID [color = "#HEX_VALUE", style = "filled"];\n
+		delete cor;
+	}
+
+	map->limpar();
+	delete map;	//Realiza delete de todas as cores contidas em map
+
+
+	//Definicao de arcos e arestas
+	for (int i = 0; i < g -> numero_vertices; i++)
+	{
+		for (int y = 0; y < g -> numero_vertices; y++)
+		{
+			if (grafo[i][y] == 1 && i < y)	{	//Representa aresta como um arco azul do menor para maior
+				lin = "";
+				lin += to_string(i);
+				lin += "->";
+				lin += to_string(y);
+				bool mesmo_componente = false;
+				bool zi = false;
+				bool zy = false;
+				for (list<int> l: componentes)
+				{
+					zi = false;
+					zy = false;
+					for (int x: l)
+					{
+						if (x == i) zi = true;
+						else if(x == y) zy = true;
+					}
+					if (zi && zy) {
+						mesmo_componente = true;
+						break;
+					}
+				}
+
+				if (mesmo_componente) {
+					lin += "[color = green]";
+				} else {
+					lin += "[color = blue]";
+				}
+				lin += ";\n";
+				fputs(lin.c_str(), arquivo);
+				//Forma esperada: ID_MENOR -> ID_MAIOR [color = blue];\n
+			} else if(grafo[i][y] == 2) {	//Representa um arco de i para y
+				lin = "";
+				lin += to_string(i);
+				lin += "->";
+				lin += to_string(y);
+				lin += ";\n";
+				fputs(lin.c_str(), arquivo);
+				//Forma esperada: ID -> ID;\n
+			} else if(grafo[i][y] == 12) {	//Representa um arco de i para y mas i e pai de y
+				lin = "";
+				lin += to_string(i);
+				lin += "->";
+				lin += to_string(y);
+				lin += "[color = red]";
+				lin += ";\n";
+				fputs(lin.c_str(), arquivo);
+				//Forma esperada: ID -> ID[color = red];\n
+			}
+		}
+	}
+
+	//Termina grafo e fecha arquivo
+	fputs("}\n",arquivo);
+	fclose(arquivo);
+}
+
 void reinicia_cores() {
 	cores.clear();
-
+	cores.push_back("#0000FF");
+	cores.push_back("#FF0000");
+	cores.push_back("#00FF00");
+	cores.push_back("#FFFF00");
+	cores.push_back("#FF00FF");
+	cores.push_back("#00FFFF");
+	cores.push_back("#808080");
+	cores.push_back("#4682B4");
+	cores.push_back("#008080");
+	cores.push_back("#808000");
 	cores.push_back("#8B4513");
 	cores.push_back("#DEB887");
 	cores.push_back("#8B008B");
@@ -475,15 +692,4 @@ void reinicia_cores() {
 	cores.push_back("#FF8C00");
 	cores.push_back("#D8BFD8");
 	cores.push_back("#EEE8AA");
-
-	cores.push_back("#0000FF");
-		cores.push_back("#FF0000");
-		cores.push_back("#00FF00");
-		cores.push_back("#FFFF00");
-		cores.push_back("#FF00FF");
-		cores.push_back("#00FFFF");
-		cores.push_back("#808080");
-		cores.push_back("#4682B4");
-		cores.push_back("#008080");
-		cores.push_back("#808000");
 }

@@ -55,10 +55,16 @@ class Atributos_vertice {
 		int numero;
 		char tipo;
 		list<int> cor;
-
+		list<int> pais;
+		list<int> filhos;
+		list<int> casados;
 		int cores_ate_folha;
+
 		Atributos_vertice(int id, int numero, char tipo);
 		void adicionar_cor(int cor_);
+		void adicionar_casamento(int casamento);
+		void adicionar_pais(int pai);
+		void adicionar_filho(int filho);
 };
 
 class Grafo {
@@ -110,4 +116,5 @@ class Hash {
 		void adicionar_cor(int numero, Cor* cor);
 		void limpar();
 };
+
 #endif /* ESTRUTURA_H */

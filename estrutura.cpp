@@ -1,5 +1,6 @@
 #include "algoritmo.h"
 
+//Vertice
 Vertice::Vertice(){
 	adjs = std::list<Vertice*>();
 	filhos = std::list<Vertice*>();
@@ -7,7 +8,6 @@ Vertice::Vertice(){
 	id = 0;
 	atributo = 0;
 }
-
 Vertice::Vertice(int id_) {
 	adjs = std::list<Vertice*>();
 	filhos = std::list<Vertice*>();
@@ -28,6 +28,7 @@ void Vertice::adicionar_pai(Vertice* vertice) {
 	pais.push_back(vertice);
 }
 
+//Grafo
 Grafo::Grafo(int numero_vertices_, list<Atributos_vertice*> atributos_, int** grafo_) {
 	numero_vertices = numero_vertices_;
 	atributos = atributos_;
@@ -35,13 +36,28 @@ Grafo::Grafo(int numero_vertices_, list<Atributos_vertice*> atributos_, int** gr
 }
 
 void Grafo::adicionar_aresta(int v1, int v2){
-	grafo[v1][v2] = 1;
-	grafo[v2][v1] = 1;
+	if (grafo[v1][v2] == 2) {
+		grafo[v1][v2] = 12;
+		grafo[v2][v1] = 13;
+	} else if (grafo[v2][v1] == 2) {
+		grafo[v1][v2] = 13;
+		grafo[v2][v1] = 12;
+	} else {
+		grafo[v1][v2] = 1;
+		grafo[v2][v1] = 1;
+	}
 }
+
 void Grafo::adicionar_arco(int fonte, int destino) {
-	grafo[fonte][destino] = 2;
-	grafo[destino][fonte] = 3;
+	if (grafo[fonte][destino] == 1) {
+		grafo[fonte][destino] = 12;
+		grafo[destino][fonte] = 13;
+	} else {
+		grafo[fonte][destino] = 2;
+		grafo[destino][fonte] = 3;
+	}
 }
+
 Atributos_vertice* Grafo::encontrar_atributo(int i) {
 	for (Atributos_vertice* v: atributos)
 	{
@@ -50,6 +66,8 @@ Atributos_vertice* Grafo::encontrar_atributo(int i) {
 	}
 	return new Atributos_vertice(-1, -1, 'e');
 }
+
+//Atributos_vertice
 Atributos_vertice::Atributos_vertice (int id_, int numero_, char tipo_) {
 	id = id_;
 	numero = numero_;
@@ -60,12 +78,21 @@ Atributos_vertice::Atributos_vertice (int id_, int numero_, char tipo_) {
 void Atributos_vertice::adicionar_cor(int cor_) {
 	cor.push_back(cor_);
 }
+void Atributos_vertice::adicionar_casamento(int casamento) {
+	casados.push_back(casamento);
+}
+void Atributos_vertice::adicionar_pais(int pai) {
+	pais.push_back(pai);
+}
+void Atributos_vertice::adicionar_filho(int filho) {
+	filhos.push_back(filho);
+}
 
+//Nodo
 Nodo::Nodo(int id_) {
 	id = id_;
 	anterior = NULL;
 }
-
 Nodo::Nodo(int id_, Nodo* anterior_) {
 	id = id_;
 	anterior = anterior_;
@@ -80,6 +107,7 @@ void Nodo::adicionar_anterior (Nodo* anterior_) {
 		anterior = anterior_;
 }
 
+//Cor
 Cor::Cor() {
 	stringstream stream;
 	r = 1;
@@ -138,6 +166,7 @@ Cor::Cor(Cor* cor) {
 	stream << std::hex << (b);
 	rgb += stream.str();
 }
+
 void Cor::soma(Cor* c) {
 	stringstream stream;
 	r = (r + c->r)/2;
@@ -153,6 +182,7 @@ void Cor::soma(Cor* c) {
 	rgb += stream.str();
 }
 
+//Hash
 Hash::Hash() {
 	numeros = vector<int>();
 	cores = vector<Cor*>();
@@ -165,10 +195,12 @@ Hash::~Hash() {
 		delete aux;
 	}
 }
+
 void Hash::adicionar_cor(int numero, Cor* cor) {
 	numeros.push_back(numero);
 	cores.push_back(cor);
 }
+
 void Hash::limpar() {
 	numeros.clear();
 	Cor* aux;

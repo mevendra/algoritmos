@@ -98,6 +98,7 @@ void testar_busca_largura_listas(Grafo* graf) {
 	printf("\nNumero de raizes: %d\n", arvore.size());
 }
 void testar_busca_profundidade_listas(Grafo* graf) {
+	//
 }
 void testar_componentes_conexas(Grafo* grafo) {
 	printf("\nTestando busca de componentes conexas\n");
@@ -127,7 +128,6 @@ void testar_colorir_grafo(Grafo *grafo) {
 
 	descolorir(grafo);
 }
-
 void testar_colorir_grafo_mat(Grafo* grafo) {
 	printf("Testando colorir grafo\n");
 	colorir_grafo_mat(grafo);
@@ -168,10 +168,16 @@ void testar_casamento_entre_irmaos(Grafo* g) {
 		printf("\n");
 	}
 }
-
+void testar_max_cores_ate_folha(Grafo* g) {
+	printf("Testando encontrar o maior numero de cores diferentes ate uma folha\n");
+	colorir_grafo(g);
+	define_max_cores(g);
+	for (Atributos_vertice* v: g -> atributos)
+	{
+		printf("Vertice %d(%d): Tem %d cores diferentes ate folha!\n", v -> id, v -> numero, v -> cores_ate_folha);
+	}
+}
 int main(int argc, char *argv[]) {
-	srand(time(NULL));
-
 	Grafo *g = trabalha_arquivo("entrada/Arara4MaqPar.txt");
 	int **grafo = g->grafo;
 
@@ -183,46 +189,74 @@ int main(int argc, char *argv[]) {
 	testar_colorir_grafo_mat(g);
 	testar_colorir_grafo(g);
 	testar_casamento_entre_irmaos(g);
+	testar_max_cores_ate_folha(g);
 
+	//Escrita dos grafos
+	//Grafo normal (sem cores)
 	escreve_grafo_graphviz(g, false, "entrada/grafo_normal.dot");
+	printf("Escreveu grafo normal!\n");
 
+	//Arvore
 	int* arv = new int[g -> numero_vertices];
 	busca_em_largura(grafo, g -> numero_vertices, arv);
 	escreve_arvore_graphviz(g, arv, "entrada/arvore.dot");
-	printf("Escreveu arvore\n");
+	printf("Escreveu arvore!\n");
 
+	//Componentes conexas
 	list<list<int>> lista;
 	busca_componentes_conexas(grafo, g -> numero_vertices, lista);
 	escreve_componentes_graphviz(g, lista, "entrada/componentes.dot");
-	printf("Escreveu componentes\n");
+	printf("Escreveu componentes!\n");
 
-	//escrevendo e colorindo
+	//Grafo Colorido
 	colorir_grafo(g);
 	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido.dot");
 	descolorir(g);
-	printf("Escreveu e coloriu\n");
+	printf("Escreveu grafo colorido\n");
 
+	//Grafo materno colorido
 	colorir_grafo_mat(g);
 	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido_mat.dot");
 	descolorir(g);
-	printf("Escreveu e coloriu mat\n");
+	printf("Escreveu grafo materno colorido!\n");
 
+	//Grafo paterno colorido
 	colorir_grafo_pat(g);
 	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido_pat.dot");
 	descolorir(g);
-	printf("Escreveu e coloriu pat\n");
+	printf("Escreveu e coloriu pat!\n");
 
-	//casamento entre irmaos
+
 	list<list<int>> destino;
+	//Componentes de casamento entre irmaos
+	destino.clear();
 	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
-	escreve_componentes_graphviz(g, destino, "entrada/casamento_irmaos.dot");
+	escreve_componentes_sem_elementos_graphviz(g, destino, "entrada/casamento_irmaos.dot");
+	printf("Escreveu Componentes de casamento entre irmaos!\n");
 
+	//Componentes de casamento entre irmaos + grafo colorido
+	destino.clear();
+	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
 	colorir_grafo(g);
-	define_max_cores(g);
-	for (Atributos_vertice* v: g -> atributos)
-	{
-		printf("%d: %d\n", v -> id, v -> cores_ate_folha);
-	}
+	escreve_grafo_com_componentes_especiais(g, destino, "entrada/grafo_colorido_com_casamento_irmaos.dot");
+	descolorir(g);
+	printf("Escreveu Componentes de casamento entre irmaos junto com grafo colorido!\n");
+
+	//Componentes de casamento entre irmaos + grafo materno colorido
+	destino.clear();
+	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
+	colorir_grafo_mat(g);
+	escreve_grafo_com_componentes_especiais(g, destino, "entrada/grafo_colorido_materno_com_casamento_irmaos.dot");
+	descolorir(g);
+	printf("Escreveu Componentes de casamento entre irmaos junto com grafo materno colorido!\n");
+
+	//Componentes de casamento entre irmaos + grafo paterno colorido
+	destino.clear();
+	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
+	colorir_grafo_pat(g);
+	escreve_grafo_com_componentes_especiais(g, destino, "entrada/grafo_colorido_paterno_com_casamento_irmaos.dot");
+	descolorir(g);
+	printf("Escreveu Componentes de casamento entre irmaos junto com grafo paterno colorido!\n");
 	return 0;
 }
 

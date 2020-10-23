@@ -17,5 +17,5 @@ void testar_colorir_grafo(Grafo *grafo);
 void testar_colorir_grafo_mat(Grafo* grafo);
 void testar_colorir_grafo_pat(Grafo* grafo);
 void testar_casamento_entre_irmaos(Grafo* g);
-
+void testar_max_cores_ate_folha(Grafo* g);
 #endif /* MAIN_H */

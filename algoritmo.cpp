@@ -254,6 +254,7 @@ void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz
 		free(v -> atributo);
 	}
 }
+
 void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz)
 {
 	//Atributos
@@ -289,6 +290,7 @@ void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>&
 		free(v -> atributo);
 	}
 }
+
 void busca_em_profundidade_listas_adjacencia_(list<Vertice*>& grafo, Vertice* v) {
 	((Atributos_profundidade_lista* )v -> atributo) -> cor = 1;
 	Nodo* aux;
@@ -318,6 +320,7 @@ void descolorir(Grafo* g)
 		v -> cor.clear();
 	}
 }
+
 void colorir_grafo(Grafo* g)
 {
 	int** grafo = g -> grafo;
@@ -415,6 +418,7 @@ void colorir_grafo_mat(Grafo* g)
 		colorir_apartir_de_tipo(g, i, 'e');
 
 }
+
 void colorir_grafo_pat(Grafo* g)
 {
 	int** grafo = g -> grafo;
@@ -447,6 +451,7 @@ void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
 			{destino.push_back(i);}	//adiciona i como fonte na lista
 	}
 }
+
 void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo)
 {
 	int** grafo = g -> grafo;
@@ -499,28 +504,30 @@ void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo)
 		free(atributos_vertices[i]);
 	}
 }
+
 bool verifica_irmaos(int** grafo,int tamanho,int a,int b) {
 	list<int> pais_a;
 	for (int i = 0; i < tamanho; i++)
 	{
-		if (grafo[a][i] == 3) {
+		if (grafo[a][i] == 3 || grafo[a][i] == 13) {
 			pais_a.push_back(i);
 		}
 	}
 
 	for (int i: pais_a)
 	{
-		if (grafo[b][i] == 3) {
+		if (grafo[b][i] == 3 || grafo[b][i] == 13) {
 			return true;
 		}
 	}
 
 	return false;
 }
+
 void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destino) {
 	list<int> casamento;
 	for (int i = 0; i < tamanho; i++) {
-		for (int y = 0; y < tamanho; y++) {
+		for (int y = 0; y < i; y++) {
 			if (grafo[i][y] == 1) {
 				if (verifica_irmaos(grafo, tamanho, i, y)) {
 					casamento = list<int>();

@@ -18,6 +18,7 @@ public:
 
 	Lista_int();
 	~Lista_int();
+	Lista_int* copiar_lista();
 	bool vazia();
 	bool contem(int numero);
 	bool eh_igual(Lista_int *lista);

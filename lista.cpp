@@ -16,6 +16,17 @@ Lista_int::Lista_int() {
 Lista_int::~Lista_int() {	//Verificar funcionamento
 	delete primeiro;
 }
+Lista_int* Lista_int::copiar_lista() {
+	Lista_int* nova = new Lista_int();
+	Elemento_int* atual = primeiro;
+	for (int i = 0; i < tamanho; i++)
+	{
+		int numero = atual -> elemento;
+		nova -> adicionar(numero);
+		atual = atual -> proximo;
+	}
+	return nova;
+}
 bool Lista_int::vazia() {
 	if (tamanho <= 0) return true;
 	else return false;

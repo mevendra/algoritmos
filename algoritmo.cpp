@@ -547,15 +547,8 @@ void define_max_cores(Grafo* g) {
 
 	for (Atributos_vertice* v: g -> atributos)
 	{
-		bool eh_folha = true;
 		int id = v -> id;
-		for (int i = 0; i < g -> numero_vertices; i++)
-		{
-			if (g -> grafo[id][i] == 2 || g -> grafo[id][i] == 12) {
-				eh_folha = false;
-			}
-		}
-		if (eh_folha) {
+		if (v -> filhos.size() == 0) {
 			Lista_int* v_cor = new Lista_int();
 			for (int i: v -> cor) {
 				v_cor -> adicionar(i);
@@ -574,33 +567,35 @@ void define_max_cores(Grafo* g) {
 		v = fila.front();
 		fila.pop();
 		int v_id = v -> id;
-		for (int i = 0; i < g -> numero_vertices; i++)
+		for (int i: v -> pais)
 		{
 			Atributos_vertice* pai;
-			if (g -> grafo[v_id][i] == 3 || g -> grafo[v_id][i] == 13) {
-				pai = g -> encontrar_atributo(i);
-				Lista_int* pai_cor = new Lista_int();
-				for (int y: pai -> cor) {
-					pai_cor -> adicionar(y);
-				}
-				Lista_lista* nova_lista_pai;
-				for (Lista_lista* lista: lista_cores[v_id])
-				{
-					bool adicionar = true;
-					nova_lista_pai = lista -> copiar();
-					nova_lista_pai -> adicionar(pai_cor);
-					for (Lista_lista* l: lista_cores[i])
-					{
-						if (l -> eh_igual(nova_lista_pai)) {
-							adicionar = false;
-							break;
-						}
-					}
-					if (adicionar)
-						lista_cores[i].push_back(nova_lista_pai);
-				}
-				fila.push(pai);
+			pai = g -> encontrar_atributo(i);
+			Lista_int* pai_cor = new Lista_int();
+			for (int y: pai -> cor) {
+				pai_cor -> adicionar(y);
 			}
+			Lista_lista* nova_lista_pai;
+			for (Lista_lista* lista: lista_cores[v_id])
+			{
+				bool adicionar = true;
+				nova_lista_pai = lista -> copiar();
+				nova_lista_pai -> adicionar(pai_cor -> copiar_lista());
+				for (Lista_lista* l: lista_cores[i])
+				{
+					if (l -> eh_igual(nova_lista_pai)) {
+						adicionar = false;
+						break;
+					}
+				}
+				printf("antes\n");
+				if (adicionar)
+					lista_cores[i].push_back(nova_lista_pai);
+				else
+					delete nova_lista_pai;
+			}
+			delete pai_cor;
+			fila.push(pai);
 		}
 	}
 
@@ -611,6 +606,7 @@ void define_max_cores(Grafo* g) {
 		for (Lista_lista* lista: lista_cores[i])
 		{
 			if (lista -> tamanho > tamanho) tamanho = lista -> tamanho;
+			delete lista;
 		}
 		g -> encontrar_atributo(i) -> cores_ate_folha = tamanho;
 	}

@@ -191,6 +191,8 @@ int main(int argc, char *argv[]) {
 	testar_casamento_entre_irmaos(g);
 	testar_max_cores_ate_folha(g);
 
+	bool escreve_grafos = false;
+	if (escreve_grafos) {
 	//Escrita dos grafos
 	//Grafo normal (sem cores)
 	escreve_grafo_graphviz(g, false, "entrada/grafo_normal.dot");
@@ -257,6 +259,7 @@ int main(int argc, char *argv[]) {
 	escreve_grafo_com_componentes_especiais(g, destino, "entrada/grafo_colorido_paterno_com_casamento_irmaos.dot");
 	descolorir(g);
 	printf("Escreveu Componentes de casamento entre irmaos junto com grafo paterno colorido!\n");
+	}
 	return 0;
 }
 

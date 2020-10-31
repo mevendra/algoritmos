@@ -1,0 +1,50 @@
+Algoritmo Guloso 1.1
+
+Grafo(Vertices, Arestas), n = Numero de Vertices, a = Maior grau de saida, c = Tamanho do maior caminho entre 2 vertices
+
+Fila fila
+for(Vertice v: Vertices)	//Executa n vezes
+{	
+	v.lista_cores.adicionar(v.cor)
+	if (v.eh_folha) {
+		fila.adicionar(v)
+	}
+}
+
+while(!fila.vazio())	//Para cada Vertice pode executar a vezes(Executa de acordo com o numero de filhos, no maximo n*a vezes)
+{
+	Vertice v = fila.remover_primeiro()
+
+	if (v.ja_avaliado = true) {	//Todo vertice sera colocado na fila a vezes
+		continuar while
+	}
+
+	for(Vertice filho: v.filhos())	//Max a vezes
+	{
+		if (filho.ja_avaliado = false) {
+			fila.adicionar(v)
+			continuar while
+		}
+	}
+
+	//Executa n vezes
+	for(Vertice filho: v.filhos())	//Executa no maximo a vezes
+	{
+		if (filho.lista_cores.tamanho >= v.lista_cores.tamanho) {	// >= Pq a lista do filho pode ou nao conter a cor do pai, cor que ja esta adicionada na lista do pai
+			v.lista_cores = filho.lista_cores.copiar_lista()		//Maximo = c (Se todos os vertices do caminho tiverem cores diferentes)
+			v.lista_cores.adicionar(v.cor)							//Maximo = c (Percorre a lista para verificar se v.cor esta nela)
+		}
+	}
+
+	for(Vertice pai: v.pais())	//Executa 2x
+	{
+		fila.adicionar(pai)	//constante(adiciona no final)
+	}
+
+	v.ja_avaliado = true
+}
+
+Complexidade
+Tempo: 2n + (4 * n * a) + (n * (a * (2 * c + 1) + 3))
+
+Tamanho: n * c //Cada vertice com uma lista de no maximo c elementos(c = n em um grafo conexo)

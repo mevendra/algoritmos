@@ -216,22 +216,23 @@ void coloca_transicoes(int** grafo, int tamanho, list<Atributos_vertice*> atribu
 	for (Atributos_vertice* v: atributos)
 	{
 		id = v -> id;
-		for (int i = 0; i < tamanho; i++)
+		for (Atributos_vertice* a: atributos)
 		{
+			int i = a -> id;
 			if (grafo[id][i] == 0) {
 				continue;
 			} else if (grafo[id][i] == 1) {
-				v -> adicionar_casamento(i);
+				v -> adicionar_casamento(a);
 			} else if (grafo[id][i] == 12) {
-				v -> adicionar_casamento(i);
-				v -> adicionar_filho(i);
+				v -> adicionar_casamento(a);
+				v -> adicionar_filho(a);
 			} else if (grafo[id][i] == 13) {
-				v -> adicionar_casamento(i);
-				v -> adicionar_pais(i);
+				v -> adicionar_casamento(a);
+				v -> adicionar_pais(a);
 			} else if (grafo[id][i] == 2) {
-				v -> adicionar_filho(i);
+				v -> adicionar_filho(a);
 			} else {	//grafo[id][i] == 3
-				v -> adicionar_pais(i);
+				v -> adicionar_pais(a);
 			}
 		}
 	}
@@ -668,6 +669,54 @@ void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> component
 
 	//Termina grafo e fecha arquivo
 	fputs("}\n",arquivo);
+	fclose(arquivo);
+}
+
+void escreve_cores(Grafo* g, char* caminho) {
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string linha;
+
+	for (Atributos_vertice *a : g->atributos) {
+		linha = "";
+		linha+= "Numero: ";
+		linha+= to_string(a -> numero);
+		linha+= " Tipo: ";
+		if (a -> tipo == 'e')
+			linha+= "elipse   ";
+		else
+			linha+= "triangulo";
+		for (int i : a->cor) {
+			linha+= "| ";
+			linha+= to_string(g -> encontrar_atributo(i) -> numero);
+		}
+		linha += "\n";
+		fputs(linha.c_str(), arquivo);
+	}
+
+	fclose(arquivo);
+}
+
+void escreve_max_cores(Grafo* g, char* caminho) {
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string linha;
+
+	for (Atributos_vertice *a : g->atributos) {
+		linha = "";
+		linha+= "Numero: ";
+		linha+= to_string(a -> numero);
+		linha+= " Tipo: ";
+		if (a -> tipo == 'e')
+			linha+= "elipse   ";
+		else
+			linha+= "triangulo";
+		linha+= " Maximo de Cores: ";
+		linha+= to_string(a -> cores_ate_folha);
+		linha += "\n";
+		fputs(linha.c_str(), arquivo);
+	}
+
 	fclose(arquivo);
 }
 

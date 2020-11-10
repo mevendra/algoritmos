@@ -73,18 +73,20 @@ Atributos_vertice::Atributos_vertice (int id_, int numero_, char tipo_) {
 	numero = numero_;
 	tipo = tipo_;
 	cores_ate_folha = -1;
+	particao = -1;
+	valor_bool = false;
 }
 
 void Atributos_vertice::adicionar_cor(int cor_) {
 	cor.push_back(cor_);
 }
-void Atributos_vertice::adicionar_casamento(int casamento) {
+void Atributos_vertice::adicionar_casamento(Atributos_vertice* casamento) {
 	casados.push_back(casamento);
 }
-void Atributos_vertice::adicionar_pais(int pai) {
+void Atributos_vertice::adicionar_pais(Atributos_vertice* pai) {
 	pais.push_back(pai);
 }
-void Atributos_vertice::adicionar_filho(int filho) {
+void Atributos_vertice::adicionar_filho(Atributos_vertice* filho) {
 	filhos.push_back(filho);
 }
 
@@ -220,4 +222,19 @@ Cor* Hash::encontrar_cor(int numero) {
 	return NULL;
 }
 
+Juncao::Juncao(Atributos_vertice* primeiro_, Atributos_vertice* segundo_, Atributos_vertice* juncao_) {
+	primeiro = primeiro_;
+	segundo = segundo_;
+	juncao = juncao_;
+}
+
+Particao::Particao(Atributos_vertice* primeiro_) {
+	primeiro = primeiro_;
+	id_primeiro = primeiro_ -> id;
+	ja_avaliado = false;
+}
+
+void Particao::adicionar_vertice(Atributos_vertice* vertice) {
+	vertices.push_back(vertice);
+}
 

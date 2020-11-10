@@ -1,0 +1,389 @@
+Numero: 1001 Tipo: triangulo| 1001
+Numero: 1002 Tipo: elipse   | 1002
+Numero: 1003 Tipo: triangulo| 1003
+Numero: 1004 Tipo: elipse   | 1004
+Numero: 1005 Tipo: triangulo| 1105
+Numero: 1006 Tipo: elipse   | 1105
+Numero: 1007 Tipo: triangulo| 1105
+Numero: 1008 Tipo: triangulo| 1001| 1002
+Numero: 1009 Tipo: elipse   | 1001| 1002
+Numero: 1010 Tipo: elipse   | 1001| 1002
+Numero: 1011 Tipo: elipse   | 1001| 1002
+Numero: 1012 Tipo: triangulo| 1203| 1204
+Numero: 1013 Tipo: triangulo| 1003| 1004
+Numero: 1014 Tipo: elipse   | 1003| 1004
+Numero: 1015 Tipo: elipse   | 1003| 1004
+Numero: 1016 Tipo: triangulo| 1004| 1105
+Numero: 1017 Tipo: triangulo| 1004| 1105
+Numero: 1018 Tipo: elipse   | 1004| 1105
+Numero: 1019 Tipo: triangulo| 1105
+Numero: 1020 Tipo: triangulo| 1105
+Numero: 1021 Tipo: triangulo| 1001| 1002| 1105
+Numero: 1022 Tipo: elipse   | 1001| 1002| 1105
+Numero: 1023 Tipo: triangulo| 1001| 1002| 1105
+Numero: 1024 Tipo: triangulo| 1001| 1002| 1105
+Numero: 1025 Tipo: triangulo| 1001| 1002| 1105
+Numero: 1026 Tipo: elipse   | 1001| 1002| 1004| 1105
+Numero: 1027 Tipo: elipse   | 1001| 1002| 1004| 1105
+Numero: 1028 Tipo: elipse   | 1001| 1002| 1004| 1105
+Numero: 1029 Tipo: elipse   | 1001| 1002| 1004| 1105
+Numero: 1030 Tipo: triangulo| 1001| 1002| 1004| 1105
+Numero: 1031 Tipo: elipse   | 1001| 1002
+Numero: 1032 Tipo: triangulo| 1001| 1002
+Numero: 1033 Tipo: elipse   | 1001| 1002
+Numero: 1034 Tipo: elipse   | 1001| 1002
+Numero: 1035 Tipo: triangulo| 1001| 1002
+Numero: 1036 Tipo: triangulo| 1001| 1002
+Numero: 1037 Tipo: triangulo| 1001| 1002
+Numero: 1038 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1039 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1040 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1041 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1042 Tipo: triangulo| 1001| 1002| 1003| 1004
+Numero: 1043 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1044 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1045 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1046 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1047 Tipo: elipse   | 1001| 1002
+Numero: 1048 Tipo: triangulo| 1001| 1002
+Numero: 1049 Tipo: elipse   | 1001| 1002| 1203| 1204
+Numero: 1050 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1051 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1052 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1053 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1054 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1055 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1056 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1057 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1058 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1059 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1060 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1061 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1062 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1063 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1064 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1065 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1066 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1067 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1068 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1069 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1070 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1071 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1073 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1074 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1075 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1076 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1077 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1078 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1079 Tipo: elipse   | 1001| 1002| 1004| 1105
+Numero: 1080 Tipo: elipse   | 1001| 1002| 1004| 1105
+Numero: 1081 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1082 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1083 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1084 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1085 Tipo: triangulo| 1001| 1002| 1004| 1105
+Numero: 1086 Tipo: elipse   | 1001| 1002| 1004| 1105
+Numero: 1087 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1088 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1089 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1090 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1091 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1092 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1093 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1094 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1095 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1096 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1097 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1100 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1101 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1102 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1103 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1104 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1105 Tipo: triangulo| 1105
+Numero: 1106 Tipo: triangulo| 1106
+Numero: 1107 Tipo: elipse   | 1001| 1002
+Numero: 1108 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1109 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1110 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1111 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1112 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1113 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1114 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1115 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1116 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1117 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1118 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1119 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1120 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1121 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1122 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1123 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1124 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1125 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1126 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1127 Tipo: elipse   | 1001| 1002| 1106| 1196
+Numero: 1128 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1129 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1130 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1131 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1132 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1133 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1134 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1135 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1136 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1137 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1138 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1139 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1140 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1141 Tipo: triangulo| 1001| 1002| 1106| 1197
+Numero: 1142 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1143 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1144 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1145 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1146 Tipo: elipse   | 1001| 1002| 1106| 1195
+Numero: 1147 Tipo: triangulo| 1001| 1002| 1106| 1196
+Numero: 1148 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1149 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1150 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1151 Tipo: elipse   | 1001| 1002| 1106| 1195
+Numero: 1152 Tipo: triangulo| 1001| 1002| 1106| 1194
+Numero: 1153 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1154 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1155 Tipo: elipse   | 1001| 1002| 1106| 1195
+Numero: 1156 Tipo: elipse   | 1001| 1002| 1106| 1196
+Numero: 1157 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1158 Tipo: elipse   | 1001| 1002| 1106| 1197
+Numero: 1159 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1160 Tipo: triangulo| 1001| 1002| 1106| 1194
+Numero: 1161 Tipo: triangulo| 1001| 1002| 1106| 1194
+Numero: 1162 Tipo: triangulo| 1001| 1002| 1106| 1196
+Numero: 1163 Tipo: triangulo| 1001| 1002| 1106| 1195
+Numero: 1164 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1165 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1166 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1167 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1168 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1169 Tipo: elipse   | 1001| 1002| 1106| 1197
+Numero: 1170 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1171 Tipo: triangulo| 1001| 1002| 1106| 1195
+Numero: 1172 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1173 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1174 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1175 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1176 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1177 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1178 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1179 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1180 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1181 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1182 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1183 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1184 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1185 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1186 Tipo: triangulo| 1001| 1002| 1106| 1197
+Numero: 1187 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1188 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1189 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1190 Tipo: elipse   | 1001| 1002| 1106
+Numero: 1191 Tipo: triangulo| 1001| 1002| 1106| 1195
+Numero: 1192 Tipo: elipse   | 1001| 1002| 1106| 1194
+Numero: 1193 Tipo: triangulo| 1001| 1002| 1106
+Numero: 1194 Tipo: triangulo| 1194
+Numero: 1195 Tipo: elipse   | 1195
+Numero: 1196 Tipo: triangulo| 1196
+Numero: 1197 Tipo: triangulo| 1197
+Numero: 1201 Tipo: elipse   | 1201
+Numero: 1203 Tipo: triangulo| 1203
+Numero: 1204 Tipo: elipse   | 1204
+Numero: 1205 Tipo: elipse   | 1001| 1002| 1203| 1204
+Numero: 1216 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1226 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1228 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1229 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1230 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1233 Tipo: elipse   | 1001| 1002| 1203| 1204
+Numero: 1239 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1240 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1247 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1250 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1251 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1252 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1256 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1257 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1258 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1259 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1261 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1264 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1265 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1267 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1268 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1271 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1278 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1279 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1280 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1281 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1296 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1354 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1355 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1367 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1368 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1369 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1370 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1371 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1372 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1375 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1376 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1377 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1378 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1379 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1380 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1381 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1382 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1383 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1384 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1385 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1386 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1387 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1388 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1389 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1390 Tipo: elipse   | 1201
+Numero: 1391 Tipo: elipse   | 1201
+Numero: 1392 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1393 Tipo: triangulo| 1001| 1002| 1203| 1204
+Numero: 1394 Tipo: elipse   | 1001| 1002| 1203| 1204
+Numero: 1395 Tipo: triangulo| 1001| 1002| 1203| 1204
+Numero: 1396 Tipo: triangulo| 1001| 1002| 1203| 1204
+Numero: 1397 Tipo: elipse   | 1001| 1002| 1203| 1204
+Numero: 1398 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1399 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1400 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1401 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1402 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1403 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1404 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1405 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1406 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1407 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1408 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1409 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1410 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1411 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1412 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1413 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1414 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1415 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1416 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1417 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1418 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1419 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1420 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1421 Tipo: elipse   | 1001| 1002
+Numero: 1422 Tipo: triangulo| 1001| 1002
+Numero: 1423 Tipo: elipse   | 1001| 1002
+Numero: 1424 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1425 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1426 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1427 Tipo: triangulo| 1001| 1002| 1004| 1105
+Numero: 1428 Tipo: triangulo| 1001| 1002| 1004| 1105
+Numero: 1429 Tipo: elipse   | 1001| 1002| 1004| 1105
+Numero: 1430 Tipo: triangulo| 1001| 1002| 1004| 1105
+Numero: 1431 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1432 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1433 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1434 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1435 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1436 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1437 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1438 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1439 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1440 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1441 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1442 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1443 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1444 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1445 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1446 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1447 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1448 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1449 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1450 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1451 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1452 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1453 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1454 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1455 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1456 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105| 1201
+Numero: 1457 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1458 Tipo: triangulo| 1001| 1002
+Numero: 1459 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1460 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1461 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1462 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1463 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1464 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1465 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1466 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1467 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1468 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1469 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1470 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1471 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1472 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1473 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1474 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1475 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1476 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1477 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1478 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1479 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1480 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1481 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1482 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1483 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1484 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1485 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1486 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1487 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1488 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1489 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1490 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1491 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105| 1203| 1204
+Numero: 1492 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1493 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1494 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1495 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1496 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1497 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1498 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1499 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1501 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1502 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1503 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1504 Tipo: triangulo| 1003| 1004| 1105
+Numero: 1505 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1506 Tipo: elipse   | 1003| 1004| 1105
+Numero: 1507 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1508 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1509 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1510 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1511 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1512 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1513 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1514 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1515 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1516 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1517 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1518 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1519 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1520 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1521 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1522 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1523 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1524 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1525 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1526 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1527 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1528 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1529 Tipo: elipse   | 1001| 1002| 1003| 1004| 1105
+Numero: 1530 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105
+Numero: 1531 Tipo: triangulo| 1001| 1002| 1003| 1004| 1105

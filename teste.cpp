@@ -176,6 +176,20 @@ void testar_max_cores_ate_folha(Grafo* g) {
 	{
 		printf("Vertice %d(%d): Tem %d cores diferentes ate folha!\n", v -> id, v -> numero, v -> cores_ate_folha);
 	}
+	descolorir(g);
+}
+void testar_juncoes(Grafo* g) {
+	printf("Testando encontrar juncoes\n");
+	list<Juncao*> destino;
+	encontra_juncoes(g, destino);
+	int num = 1088;
+	printf("Mostrando Juncoes sobre o numero %d\n", num);
+	for (Juncao* j: destino)
+	{
+		if (j -> juncao -> numero == num)
+			printf("Juncao %d sobre %d e %d encontrada\n", j -> juncao -> numero, j -> primeiro -> numero, j -> segundo -> numero);
+	}
+	printf("Numero de juncoes encontradas: %d\n", destino.size());
 }
 int main(int argc, char *argv[]) {
 	Grafo *g = trabalha_arquivo("entrada/Arara4MaqPar.txt");
@@ -190,6 +204,7 @@ int main(int argc, char *argv[]) {
 	testar_colorir_grafo(g);
 	testar_casamento_entre_irmaos(g);
 	testar_max_cores_ate_folha(g);
+	testar_juncoes(g);
 
 	bool escreve_grafos = false;
 	if (escreve_grafos) {
@@ -259,6 +274,24 @@ int main(int argc, char *argv[]) {
 	escreve_grafo_com_componentes_especiais(g, destino, "entrada/grafo_colorido_paterno_com_casamento_irmaos.dot");
 	descolorir(g);
 	printf("Escreveu Componentes de casamento entre irmaos junto com grafo paterno colorido!\n");
+
+	//Saida textual das cores
+	colorir_grafo(g);
+	escreve_cores(g, "entrada/cores.txt");
+	escreve_max_cores(g, "entrada/max_cores.txt");
+	descolorir(g);
+
+	//Saida textual das cores maternas
+	colorir_grafo_mat(g);
+	escreve_cores(g, "entrada/cores_mat.txt");
+	escreve_max_cores(g, "entrada/max_cores_mat.txt");
+	descolorir(g);
+
+	//Saida textual das cores paternas
+	colorir_grafo_pat(g);
+	escreve_cores(g, "entrada/cores_pat.txt");
+	escreve_max_cores(g, "entrada/max_cores_pat.txt");
+	descolorir(g);
 	}
 	return 0;
 }

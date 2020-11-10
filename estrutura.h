@@ -8,6 +8,7 @@
 
 using namespace std;
 class Nodo;
+class Particao;
 
 struct Atributos_largura_lista {
 	int cor;
@@ -55,16 +56,18 @@ class Atributos_vertice {
 		int numero;
 		char tipo;
 		list<int> cor;
-		list<int> pais;
-		list<int> filhos;
-		list<int> casados;
+		list<Atributos_vertice*> pais;
+		list<Atributos_vertice*> filhos;
+		list<Atributos_vertice*> casados;
 		int cores_ate_folha;
+		int particao;
+		bool valor_bool;
 
 		Atributos_vertice(int id, int numero, char tipo);
 		void adicionar_cor(int cor_);
-		void adicionar_casamento(int casamento);
-		void adicionar_pais(int pai);
-		void adicionar_filho(int filho);
+		void adicionar_casamento(Atributos_vertice* casamento);
+		void adicionar_pais(Atributos_vertice* pai);
+		void adicionar_filho(Atributos_vertice* filho);
 };
 
 class Grafo {
@@ -115,6 +118,25 @@ class Hash {
 		Cor* encontrar_cor(int numero);
 		void adicionar_cor(int numero, Cor* cor);
 		void limpar();
+};
+
+class Juncao {
+	public:
+		Atributos_vertice* primeiro;
+		Atributos_vertice* segundo;
+		Atributos_vertice* juncao;
+
+		Juncao(Atributos_vertice* primeiro_, Atributos_vertice* segundo_, Atributos_vertice* juncao_);
+};
+class Particao {
+	public:
+		Atributos_vertice* primeiro;
+		list<Atributos_vertice*> vertices;
+		int id_primeiro;
+		bool ja_avaliado;
+		Particao(Atributos_vertice* primeiro);
+
+		void adicionar_vertice(Atributos_vertice* vertice);
 };
 
 #endif /* ESTRUTURA_H */

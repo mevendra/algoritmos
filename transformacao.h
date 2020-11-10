@@ -16,6 +16,8 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char* caminho);
 void escreve_arvore_graphviz(Grafo* g, int* arvore, char* caminho);
 void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char* caminho);
 void escreve_componentes_sem_elementos_graphviz(Grafo* g, list<list<int>> componentes, char* caminho);
+void escreve_cores(Grafo* g, char* caminho);
+void escreve_max_cores(Grafo* g, char* caminho);
 
 void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char* caminho);
 void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenhar);

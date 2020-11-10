@@ -434,12 +434,12 @@ void colorir_grafo_pat(Grafo* g)
 		colorir_apartir_de_tipo(g, i, 't');
 }
 
-void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
-{
-	bool eh_fonte;
-	int tamanho = g -> numero_vertices;
-	int** grafo = g-> grafo;
-	for (int i = 0; i < tamanho; i++)
+	void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
+	{
+		bool eh_fonte;
+		int tamanho = g -> numero_vertices;
+		int** grafo = g-> grafo;
+		for (int i = 0; i < tamanho; i++)
 	{
 		eh_fonte = true;
 		for (int y = 0; y < tamanho; y++)
@@ -505,7 +505,8 @@ void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo)
 	}
 }
 
-bool verifica_irmaos(int** grafo,int tamanho,int a,int b) {
+bool verifica_irmaos(int** grafo,int tamanho,int a,int b)
+{
 	list<int> pais_a;
 	for (int i = 0; i < tamanho; i++)
 	{
@@ -524,7 +525,8 @@ bool verifica_irmaos(int** grafo,int tamanho,int a,int b) {
 	return false;
 }
 
-void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destino) {
+void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destino)
+{
 	list<int> casamento;
 	for (int i = 0; i < tamanho; i++) {
 		for (int y = 0; y < i; y++) {
@@ -541,14 +543,16 @@ void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destin
 	}
 }
 
-void define_max_cores(Grafo* g) {
+void define_max_cores(Grafo* g)
+{
 	queue<Atributos_vertice*> fila;
 	list<Lista_lista*> lista_cores[g -> numero_vertices];
 
 	for (Atributos_vertice* v: g -> atributos)
 	{
-		int id = v -> id;
-		if (v -> filhos.size() == 0) {
+		v -> valor_bool = false;
+		if (v -> filhos.size() == 0) {	//if eh_folha
+			int id = v -> id;
 			Lista_int* v_cor = new Lista_int();
 			for (int i: v -> cor) {
 				v_cor -> adicionar(i);
@@ -566,11 +570,25 @@ void define_max_cores(Grafo* g) {
 	{
 		v = fila.front();
 		fila.pop();
+
+		if (v -> valor_bool)
+			continue;
+
 		int v_id = v -> id;
-		for (int i: v -> pais)
+
+		bool prox_while= false;
+		for (Atributos_vertice* filho: v -> filhos) {
+			if (filho -> valor_bool == false) {
+				prox_while = true;
+				fila.push(v);
+				break;
+			}
+		}
+		if (prox_while) continue;
+
+		for (Atributos_vertice* pai: v -> pais)
 		{
-			Atributos_vertice* pai;
-			pai = g -> encontrar_atributo(i);
+			int i = pai -> id;
 			Lista_int* pai_cor = new Lista_int();
 			for (int y: pai -> cor) {
 				pai_cor -> adicionar(y);
@@ -588,7 +606,6 @@ void define_max_cores(Grafo* g) {
 						break;
 					}
 				}
-				printf("antes\n");
 				if (adicionar)
 					lista_cores[i].push_back(nova_lista_pai);
 				else
@@ -597,6 +614,8 @@ void define_max_cores(Grafo* g) {
 			delete pai_cor;
 			fila.push(pai);
 		}
+
+		v -> valor_bool = true;
 	}
 
 	int tamanho;
@@ -611,3 +630,104 @@ void define_max_cores(Grafo* g) {
 		g -> encontrar_atributo(i) -> cores_ate_folha = tamanho;
 	}
 }
+
+void ordem_topologica(Grafo* g, Atributos_vertice* fonte, queue<Atributos_vertice*>& destino)
+{
+	//Utilizado busca em largura
+	//Atributos
+	queue<Atributos_vertice*> aux;
+	bool visitado[g -> numero_vertices];
+	for (int i = 0; i < g -> numero_vertices; i++)
+		visitado[i] = false;
+
+	aux.push(fonte);
+
+	Atributos_vertice* atual;
+	while(!aux.empty())
+	{
+		atual = aux.front();
+		aux.pop();
+		destino.push(atual);
+
+		for(Atributos_vertice* filho: atual -> filhos)
+		{
+			if (!visitado[filho -> id]) {
+				visitado[filho->id] = true;
+				aux.push(filho);
+			}
+		}
+	}
+}
+
+void encontra_juncoes(Grafo* g, list<Juncao*>& destino) {
+	queue<Atributos_vertice*> vs;
+
+	for(Atributos_vertice* s: g -> atributos)
+	{
+		for(Atributos_vertice* a: g -> atributos)
+		{
+			a -> particao = -1;
+			a -> valor_bool = false;
+		}
+		ordem_topologica(g, s, vs);
+		s -> particao = s -> id;
+		//assert(vs.front() -> id == s -> id);
+		vs.pop();
+
+		Atributos_vertice* v;
+		while(!vs.empty())
+		{
+			v = vs.front();
+			vs.pop();
+
+			if (v -> pais.size() == 2) {
+				if ((v -> pais.front() -> particao == -1) && (v -> pais.back() -> particao == -1)) {
+					printf("Erro, pais do vertice nao mapeados");
+					destino.clear();
+					return;
+				} else if (v -> pais.front() -> id == s -> id || v -> pais.back() -> id == s -> id) {
+					v -> particao = v -> id;
+				} else if (v -> pais.front() -> id == -1) {
+					v -> particao = v -> pais.back() -> particao;
+				} else if (v -> pais.back() -> id == -1) {
+					v -> particao = v -> pais.front() -> particao;
+				} else if (v -> pais.front() -> particao != v -> pais.back() -> particao) {
+					v -> particao = v -> id;
+				} else {
+					v -> particao = v -> pais.front() -> particao;
+				}
+
+			} else if (v -> pais.size() == 1) {
+				v -> particao = v -> pais.front() -> particao;
+			} else {
+				printf("Erro, vertice fonte no meio da ordenacao");
+				destino.clear();
+				return;
+			}
+		}
+
+		//Juncoes
+		for (Atributos_vertice* a1: g -> atributos)
+		{
+			if (a1 -> particao != -1) {
+				for (Atributos_vertice* a2: g -> atributos)
+				{
+					if(!a2 -> valor_bool) {
+						if (a1 -> particao != a2 -> particao && a2 -> particao != -1) {
+							destino.push_back(new Juncao(a1, a2, s));
+						}
+					}
+				}
+			}
+			a1 -> valor_bool = true;
+		}
+	}
+}
+
+
+
+
+
+
+
+

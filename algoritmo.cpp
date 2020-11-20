@@ -687,9 +687,9 @@ void encontra_juncoes(Grafo* g, list<Juncao*>& destino) {
 					return;
 				} else if (v -> pais.front() -> id == s -> id || v -> pais.back() -> id == s -> id) {
 					v -> particao = v -> id;
-				} else if (v -> pais.front() -> id == -1) {
+				} else if (v -> pais.front() -> particao == -1) {
 					v -> particao = v -> pais.back() -> particao;
-				} else if (v -> pais.back() -> id == -1) {
+				} else if (v -> pais.back() -> particao == -1) {
 					v -> particao = v -> pais.front() -> particao;
 				} else if (v -> pais.front() -> particao != v -> pais.back() -> particao) {
 					v -> particao = v -> id;

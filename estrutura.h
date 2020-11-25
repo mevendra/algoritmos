@@ -128,6 +128,17 @@ class Juncao {
 
 		Juncao(Atributos_vertice* primeiro_, Atributos_vertice* segundo_, Atributos_vertice* juncao_);
 };
+
+class JuncoesDe {
+	public:
+		Atributos_vertice* primeiro;
+		Atributos_vertice* segundo;
+
+		list<Atributos_vertice*> juncoes;
+
+		void adicionar_juncao(Atributos_vertice* juncao);
+		JuncoesDe(Atributos_vertice* primeiro_, Atributos_vertice* segundo_);
+};
 class Particao {
 	public:
 		Atributos_vertice* primeiro;
@@ -137,6 +148,14 @@ class Particao {
 		Particao(Atributos_vertice* primeiro);
 
 		void adicionar_vertice(Atributos_vertice* vertice);
+};
+
+class Anel {
+
+};
+
+class Anel_aux {
+
 };
 
 #endif /* ESTRUTURA_H */

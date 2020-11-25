@@ -724,8 +724,154 @@ void encontra_juncoes(Grafo* g, list<Juncao*>& destino) {
 	}
 }
 
+void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino) {
+	list<Juncao*> juncoes;
+	encontra_juncoes(g, juncoes);
+
+	JuncoesDe* jun[g -> numero_vertices][g->numero_vertices];
+	JuncoesDe* aux;
+	for (int i = 0; i < g -> numero_vertices; i++) {
+		for (int j = i + 1; j < g -> numero_vertices; j++) {
+			Atributos_vertice* e1 = g -> encontrar_atributo(i);
+			Atributos_vertice* e2 = g -> encontrar_atributo(j);
+			aux = new JuncoesDe(e1, e2);
+
+			jun[i][j] = aux;
+			jun[j][i] = aux;
+			destino.push_back(aux);
+		}
+	}
+
+	for (Juncao* j: juncoes) {
+		jun[j -> primeiro -> id][j -> segundo -> id] -> adicionar_juncao(j -> juncao);
+	}
+}
+
+void encontra_casamentos(Grafo* g, list<list<int>>& casamentos) {
+	for (int i = 0; i < g -> numero_vertices; i++) {
+		for (int j = i + 1; j < g -> numero_vertices; j++) {
+			if (g -> grafo[i][j] == 1 || g -> grafo[i][j] == 12 || g -> grafo[i][j] == 13) {
+				list<int> casamento;
+				casamento.push_back(i);
+				casamento.push_back(j);
+
+				casamentos.push_back(casamento);
+			}
+		}
+	}
+}
+
+void constroi_casamentos_ordenados(list<list<int>> casamentos, int k, list<list<list<int>>> &destino) {
+	//Encontra o numero total de casamentos ordenados
+	int soma = 1;
+	for (int i = casamentos.size(); i > (casamentos.size() - k); i--)
+		soma *= i;
+
+	//Atributos auxiliares
+	list<list<int>> destino_[soma];
+	list<list<int>> destino_encontrar_casamentos;
+	list<int> atual_encontrar_casamentos;
+
+	list<int> indices_casamentos[casamentos.size()];
+	int indice = 0;
+	for (list<int> y: casamentos)
+		indices_casamentos[indice++] = y;
+
+	list<int> fonte_encontrar_casamentos;
+	for (int i = 0; i < casamentos.size(); i++)
+		fonte_encontrar_casamentos.push_back(i);
+
+	//Realiza busca
+	encontrar_casamentos_ordenados(k, atual_encontrar_casamentos, fonte_encontrar_casamentos, destino_encontrar_casamentos);
+
+	//Realiza conversão para destino
+	indice = 0;
+	for (list<int> i : destino_encontrar_casamentos) {
+		for (int y: i)
+			destino_[indice].push_back(indices_casamentos[y]);
+		indice++;
+	}
+
+	for (int i = 0; i < soma; i++)
+		destino.push_back(destino_[i]);
+}
+
+bool contem(int elem, list<int> fonte) {
+	for (int i: fonte)
+		if (i == elem)
+			return true;
+
+	return false;
+}
+
+void encontrar_casamentos_ordenados(int k, list<int>& atual, list<int>& fonte, list<list<int>>& destino) {
+	if (k == 0) {
+		destino.push_back(atual);
+	}
+
+	for (int i: fonte) {
+		if (!contem(i , atual)) {
+			list<int> nova_lista(atual);
+			nova_lista.push_back(i);
+			encontrar_casamentos_ordenados(k-1, nova_lista, fonte, destino);
+		}
+	}
+}
+
+void encontrar_combinacoes(list<list<int>> fonte, list<list<list<int>>>& destino) {
+
+}
+
+void encontra_aneis(Grafo* g, list<Anel*>& destino, int numero_casamentos) {
+	//3.1
+	//Encontra todas as juncoes do grafo
+	list<JuncoesDe*> juncoes;
+	encontra_juncoes(g, juncoes);
+
+	//3.2
+	//Encontra todos os casamentos do grafo
+	list<list<int>> casamentos;
+	encontra_casamentos(g, casamentos);
+
+	//Constroi X conjuntos de tamanho numero_casamentos com todas possibilidades de
+	//agrupamento de casamentos (c1,...,cnumero_casamentos)
+	// X = (casamentos->size() ^ (casamentos -> size() - numero_casamentos)
+	list<list<list<int>>> conjuntos_c;
+	constroi_casamentos_ordenados(casamentos, numero_casamentos, conjuntos_c);
+
+	//TALVEZ AQUI RETIRAR CONJUNTOS QUE A MESMA PESSOA ESTEJA VARIAS VEZES(MULTIPLOS CASAMENTOS)
+
+	//3.3
+	for (list<list<int>> set_c: conjuntos_c) {
+		//Todas as possibilidades de combinações dado ordem do set_c
+		//Numero de combinacoes = 2^numero_casamentos
+		list<list<list<int>>> combinacoes;
+		encontrar_combinacoes(set_c, combinacoes);
+
+		//Para cada possivel combinacao
+		for (list<list<int>> a: combinacoes) {
+			//Para cada par da combinacao
+			for (list<int> par: a) {
+				//Encontra as juncoes do par
+				list<Atributos_vertice*> juncoes_par;
+				for (JuncoesDe* j: juncoes) {
+					if (par.front() == j -> primeiro -> id || par.front() == j -> segundo -> id)
+						if (par.front() == j -> primeiro -> id || par.front() == j -> segundo -> id) {
+							juncoes_par = j -> juncoes;
+							break;
+						}
+				}
+
+				//Encontrar caminhos disjuntos de cada juncao até cada membro do par
+			}
 
 
+
+			//Para todo grupo de caminhos disjuntos fazer intersecção
+			//Se intersecção for vazia encontrou um anel
+		}
+	}
+}
 
 
 

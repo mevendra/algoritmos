@@ -22,6 +22,8 @@ void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino);
 void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo);
 bool verifica_irmaos(int** grafo, int tamanho, int a, int b);
 void ordem_topologica(Grafo* g, Atributos_vertice* fonte, queue<Atributos_vertice*>& destino);
+bool contem(int elem, list<int> fonte);
+void encontrar_casamentos_ordenados(int k, list<int>& atual, list<int>& fonte, list<list<int>>& destino);
 
 //Metodos "Finais"
 extern void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz);
@@ -39,4 +41,6 @@ void colorir_grafo_pat(Grafo* g);
 void define_max_cores(Grafo* g);
 
 void encontra_juncoes(Grafo* g, list<Juncao*>& destino);
+void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino);
+void encontra_aneis(Grafo* g, list<Anel*> & destino);
 #endif /* ALGORITMO_H*/

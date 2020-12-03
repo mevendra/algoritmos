@@ -228,6 +228,28 @@ Juncao::Juncao(Atributos_vertice* primeiro_, Atributos_vertice* segundo_, Atribu
 	juncao = juncao_;
 }
 
+JuncoesDe::JuncoesDe(Atributos_vertice* primeiro_, Atributos_vertice* segundo_) {
+	primeiro = primeiro_;
+	segundo = segundo_;
+}
+
+
+void JuncoesDe::adicionar_juncao(Atributos_vertice* juncao) {
+	juncoes.push_back(juncao);
+}
+
+void Anel::adicionar_elemento(list<Atributos_vertice*> caminho) {
+	for (Atributos_vertice* i: caminho)
+		anel.push_back(i);
+}
+
+void Anel_aux::mudar_tamanho(int tamanho) {
+	juncoes.resize(tamanho);
+	caminhos_primeiro.resize(tamanho);
+	caminhos_segundo.resize(tamanho);
+}
+
+
 Particao::Particao(Atributos_vertice* primeiro_) {
 	primeiro = primeiro_;
 	id_primeiro = primeiro_ -> id;

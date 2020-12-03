@@ -191,6 +191,27 @@ void testar_juncoes(Grafo* g) {
 	}
 	printf("Numero de juncoes encontradas: %d\n", destino.size());
 }
+void testar_aneis(Grafo* g, int k) {
+	printf("Testando encontrar aneis com %d casamentos\n", k);
+	list<Anel*> destino;
+	encontra_aneis(g, destino, k);
+	printf("Um exemplo de anel: \n");
+	Anel* ex;
+	if (destino.size() > 0) {
+		ex = destino.front();
+		for (Atributos_vertice* i: ex -> anel)
+			printf("%d  ", i -> numero);
+		printf("\n");
+		ex = destino.back();
+		for (Atributos_vertice* i: ex -> anel)
+			printf("%d  ", i -> numero);
+		printf("\n");
+	}
+
+
+
+	printf("Numero de aneis encontrados: %d\n", destino.size());
+}
 int main(int argc, char *argv[]) {
 	Grafo *g = trabalha_arquivo("entrada/Arara4MaqPar.txt");
 	int **grafo = g->grafo;
@@ -205,6 +226,7 @@ int main(int argc, char *argv[]) {
 	testar_casamento_entre_irmaos(g);
 	testar_max_cores_ate_folha(g);
 	testar_juncoes(g);
+	testar_aneis(g, 3);
 
 	bool escreve_grafos = false;
 	if (escreve_grafos) {

@@ -151,11 +151,21 @@ class Particao {
 };
 
 class Anel {
+	public:
+		list<Atributos_vertice*> anel;
 
+		void adicionar_elemento(list<Atributos_vertice*> caminho);
 };
 
 class Anel_aux {
+	public:
+		Atributos_vertice* primeiro;
+		Atributos_vertice* segundo;
 
+		vector<Atributos_vertice*> juncoes;
+		vector<vector<list<Atributos_vertice*>>> caminhos_primeiro;
+		vector<vector<list<Atributos_vertice*>>> caminhos_segundo;
+		void mudar_tamanho(int tamanho);
 };
 
 #endif /* ESTRUTURA_H */

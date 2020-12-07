@@ -170,7 +170,9 @@ void testar_casamento_entre_irmaos(Grafo* g) {
 }
 void testar_max_cores_ate_folha(Grafo* g) {
 	printf("Testando encontrar o maior numero de cores diferentes ate uma folha\n");
-	colorir_grafo(g);
+	//colorir_grafo(g);
+
+	colorir_grafo_mat(g);
 	define_max_cores(g);
 	for (Atributos_vertice* v: g -> atributos)
 	{
@@ -226,7 +228,7 @@ int main(int argc, char *argv[]) {
 	testar_casamento_entre_irmaos(g);
 	testar_max_cores_ate_folha(g);
 	testar_juncoes(g);
-	testar_aneis(g, 3);
+	testar_aneis(g, 2);
 
 	bool escreve_grafos = false;
 	if (escreve_grafos) {

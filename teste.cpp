@@ -233,7 +233,7 @@ int main(int argc, char *argv[]) {
 
 	testar_aneis(g,1);
 
-	/*
+	
 	list<Anel*> aneis;
 	encontra_aneis(g, aneis, 1);
 	escreve_aneis(aneis, g, "entrada/aneis_padrao_1.txt");
@@ -243,7 +243,7 @@ int main(int argc, char *argv[]) {
 	encontra_aneis(g, aneis_aux, 2);
 	escreve_aneis(aneis_aux, g, "entrada/aneis_padrao_2.txt");
 	escreve_aneis_ordem(aneis_aux, g, "entrada/aneis_ordem_2.txt");
-*/
+
 
 	bool escreve_grafos = false;
 	if (escreve_grafos) {

@@ -18,6 +18,8 @@ void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char* c
 void escreve_componentes_sem_elementos_graphviz(Grafo* g, list<list<int>> componentes, char* caminho);
 void escreve_cores(Grafo* g, char* caminho);
 void escreve_max_cores(Grafo* g, char* caminho);
+void escreve_aneis(list<Anel*> aneis, Grafo* g, char* caminho);
+void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char* caminho);
 
 void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char* caminho);
 void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenhar);

@@ -720,6 +720,43 @@ void escreve_max_cores(Grafo* g, char* caminho) {
 	fclose(arquivo);
 }
 
+Atributos_vertice* encontrar_casado(Anel* anel) {
+	for (Atributos_vertice* i: anel -> anel) {
+		for (Atributos_vertice* y: anel -> anel) {
+			if (i -> id != y -> id) {
+				for (Atributos_vertice* z: i -> casados) {
+					if (y -> id == z -> id)
+						return y;
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
+void escreve_aneis(list<Anel*> aneis, Grafo* g, char* caminho) {
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string linha;
+
+	for (Anel* i: aneis) {
+		linha = i -> linha_normal;
+		fputs(linha.c_str(), arquivo);
+	}
+	fclose(arquivo);
+}
+void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char* caminho){
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string linha;
+
+	for (Anel* i: aneis) {
+		linha = i -> linha_ordem;
+		fputs(linha.c_str(), arquivo);
+	}
+	fclose(arquivo);
+}
+
 void reinicia_cores() {
 	cores.clear();
 	cores.push_back("#0000FF");

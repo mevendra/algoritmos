@@ -176,7 +176,9 @@ void testar_max_cores_ate_folha(Grafo* g) {
 	define_max_cores(g);
 	for (Atributos_vertice* v: g -> atributos)
 	{
-		printf("Vertice %d(%d): Tem %d cores diferentes ate folha!\n", v -> id, v -> numero, v -> cores_ate_folha);
+		printf("Vertice %d(%d): Tem %d cores diferentes ate folha(%d)!\n", v -> id, v -> numero, v -> cores_ate_folha, v -> folha_cores -> numero);
+		if (v -> folha_cores -> filhos.size() > 0)
+			printf("Erro, %d nao é folha\n", v -> folha_cores -> numero);
 	}
 	descolorir(g);
 }
@@ -228,7 +230,20 @@ int main(int argc, char *argv[]) {
 	testar_casamento_entre_irmaos(g);
 	testar_max_cores_ate_folha(g);
 	testar_juncoes(g);
-	testar_aneis(g, 2);
+
+	testar_aneis(g,1);
+
+	/*
+	list<Anel*> aneis;
+	encontra_aneis(g, aneis, 1);
+	escreve_aneis(aneis, g, "entrada/aneis_padrao_1.txt");
+	escreve_aneis_ordem(aneis, g, "entrada/aneis_ordem_1.txt");
+
+	list<Anel*> aneis_aux;
+	encontra_aneis(g, aneis_aux, 2);
+	escreve_aneis(aneis_aux, g, "entrada/aneis_padrao_2.txt");
+	escreve_aneis_ordem(aneis_aux, g, "entrada/aneis_ordem_2.txt");
+*/
 
 	bool escreve_grafos = false;
 	if (escreve_grafos) {

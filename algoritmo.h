@@ -7,6 +7,7 @@
 #include <vector>
 #include <stack>
 #include <stdlib.h>
+#include <fstream>
 #include "estrutura.h"
 #include "lista.h"
 using namespace std;
@@ -27,10 +28,21 @@ bool verifica_irmaos(int** grafo, int tamanho, int a, int b);
 
 void ordem_topologica(Atributos_vertice* fonte, queue<Atributos_vertice*>& destino);
 bool contem(int elem, list<int> fonte);
-void encontrar_casamentos_ordenados(int k, list<int>& atual, list<int>& fonte, list<list<int>>& destino);
 void encontra_casamentos(Grafo* g, list<list<int>>& casamentos);
-void encontra_conjuntos_casamentos(list<list<int>> casamentos, int k, list<list<list<int>>> &destino);
-void encontra_pares(queue<list<int>> fonte, list<list<int>> atual, int v_atual, int v_primeiro, list<list<list<int>>> &destino);
+void encontra_casamentos(Grafo* g, vector<list<int>>& casamentos);
+
+void encontra_caminhos(Atributos_vertice* fonte, Atributos_vertice* destino,list<Atributos_vertice*> caminho_atual, list<list<Atributos_vertice*>> &caminhos);
+bool sao_disjuntos(list<Atributos_vertice*> caminho_a, list<Atributos_vertice*> caminho_b);
+void verifica_anel(vector<list<Atributos_vertice*>> caminhos, list<Anel*> &destino, list<Atributos_vertice*> juncoes, list<list<int>> casamentos);
+void encontra_aneis(list<Anel_aux*> aux, vector<list<Atributos_vertice*>> atual, list<Anel*> & destino, list<Atributos_vertice*> juncoes, list<list<int>> casamentos);
+void encontra_duplas_casamentos(vector<list<int>> casamentos, list<list<list<int>>>& destino);
+void encontra_combinacoes_dupla(list<list<int>> dupla_casamentos, list<list<list<int>>>& destino);
+void encontra_trios_casamentos(vector<list<int>> casamentos, list<list<list<int>>>& destino);
+void encontra_combinacoes_trio(list<list<int>> trio_casamentos, list<list<list<int>>>& destino);
+void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino);
+void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
+void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
+void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
 
 //Metodos "Finais"
 extern void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz);
@@ -50,5 +62,7 @@ void define_max_cores(Grafo* g);
 
 void encontra_juncoes(Grafo* g, list<Juncao*>& destino);
 void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino);
+
 void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos);
+
 #endif /* ALGORITMO_H*/

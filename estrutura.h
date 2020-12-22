@@ -59,7 +59,10 @@ class Atributos_vertice {
 		list<Atributos_vertice*> pais;
 		list<Atributos_vertice*> filhos;
 		list<Atributos_vertice*> casados;
+
 		int cores_ate_folha;
+		Atributos_vertice* folha_cores;
+
 		int particao;
 		bool valor_bool;
 
@@ -139,22 +142,16 @@ class JuncoesDe {
 		void adicionar_juncao(Atributos_vertice* juncao);
 		JuncoesDe(Atributos_vertice* primeiro_, Atributos_vertice* segundo_);
 };
-class Particao {
-	public:
-		Atributos_vertice* primeiro;
-		list<Atributos_vertice*> vertices;
-		int id_primeiro;
-		bool ja_avaliado;
-		Particao(Atributos_vertice* primeiro);
-
-		void adicionar_vertice(Atributos_vertice* vertice);
-};
 
 class Anel {
 	public:
 		list<Atributos_vertice*> anel;
 
-		void adicionar_elemento(list<Atributos_vertice*> caminho);
+		string linha_normal;
+		string linha_ordem;
+
+		void adicionar_elemento(list<Atributos_vertice*> caminho, bool caminho_inverso);
+		void adicionar_elemento(vector<list<Atributos_vertice*>> caminho, list<Atributos_vertice*> juncoes, list<list<int>> casamentos);
 };
 
 class Anel_aux {

@@ -75,6 +75,7 @@ Atributos_vertice::Atributos_vertice (int id_, int numero_, char tipo_) {
 	cores_ate_folha = -1;
 	particao = -1;
 	valor_bool = false;
+	folha_cores = NULL;
 }
 
 void Atributos_vertice::adicionar_cor(int cor_) {
@@ -238,9 +239,214 @@ void JuncoesDe::adicionar_juncao(Atributos_vertice* juncao) {
 	juncoes.push_back(juncao);
 }
 
-void Anel::adicionar_elemento(list<Atributos_vertice*> caminho) {
-	for (Atributos_vertice* i: caminho)
+void Anel::adicionar_elemento(list<Atributos_vertice*> caminho, bool caminho_inverso = false) {
+	Atributos_vertice* v;
+	if (!caminho_inverso && caminho.size() > 0) {
+		v = caminho.front();
+		caminho.pop_front();
+		linha_normal += to_string(v -> numero);
+		linha_normal += " ";
+
+		if (v -> tipo == 'e')
+			linha_ordem += "W";
+		else
+			linha_ordem += "H";
+
+		linha_ordem += " ";
+		linha_ordem	+= to_string(v -> numero);
+		linha_ordem += " ";
+	}
+
+	for (Atributos_vertice* i: caminho) {
+		linha_normal += to_string(i -> numero);
+		linha_normal += " ";
+
+		if (caminho_inverso)
+			if (i -> tipo == 'e')
+				linha_ordem += "D";
+			else
+				linha_ordem += "S";
+		else
+			if (i -> tipo == 'e')
+				linha_ordem += "M";
+			else
+				linha_ordem += "F";
+
+		linha_ordem += " ";
+		linha_ordem	+= to_string(i -> numero);
+		linha_ordem += " ";
+
 		anel.push_back(i);
+	}
+
+	if (!caminho_inverso && caminho.size() > 0)
+		caminho.push_front(v);
+}
+
+void Anel::adicionar_elemento(vector<list<Atributos_vertice*>> caminho, list<Atributos_vertice*> juncoes, list<list<int>> casamentos){
+	//Adiciona todos os elementos ao anel
+	for (list<Atributos_vertice*> lista: caminho) {
+		for (Atributos_vertice* i: lista) {
+			anel.push_back(i);
+		}
+	}
+
+	//Adiciona juncoes ao anel
+	for (Atributos_vertice* i: juncoes) {
+		anel.push_back(i);
+	}
+
+	//Escolhe um casamento para iniciar
+	list<Atributos_vertice*> aux(anel);
+	int primeiro = casamentos.front().front();
+	int segundo = casamentos.front().back();
+	Atributos_vertice* v = NULL;
+	for (Atributos_vertice* i: aux) {
+		if ( (i -> id == primeiro || i -> id == segundo) && i -> tipo == 't') {
+			v = i;
+			break;
+		}
+	}
+
+	//Se encontrou casamento
+	if (v != NULL) {
+		aux.remove(v);
+		if (v -> tipo == 'e')
+			linha_ordem = " W";
+		else
+			linha_ordem = " H";
+
+		linha_normal += " ";
+		linha_normal = to_string(v -> numero);
+
+		linha_ordem += to_string(v -> numero);
+	} else {	//Se nao encontrou casamento acontece erro
+		printf("Nao encontrou casamento \n");
+		return;
+	}
+
+	//Começa escolha das linhas
+	Atributos_vertice* proximo;
+	bool em_subida = false;
+	while(aux.size() > 0) {
+		//Procura primeiro pelos pais
+		proximo = NULL;
+		bool parar = false;
+		for (Atributos_vertice* pai: v -> pais) {
+			for (Atributos_vertice* atrib_aux: aux) {
+				if (pai -> id == atrib_aux -> id) {
+					parar = true;
+					proximo = atrib_aux;
+					break;
+				}
+			}
+			if (parar)
+				break;
+		}
+
+		//Encontrou pai
+		if (proximo != NULL) {
+			em_subida = true;
+			aux.remove(proximo);
+			v = proximo;
+			if (v -> tipo == 'e')
+				linha_ordem += " M";
+			else
+				linha_ordem += " F";
+
+			linha_normal += " ";
+			linha_normal += to_string(v -> numero);
+
+			linha_ordem += to_string(v -> numero);
+			continue;
+		}
+
+		//Nao encontrou pai, procura filhos
+		parar = false;
+		for (Atributos_vertice* filho: v -> filhos) {
+			for (Atributos_vertice* atrib_aux: aux) {
+				if (filho -> id == atrib_aux -> id) {
+					parar = true;
+					proximo = atrib_aux;
+					break;
+				}
+			}
+			if (parar)
+				break;
+		}
+
+		//Encontrou filho
+		if (proximo != NULL) {
+			if (em_subida) {	//Estava procurando pai e começa a procurar filho(Juncao)
+				linha_ordem += "_J";
+				em_subida = false;
+			}
+			aux.remove(proximo);
+			v = proximo;
+			if (v -> tipo == 'e')
+				linha_ordem += " D";
+			else
+				linha_ordem += " S";
+
+			linha_normal += " ";
+			linha_normal += to_string(v -> numero);
+
+			linha_ordem += to_string(v -> numero);
+
+			continue;
+		}
+
+		//Nao encontrou filhos procura casamento
+		parar = false;
+		for (Atributos_vertice* casado: v -> casados) {
+			for (Atributos_vertice* atrib_aux: aux) {
+				if (casado -> id == atrib_aux -> id) {
+					//Procura se é o casamento desejado
+					for (list<int> i: casamentos) {
+						if (i.front() == casado -> id) {
+							if (i.back() == v -> id) {
+								parar = true;
+								proximo = atrib_aux;
+								break;
+							}
+						} else if (i.back() == casado -> id) {
+							if (i.front() == v -> id) {
+								parar = true;
+								proximo = atrib_aux;
+								break;
+							}
+						}
+					}
+					if (parar)
+						break;
+				}
+			}
+			if (parar)
+				break;
+		}
+		if (proximo != NULL) {
+			aux.remove(proximo);
+			v = proximo;
+			if (v -> tipo == 'e')
+				linha_ordem += " W";
+			else
+				linha_ordem += " H";
+
+			linha_normal += " ";
+			linha_normal += to_string(v -> numero);
+
+			linha_ordem += to_string(v -> numero);
+
+			continue;
+		}
+
+		linha_normal = "";
+		linha_ordem = "";
+		return;
+	}
+
+	linha_normal += "\n";
+	linha_ordem += "\n";
 }
 
 void Anel_aux::mudar_tamanho(int tamanho) {
@@ -248,15 +454,3 @@ void Anel_aux::mudar_tamanho(int tamanho) {
 	caminhos_primeiro.resize(tamanho);
 	caminhos_segundo.resize(tamanho);
 }
-
-
-Particao::Particao(Atributos_vertice* primeiro_) {
-	primeiro = primeiro_;
-	id_primeiro = primeiro_ -> id;
-	ja_avaliado = false;
-}
-
-void Particao::adicionar_vertice(Atributos_vertice* vertice) {
-	vertices.push_back(vertice);
-}
-

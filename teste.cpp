@@ -216,6 +216,7 @@ void testar_aneis(Grafo* g, int k) {
 
 	printf("Numero de aneis encontrados: %d\n", destino.size());
 }
+
 int main(int argc, char *argv[]) {
 	Grafo *g = trabalha_arquivo("entrada/Arara4MaqPar.txt");
 	int **grafo = g->grafo;
@@ -233,7 +234,7 @@ int main(int argc, char *argv[]) {
 
 	testar_aneis(g,1);
 
-	
+
 	list<Anel*> aneis;
 	encontra_aneis(g, aneis, 1);
 	escreve_aneis(aneis, g, "entrada/aneis_padrao_1.txt");

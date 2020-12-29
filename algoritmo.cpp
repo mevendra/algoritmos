@@ -720,7 +720,10 @@ void encontra_juncoes(Grafo* g, list<Juncao*>& destino)
 				}
 
 			} else if (v -> pais.size() == 1) {
-				v -> particao = v -> pais.front() -> particao;
+				if (v -> pais.front() -> id == s -> id)
+					v -> particao = v -> id;
+				else
+					v -> particao = v -> pais.front() -> particao;
 			} else {
 				printf("Erro, vertice fonte no meio da ordenacao");
 				destino.clear();
@@ -1165,6 +1168,7 @@ void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, l
 		define_anel_aux(par_juncao, par_anel_aux);
 		c_aneis_aux.push_back(par_anel_aux);
 
+		//Teste4 caminhos
 		if ((par_anel_aux -> primeiro -> numero == 1053 || par_anel_aux -> primeiro -> numero == 1279) && (par_anel_aux -> segundo -> numero == 1053|| par_anel_aux -> segundo -> numero == 1279)) {
 			printf("OPERANDO SOBRE 1053 e 1279\n");
 			int indice = 0;

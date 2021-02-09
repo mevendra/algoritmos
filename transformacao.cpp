@@ -206,12 +206,13 @@ Grafo* trabalha_arquivo(char* caminho)
 	fclose(arquivo);
 
 
-	coloca_transicoes(grafo, numero_vertices, atributos);	//Para facilitar algoritmos depois
+	coloca_transicoes(grafo, atributos);	//Para facilitar algoritmos depois
 	retorno = new Grafo(numero_vertices, atributos, grafo);
 	return retorno;
 }
 
-void coloca_transicoes(int** grafo, int tamanho, list<Atributos_vertice*> atributos) {
+
+void coloca_transicoes(int** grafo, list<Atributos_vertice*> atributos) {
 	int id;
 	for (Atributos_vertice* v: atributos)
 	{
@@ -754,6 +755,212 @@ void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char* caminho){
 		linha = i -> linha_ordem;
 		fputs(linha.c_str(), arquivo);
 	}
+	fclose(arquivo);
+}
+
+bool contem(Atributos_vertice* x, list<Atributos_vertice*> lista) {
+	for (Atributos_vertice* v: lista)
+		if (v == x)
+			return true;
+
+	return false;
+}
+
+void escreve_aneis_completo(list<Anel*> aneis, char* caminho) {
+	int tam = aneis.front() -> casamentos.size();
+
+	string linha = "Anel, ";
+	for (int i = 0; i < tam; i++) {
+		linha += "Ego";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", SxEgo";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", Alter";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", SxAlter";
+		if (tam > 1)
+			linha += to_string(i);
+	}
+	linha += ", Percurso, BarryPercurso, Parente, ";
+	for (int i = 0; i < tam; i++) {
+		linha += "Casal";
+		if (tam > 1)
+			linha += to_string(i);
+	}
+	for (int i = 0; i < tam; i++) {
+		linha += ", Geração";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", Lateral";
+		if (tam > 1)
+			linha += to_string(i);
+	}
+	for (int i = 0; i < tam; i++) {
+		linha += ", Cnx";
+		if (tam > 1)
+			linha += to_string(i);
+	}
+	linha += "\n";
+
+
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	fputs(linha.c_str(), arquivo);
+	int count = 0;
+	for (Anel* a: aneis) {
+		count ++;
+		linha = to_string(count);	//Anel
+		linha += ", ";
+
+		for (list<Atributos_vertice*> casamentos: a -> casamentos) {
+			if (casamentos.front() -> tipo == 't') {
+				linha += to_string(casamentos.front() -> numero);	//EgoX
+				linha += ", ";
+				linha += "m";		//SxEgoX
+				linha += ", ";
+				linha += to_string(casamentos.back() -> numero);	//AlterX
+				linha += ", ";
+				linha += "f";		//SxAlterX
+				linha += ", ";
+			} else {
+				linha += to_string(casamentos.back() -> numero);	//EgoX
+				linha += ", ";
+				linha += "m";		//SxEgoX
+				linha += ", ";
+				linha += to_string(casamentos.front() -> numero);	//AlterX
+				linha += ", ";
+				linha += "f";		//SxAlterX
+				linha += ", ";
+			}
+		}
+
+		//Percurso
+		for (Atributos_vertice* v: a -> anel) {
+			linha += to_string(v -> numero);
+			linha += " ";
+		}
+		linha += ", ";
+
+		//BaryryPercurso
+		for (Atributos_vertice* v: a -> anel) {
+			if (contem (v, a -> juncoes)) {
+				linha += "(";
+				if (v -> tipo == 't')
+					linha += "m";
+				else
+					linha += "f";
+				linha += to_string(v -> numero);
+				linha += ") ";
+			} else {
+				if (v -> tipo == 't')
+					linha += "m";
+				else
+					linha += "f";
+				linha += to_string(v -> numero);
+				linha += " ";
+
+			}
+		}
+		linha += ", ";
+
+		//Parente
+		Atributos_vertice* ultimo = a -> anel.front();
+		for (Atributos_vertice* v: a -> anel) {
+			if (contem(v, ultimo -> filhos)) {
+				if (v -> tipo == 'e') {
+					linha += "D";
+				} else {
+					linha += "S";
+				}
+			} else if (contem(v, ultimo -> pais)) {
+				if (v -> tipo == 'e') {
+					linha += "M";
+				} else {
+					linha += "F";
+				}
+			} else if (contem(v, ultimo -> casados)) {
+				if (v -> tipo == 'e') {
+					linha += "W";
+				} else {
+					linha += "H";
+				}
+			}
+			ultimo = v;
+		}
+
+		//CasalX
+		for (list<Atributos_vertice*> casamentos: a -> casamentos) {
+			linha += ", ";
+			linha += to_string(casamentos.front() -> numero);
+			linha += " ";
+			linha += to_string(casamentos.back() -> numero);
+		}
+
+		//Calculos de geracao,lateral e cnx
+		list<int> cnx;
+		list<int> geracao;
+		vector<int> lateral;
+		int lat_e = 0;
+		int lat_d = 0;
+		int num = 0;
+		int num_cnx = -1;
+		ultimo = a -> anel.front();
+		for (Atributos_vertice* v: a -> anel) {
+			num_cnx++;
+			if (contem(v, ultimo -> filhos)) {
+				num--;
+				lat_d++;
+			} else if (contem(v, ultimo -> pais)) {
+				num++;
+				lat_e++;
+			} else if (contem(v, ultimo -> casados)) {
+				if (lat_d > lat_e)
+					lateral.push_back(lat_e);
+				else
+					lateral.push_back(lat_d);
+				cnx.push_back(num_cnx);
+				geracao.push_back(num);
+				num = 0;
+				lat_e = 0;
+				lat_d = 0;
+				num_cnx = 0;
+			}
+			ultimo = v;
+		}
+		geracao.push_back(num);
+		cnx.push_back(num_cnx);
+		if (lat_d > lat_e)
+			lateral.push_back(lat_e);
+		else
+			lateral.push_back(lat_d);
+
+		int i_=0;
+
+		//Geracao e Lateral
+		for (int i: geracao) {
+			linha += ", ";
+			linha += "G";
+			linha += to_string(i);
+			linha += ", ";
+			linha += to_string(lateral[i_]);
+
+			i_++;
+		}
+
+		//Cnx
+		for (int i: cnx) {
+			linha += ", ";
+			linha += to_string(i);
+
+		}
+
+		linha += "\n";
+		fputs(linha.c_str(), arquivo);
+	}
+
 	fclose(arquivo);
 }
 

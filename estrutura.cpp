@@ -75,6 +75,7 @@ Atributos_vertice::Atributos_vertice (int id_, int numero_, char tipo_) {
 	cores_ate_folha = -1;
 	particao = -1;
 	valor_bool = false;
+	geracao = 0;
 	folha_cores = NULL;
 }
 
@@ -248,13 +249,11 @@ void Anel::adicionar_elemento(list<Atributos_vertice*> caminho, bool caminho_inv
 		linha_normal += " ";
 
 		if (v -> tipo == 'e')
-			linha_ordem += "W";
+			linha_ordem += " W";
 		else
-			linha_ordem += "H";
+			linha_ordem += " H";
 
-		linha_ordem += " ";
 		linha_ordem	+= to_string(v -> numero);
-		linha_ordem += " ";
 	}
 
 	for (Atributos_vertice* i: caminho) {
@@ -263,18 +262,16 @@ void Anel::adicionar_elemento(list<Atributos_vertice*> caminho, bool caminho_inv
 
 		if (caminho_inverso)
 			if (i -> tipo == 'e')
-				linha_ordem += "D";
+				linha_ordem += " D";
 			else
-				linha_ordem += "S";
+				linha_ordem += " S";
 		else
 			if (i -> tipo == 'e')
-				linha_ordem += "M";
+				linha_ordem += " M";
 			else
-				linha_ordem += "F";
+				linha_ordem += " F";
 
-		linha_ordem += " ";
 		linha_ordem	+= to_string(i -> numero);
-		linha_ordem += " ";
 
 		anel.push_back(i);
 	}
@@ -283,174 +280,442 @@ void Anel::adicionar_elemento(list<Atributos_vertice*> caminho, bool caminho_inv
 		caminho.push_front(v);
 }
 
-void Anel::adicionar_elemento(vector<list<Atributos_vertice*>> caminho, list<Atributos_vertice*> juncoes, list<list<int>> casamentos){
-	//Adiciona todos os elementos ao anel
-	for (list<Atributos_vertice*> lista: caminho) {
-		for (Atributos_vertice* i: lista) {
-			anel.push_back(i);
+void encontrar_caminho(vector<list<Atributos_vertice*>> caminho, Atributos_vertice* pertence, list<Atributos_vertice*> &destino) {
+	for (list<Atributos_vertice*> l: caminho) {
+		for (Atributos_vertice* v: l) {
+			if (v == pertence) {
+				destino = list<Atributos_vertice*>(l);
+				return;
+			}
 		}
 	}
+}
 
-	//Adiciona juncoes ao anel
-	for (Atributos_vertice* i: juncoes) {
-		anel.push_back(i);
+bool contem__(Atributos_vertice* x, list<Atributos_vertice*> lista) {
+	for (Atributos_vertice* v: lista)
+		if (v == x)
+			return true;
+
+	return false;
+}
+
+void Anel::adicionar_elemento(vector<list<Atributos_vertice*>> caminho, list<list<int>> casamentos_, list<Juncao*> juncoesUtilizadas, bool realizado) {
+	//Adiciona todos os vertices ao anel
+	for (list<Atributos_vertice*> lista: caminho)
+		for (Atributos_vertice* i: lista)
+			vertices.push_back(i);
+
+	for (Juncao* j: juncoesUtilizadas) {
+		vertices.push_back(j -> juncao);
+		juncoes.push_back(j -> juncao);
 	}
 
-	//Escolhe um casamento para iniciar
-	list<Atributos_vertice*> aux(anel);
-	int primeiro = casamentos.front().front();
-	int segundo = casamentos.front().back();
-	Atributos_vertice* v = NULL;
-	for (Atributos_vertice* i: aux) {
-		if ( (i -> id == primeiro || i -> id == segundo) && i -> tipo == 't') {
-			v = i;
-			break;
+	//Adiciona todos os caminhos percorridos pelas juncoes
+	for (Juncao* j: juncoesUtilizadas) {
+		list<Atributos_vertice*> novo_caminho;
+		novo_caminho.push_back(j -> juncao);
+
+		list<Atributos_vertice*> caminho_aux;
+		encontrar_caminho(caminho, j -> primeiro, caminho_aux);
+		for (Atributos_vertice* v: caminho_aux)
+			novo_caminho.push_front(v);
+
+		caminho_aux.clear();
+		encontrar_caminho(caminho, j -> segundo, caminho_aux);
+		for (Atributos_vertice* v: caminho_aux)
+			novo_caminho.push_back(v);
+
+		caminhos.push_back(novo_caminho);
+	}
+
+	//Adiciona os casamentos ao Anel
+	for(list<int> l: casamentos_) {
+		list<Atributos_vertice*> novo_casamento;
+		for (int i: l) {
+			for (Atributos_vertice* v: vertices) {
+				if (v -> id == i) {
+					novo_casamento.push_back(v);
+					break;
+				}
+			}
 		}
+		casamentos.push_back(novo_casamento);
 	}
 
-	//Se encontrou casamento
-	if (v != NULL) {
-		aux.remove(v);
-		if (v -> tipo == 'e')
-			linha_ordem = " W";
-		else
-			linha_ordem = " H";
 
-		linha_normal += " ";
-		linha_normal = to_string(v -> numero);
-
-		linha_ordem += to_string(v -> numero);
-	} else {	//Se nao encontrou casamento acontece erro
-		printf("Nao encontrou casamento \n");
-		return;
-	}
-
-	//Começa escolha das linhas
+	//Escolhe o primeiro elemento do anel
 	Atributos_vertice* proximo;
-	bool em_subida = false;
-	while(aux.size() > 0) {
-		//Procura primeiro pelos pais
-		proximo = NULL;
-		bool parar = false;
-		for (Atributos_vertice* pai: v -> pais) {
-			for (Atributos_vertice* atrib_aux: aux) {
-				if (pai -> id == atrib_aux -> id) {
-					parar = true;
-					proximo = atrib_aux;
-					break;
-				}
-			}
-			if (parar)
+	if (casamentos.front().front() -> tipo == 't')
+		proximo = casamentos.front().front();
+	else
+		proximo = casamentos.front().back();
+
+	//Define ordem do anel
+	list<list<Atributos_vertice*>> caminhos_aux(caminhos);
+	list<list<Atributos_vertice*>> casamentos_aux(casamentos);
+	list<Atributos_vertice*> remover;
+	while(caminhos_aux.size() > 0) {
+		//Encontra o caminho da juncao que proximo pertence e o adiciona ao anel
+		for (list<Atributos_vertice*> l: caminhos_aux) {
+			if (l.front() == proximo) {
+				remover = l;
+				for (Atributos_vertice* v: l)
+					anel.push_back(v);
+				proximo = l.back();
 				break;
-		}
-
-		//Encontrou pai
-		if (proximo != NULL) {
-			em_subida = true;
-			aux.remove(proximo);
-			v = proximo;
-			if (v -> tipo == 'e')
-				linha_ordem += " M";
-			else
-				linha_ordem += " F";
-
-			linha_normal += " ";
-			linha_normal += to_string(v -> numero);
-
-			linha_ordem += to_string(v -> numero);
-			continue;
-		}
-
-		//Nao encontrou pai, procura filhos
-		parar = false;
-		for (Atributos_vertice* filho: v -> filhos) {
-			for (Atributos_vertice* atrib_aux: aux) {
-				if (filho -> id == atrib_aux -> id) {
-					parar = true;
-					proximo = atrib_aux;
-					break;
-				}
-			}
-			if (parar)
+			} else if (l.back() == proximo) {
+				remover = l;
+				l.reverse();
+				for (Atributos_vertice* v: l)
+					anel.push_back(v);
+				proximo = l.back();
 				break;
-		}
-
-		//Encontrou filho
-		if (proximo != NULL) {
-			if (em_subida) {	//Estava procurando pai e começa a procurar filho(Juncao)
-				linha_ordem += "_J";
-				em_subida = false;
 			}
-			aux.remove(proximo);
-			v = proximo;
-			if (v -> tipo == 'e')
-				linha_ordem += " D";
-			else
-				linha_ordem += " S";
-
-			linha_normal += " ";
-			linha_normal += to_string(v -> numero);
-
-			linha_ordem += to_string(v -> numero);
-
-			continue;
 		}
+		caminhos_aux.remove(remover);
 
-		//Nao encontrou filhos procura casamento
-		parar = false;
-		for (Atributos_vertice* casado: v -> casados) {
-			for (Atributos_vertice* atrib_aux: aux) {
-				if (casado -> id == atrib_aux -> id) {
-					//Procura se é o casamento desejado
-					for (list<int> i: casamentos) {
-						if (i.front() == casado -> id) {
-							if (i.back() == v -> id) {
-								parar = true;
-								proximo = atrib_aux;
-								break;
-							}
-						} else if (i.back() == casado -> id) {
-							if (i.front() == v -> id) {
-								parar = true;
-								proximo = atrib_aux;
-								break;
-							}
-						}
-					}
-					if (parar)
-						break;
-				}
-			}
-			if (parar)
+		//Encontra o casamento com o ultimo elemento adicionado ao anel
+		for (list<Atributos_vertice*> l: casamentos_aux) {
+			if (l.front() == proximo) {
+				proximo = l.back();
+				remover = l;
 				break;
+			} else if (l.back() == proximo) {
+				proximo = l.front();
+				remover = l;
+				break;
+			}
 		}
-		if (proximo != NULL) {
-			aux.remove(proximo);
-			v = proximo;
-			if (v -> tipo == 'e')
-				linha_ordem += " W";
-			else
-				linha_ordem += " H";
-
-			linha_normal += " ";
-			linha_normal += to_string(v -> numero);
-
-			linha_ordem += to_string(v -> numero);
-
-			continue;
-		}
-
-		linha_normal = "";
-		linha_ordem = "";
-		return;
+		casamentos_aux.remove(remover);
 	}
 
+	//Verifica se escolheu o casamento com menor geração
+	if (casamentos.size() == 2) {
+		//Calcula o numero da geracao do primeiro e segundo ego
+		int num = 0;
+		bool segundo = false;
+		int num_2 = 0;
+		Atributos_vertice* ultimo = anel.front();
+		for (Atributos_vertice* v: anel) {
+			if (contem__(v, ultimo -> filhos)) {
+				num--;
+			} else if (contem__(v, ultimo -> pais)) {
+				num++;
+			} else if (contem__(v, ultimo -> casados)) {
+				ultimo = v;
+				if (segundo)
+					break;
+				segundo = true;
+				num_2 = num;
+				num = 0;
+			}
+			ultimo = v;
+		}
+
+		//Se segundo ego tem geracao maior, inverte a ordem dos casamentos
+		bool res = num_2 < 0 ? num_2 < num : num_2 > num;
+		if (num_2 < num  && !realizado) {
+			//Geracao do casamento interno tem menos descendentes
+			anel.clear();
+			vertices.clear();
+			caminhos.clear();
+			casamentos.clear();
+			juncoes.clear();
+			linha_normal = "";
+			linha_ordem = "";
+
+			casamentos_.push_back(casamentos_.front());
+			casamentos_.pop_front();
+			this -> adicionar_elemento(caminho, casamentos_, juncoesUtilizadas, true);
+		}
+	}
+
+	//Salva o anel nas strings
+	linha_normal = "";
+	linha_ordem = "";
+	for (Atributos_vertice* v: anel) {
+		linha_normal += to_string(v -> numero);
+		linha_normal += " ";
+	}
 	linha_normal += "\n";
-	linha_ordem += "\n";
 }
 
 void Anel_aux::mudar_tamanho(int tamanho) {
 	juncoes.resize(tamanho);
 	caminhos_primeiro.resize(tamanho);
 	caminhos_segundo.resize(tamanho);
+}
+
+//Nodo dominadores
+Nodo_dominadores::Nodo_dominadores(Atributos_vertice* v) {
+	id = v -> id;
+	atributo = v;
+}
+void Nodo_dominadores::adicionar_sucessor_d_arv(Nodo_dominadores* d) {
+	sucessores_d_arv.remove(d);
+	sucessores_d_arv.push_back(d);
+}
+void Nodo_dominadores::adicionar_antecessor_d_arv(Nodo_dominadores* d) {
+	antecessores_d_arv.remove(d);
+	antecessores_d_arv.push_back(d);
+}
+void Nodo_dominadores::remover_sucessor_d_arv(Nodo_dominadores* d) {
+	sucessores_d_arv.remove(d);
+}
+void Nodo_dominadores::se_tornar_filho_de_d_arv(Nodo_dominadores* d) {
+	for (Nodo_dominadores* n: antecessores_d_arv)
+		n -> remover_sucessor_d_arv(this);
+	antecessores_d_arv.clear();
+	adicionar_antecessor_d_arv(d);
+	d -> adicionar_sucessor_d_arv(this);
+}
+bool Nodo_dominadores::contem_d_arv(Nodo_dominadores* d) {
+	if (d == this)
+		return true;
+
+	for (Nodo_dominadores* n: sucessores_d_arv)
+		if (n -> contem_d_arv(d))
+			return true;
+
+	return false;
+}
+Nodo_dominadores* Nodo_dominadores::primeiro_antecessor_d_arv() {
+	return antecessores_d_arv.front();
+}
+int Nodo_dominadores::tamanho_predecessores_d_arv() {
+	return antecessores_d_arv.size();
+}
+void Nodo_dominadores::adicionar_sucessor_a_arv(Nodo_dominadores* a) {
+	sucessores_a_arv.remove(a);
+	sucessores_a_arv.push_back(a);
+}
+void Nodo_dominadores::adicionar_antecessor_a_arv(Nodo_dominadores* a) {
+	antecessores_a_arv.remove(a);
+	antecessores_a_arv.push_back(a);
+}
+void Nodo_dominadores::remover_sucessor_a_arv(Nodo_dominadores* a) {
+	sucessores_a_arv.remove(a);
+}
+bool Nodo_dominadores::contem_a_arv(Nodo_dominadores* a) {
+	if (a == this)
+		return true;
+
+	for (Nodo_dominadores* n: sucessores_a_arv)
+		if (n -> contem_a_arv(a))
+			return true;
+
+	return false;
+}
+int Nodo_dominadores::max_caminho_a_arv() {
+	int max = 1;
+	int cam = 0;
+	for (Nodo_dominadores* d: sucessores_a_arv) {
+		cam = d -> max_caminho_a_arv();
+		max = cam >= max ? cam + 1 : max;
+	}
+
+	return max;
+}
+void Nodo_dominadores::print_filhos_a_arv() {
+	if (sucessores_a_arv.size() > 0) {
+		printf("%d: ", atributo -> numero);
+		for (Nodo_dominadores* d: sucessores_a_arv) {
+			printf("%d ", d -> atributo -> numero);
+		}
+		printf("\n");
+
+		for (Nodo_dominadores* d: sucessores_a_arv) {
+			d -> print_filhos_a_arv();
+		}
+	}
+}
+
+//A_arvore
+A_arvore::A_arvore(list<Nodo_dominadores*> raizes_) {
+	raizes = list<Nodo_dominadores*>(raizes_);
+
+	ancestrais = vector<vector<Nodo_dominadores*>> (raizes.size(), vector<Nodo_dominadores*> (raizes.size(), NULL)); 	//Talvez max = log raizes.size()
+}
+void A_arvore::link(Nodo_dominadores* u, Nodo_dominadores* v) {
+	ancestrais[u -> id][0] = v;
+
+	u -> adicionar_antecessor_a_arv(v);
+	v -> adicionar_sucessor_a_arv(u);
+
+	raizes.remove(u);
+}
+Nodo_dominadores* A_arvore::get_ancestor(Nodo_dominadores* u, int i) {
+	if (ancestrais[u -> id][i - 1] == NULL)
+		ancestrais[u -> id][i] = get_ancestor(get_ancestor(u, i - 1), i - 1);
+
+	return ancestrais[u -> id][i];
+}
+Nodo_dominadores* A_arvore::find(Nodo_dominadores* u, Nodo_dominadores* v, int i, int d) {
+	if (i == 0)
+		return ancestrais[u -> id][0];
+
+	if (get_ancestor(u, i - 1) == get_ancestor(v, i - 1))
+		return find(u, v, i - 1, d);
+
+	int calc = log2(d - pow(2, i - 1));
+	calc = calc > i - 1 ? i - 1 : calc;
+
+	return find(get_ancestor(u, i - 1), get_ancestor(v, i - 1), calc, d - pow(2, i - 1));
+}
+Nodo_dominadores* A_arvore::lowest(Nodo_dominadores* u, Nodo_dominadores* v, D_arvore* arv)  {
+	if (arv -> depth(v) > arv -> depth(u)) {
+		Nodo_dominadores* aux_n = u;
+		u = v;
+		v = aux_n;
+	}
+
+	Nodo_dominadores* x = raiz(u);
+	Nodo_dominadores* y = raiz(v);
+
+	if (x != y || x == NULL) {
+		printf("Erro em lowest_a\n");
+		return NULL;
+	}
+
+
+	Nodo_dominadores* aux = u;
+	Nodo_dominadores* anterior = u;
+	int d = arv -> depth(u) - arv -> depth(v);
+	int j;
+	while (d > 0 && aux != NULL) {
+		j = log2(d);
+		anterior = aux;
+		aux = get_ancestor(aux, j);	//Ancestor?
+		d = d - pow(2, j);
+	}
+
+	if (aux == NULL)
+		return anterior;
+
+	return aux;
+
+}
+Nodo_dominadores* A_arvore::raiz(Nodo_dominadores* u) {
+	for (Nodo_dominadores* d: raizes)
+		if (d -> contem_a_arv(u)) {
+			return d;
+		}
+
+	return NULL;
+}
+
+D_arvore::D_arvore(list<Nodo_dominadores*> raizes_) {
+		raizes = list<Nodo_dominadores*>(raizes_);
+}
+Nodo_dominadores* D_arvore::raiz(Nodo_dominadores* u) {
+	for (Nodo_dominadores* d: raizes)
+		if (d -> contem_d_arv(u)) {
+			return d;
+		}
+	return NULL;
+}
+
+int D_arvore::depth(Nodo_dominadores* u) {
+	int depth = 0;
+	list<Nodo_dominadores*> caminho;
+	Nodo_dominadores* ultimo = u;
+
+	caminho.push_back(ultimo);
+	while(ultimo -> tamanho_predecessores_d_arv() > 0) {
+		ultimo = ultimo -> primeiro_antecessor_d_arv();
+		caminho.push_back(ultimo);
+	}
+
+	for(Nodo_dominadores* d: caminho)
+		depth += d -> weigth;
+
+	int i = 0;
+	Nodo_dominadores* p = NULL;
+	if (caminho.size() > 0) {
+		caminho.reverse();
+
+		p = caminho.front();
+	}
+	for (Nodo_dominadores* d: caminho) {
+		if (i >= 2) {
+			d -> weigth = d -> weigth + p -> weigth;
+			d -> se_tornar_filho_de_d_arv(ultimo);
+		} else {
+			i++;
+			p = d;
+		}
+	}
+
+	return depth;
+}
+void D_arvore::merge(Nodo_dominadores* u, Nodo_dominadores* v) {
+	Nodo_dominadores* x = raiz(u);
+	Nodo_dominadores* y = raiz(v);
+
+	int depth_u = depth(u);
+	int depth_v = depth(v);
+
+	if (x -> count <= y -> count) {
+		x -> se_tornar_filho_de_d_arv(y);
+		y -> count = y -> count + x -> count;
+		x -> weigth = x -> weigth + depth(v) + 1 - y -> weigth;
+		raizes.remove(x);
+	} else if (x -> count > y -> count) {
+		y -> se_tornar_filho_de_d_arv(x);
+		x -> count = y -> count + x -> count;
+		x -> weigth = x -> weigth + depth(v) + 1;
+		y -> weigth = y -> weigth - x -> weigth;
+		raizes.remove(y);
+	}
+}
+Nodo_dominadores* D_arvore::lowest(Nodo_dominadores* u, Nodo_dominadores* v, A_arvore* arv) {
+	if (depth(v) > depth(u)) {
+		Nodo_dominadores* aux_n = u;
+		u = v;
+		v = aux_n;
+	}
+
+	Nodo_dominadores* x = raiz(u);
+	Nodo_dominadores* y = raiz(v);
+	if (x != y || x == NULL) {
+		printf("Erro em lowest_a\n");
+		return NULL;
+	}
+
+
+	Nodo_dominadores* aux = u;
+	Nodo_dominadores* ultimo;
+	int d = depth(u) - depth(v);
+	int j;
+	while (d > 0 && aux != NULL) {
+		j = log2(d);
+		ultimo = aux;
+		aux = arv -> ancestrais[aux -> id][j];	//arv -> get_ancestor(aux, j);
+		d = d - pow(2, j);
+	}
+
+	if (aux == NULL)
+		return ultimo;
+
+	return aux;
+}
+
+Region::Region(Nodo_dominadores* header_) {
+	header = header_;
+	membros.push_back(header);
+}
+
+void Region::juntar(Region* r) {
+	sucessores.remove(r);
+	for(Nodo_dominadores* m: r -> membros) {
+		membros.remove(m);
+		membros.push_back(m);
+	}
+	for(Region* s: r -> sucessores) {
+		sucessores.remove(s);
+		sucessores.push_back(s);
+		s -> antecessores.remove(r);
+		s -> antecessores.remove(this);
+		s -> antecessores.push_back(this);
+	}
 }

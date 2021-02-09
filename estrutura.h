@@ -5,10 +5,12 @@
 #include <iomanip>
 #include <sstream>
 #include <vector>
+#include <math.h>
 
 using namespace std;
 class Nodo;
 class Particao;
+class D_arvore;
 
 struct Atributos_largura_lista {
 	int cor;
@@ -49,11 +51,14 @@ class Vertice {
 	void adicionar_filho(Vertice* vertice);
 	void adicionar_pai(Vertice* vertice);
 };
-
 class Atributos_vertice {
+	class a{
+
+	};
 	public:
 		int id;
 		int numero;
+		int geracao;
 		char tipo;
 		list<int> cor;
 		list<Atributos_vertice*> pais;
@@ -146,12 +151,16 @@ class JuncoesDe {
 class Anel {
 	public:
 		list<Atributos_vertice*> anel;
+		list<Atributos_vertice*> vertices;
+		list<list<Atributos_vertice*>> caminhos;
+		list<list<Atributos_vertice*>> casamentos;
+		list<Atributos_vertice*> juncoes;
 
 		string linha_normal;
 		string linha_ordem;
 
 		void adicionar_elemento(list<Atributos_vertice*> caminho, bool caminho_inverso);
-		void adicionar_elemento(vector<list<Atributos_vertice*>> caminho, list<Atributos_vertice*> juncoes, list<list<int>> casamentos);
+		void adicionar_elemento(vector<list<Atributos_vertice*>> caminho, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, bool realizado= false);
 };
 
 class Anel_aux {
@@ -164,5 +173,78 @@ class Anel_aux {
 		vector<vector<list<Atributos_vertice*>>> caminhos_segundo;
 		void mudar_tamanho(int tamanho);
 };
+
+class Nodo_dominadores {
+public:
+	list<Nodo_dominadores*> sucessores_a_arv;
+	list<Nodo_dominadores*> antecessores_a_arv;
+
+	list<Nodo_dominadores*> sucessores_d_arv;
+	list<Nodo_dominadores*> antecessores_d_arv;
+
+	int id;
+	Atributos_vertice* atributo;
+
+	int count = 1;
+	int weigth = 0;
+
+	Nodo_dominadores(Atributos_vertice* v);
+	//Ops D_Arv
+	void adicionar_sucessor_d_arv(Nodo_dominadores* d);
+	void adicionar_antecessor_d_arv(Nodo_dominadores* d);
+	void remover_sucessor_d_arv(Nodo_dominadores* d);
+
+	void se_tornar_filho_de_d_arv(Nodo_dominadores* d);
+	bool contem_d_arv(Nodo_dominadores* d);
+	Nodo_dominadores* primeiro_antecessor_d_arv();
+	int tamanho_predecessores_d_arv();
+
+	//Ops A_Arv
+	void adicionar_sucessor_a_arv(Nodo_dominadores* a);
+	void adicionar_antecessor_a_arv(Nodo_dominadores* a);
+	void remover_sucessor_a_arv(Nodo_dominadores* a);
+	bool contem_a_arv(Nodo_dominadores* a);
+	int max_caminho_a_arv();
+	void print_filhos_a_arv();
+};
+
+class A_arvore {
+public:
+	list<Nodo_dominadores*> raizes;
+	vector<vector<Nodo_dominadores*>> ancestrais;
+
+	A_arvore(list<Nodo_dominadores*> raizes_);
+	void link(Nodo_dominadores* u, Nodo_dominadores* v);
+	Nodo_dominadores* get_ancestor(Nodo_dominadores* u, int i);
+	Nodo_dominadores* find(Nodo_dominadores* u, Nodo_dominadores* v, int i, int d);
+	Nodo_dominadores* lowest(Nodo_dominadores* u, Nodo_dominadores* v, D_arvore* arv);
+	Nodo_dominadores* raiz(Nodo_dominadores* u);
+};
+
+class D_arvore {
+public:
+	list<Nodo_dominadores*> raizes;
+
+	D_arvore(list<Nodo_dominadores*> raizes_);
+	Nodo_dominadores* raiz(Nodo_dominadores* u);
+	int depth(Nodo_dominadores* u);
+	void merge(Nodo_dominadores* u, Nodo_dominadores* v);
+	Nodo_dominadores* lowest(Nodo_dominadores* u, Nodo_dominadores* v, A_arvore* arv);
+
+};
+
+class Region {
+public:
+	Nodo_dominadores* header;
+	list<Nodo_dominadores*> membros;
+	list<Region*> sucessores;
+	list<Region*> antecessores;
+
+	Region(Nodo_dominadores* header_);
+
+	void juntar(Region* r);
+};
+
+
 
 #endif /* ESTRUTURA_H */

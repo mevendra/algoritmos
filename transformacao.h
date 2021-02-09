@@ -20,11 +20,12 @@ void escreve_cores(Grafo* g, char* caminho);
 void escreve_max_cores(Grafo* g, char* caminho);
 void escreve_aneis(list<Anel*> aneis, Grafo* g, char* caminho);
 void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char* caminho);
+void escreve_aneis_completo(list<Anel*> aneis, char* caminho);
 
 void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char* caminho);
 void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenhar);
 void reinicia_cores();
-void coloca_transicoes(int** grafo, int tamanho, list<Atributos_vertice*> atributos);
+void coloca_transicoes(int** grafo, list<Atributos_vertice*> atributos);
 
 enum Estados
 {

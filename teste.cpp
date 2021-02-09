@@ -217,6 +217,21 @@ void testar_aneis(Grafo* g, int k) {
 	printf("Numero de aneis encontrados: %d\n", destino.size());
 }
 
+void testar_dominadores(Grafo* g) {
+	printf("Testando encontrar dominadores no grafo\n");
+	Nodo_dominadores* d = NULL;
+
+	encontra_arvore_denominadores(g, d);
+
+	if (d == NULL) {
+		printf("Erro ao encontrar dominadores\n");
+		return;
+	}
+	d -> print_filhos_a_arv();
+
+	printf("Terminou!\n");
+}
+
 int main(int argc, char *argv[]) {
 	Grafo *g = trabalha_arquivo("entrada/Arara4MaqPar.txt");
 	int **grafo = g->grafo;
@@ -231,19 +246,24 @@ int main(int argc, char *argv[]) {
 	testar_casamento_entre_irmaos(g);
 	testar_max_cores_ate_folha(g);
 	testar_juncoes(g);
+	testar_dominadores(g);
 
-	testar_aneis(g,1);
+	//testar_aneis(g,2);
 
-
+/*
 	list<Anel*> aneis;
 	encontra_aneis(g, aneis, 1);
 	escreve_aneis(aneis, g, "entrada/aneis_padrao_1.txt");
 	escreve_aneis_ordem(aneis, g, "entrada/aneis_ordem_1.txt");
+	escreve_aneis_completo(aneis, "entrada/aneis_1.txt");
+
 
 	list<Anel*> aneis_aux;
 	encontra_aneis(g, aneis_aux, 2);
 	escreve_aneis(aneis_aux, g, "entrada/aneis_padrao_2.txt");
 	escreve_aneis_ordem(aneis_aux, g, "entrada/aneis_ordem_2.txt");
+	escreve_aneis_completo(aneis_aux, "entrada/aneis_2.txt");
+*/
 
 
 	bool escreve_grafos = false;

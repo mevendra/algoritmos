@@ -33,8 +33,8 @@ void encontra_casamentos(Grafo* g, vector<list<int>>& casamentos);
 
 void encontra_caminhos(Atributos_vertice* fonte, Atributos_vertice* destino,list<Atributos_vertice*> caminho_atual, list<list<Atributos_vertice*>> &caminhos);
 bool sao_disjuntos(list<Atributos_vertice*> caminho_a, list<Atributos_vertice*> caminho_b);
-void verifica_anel(vector<list<Atributos_vertice*>> caminhos, list<Anel*> &destino, list<Atributos_vertice*> juncoes, list<list<int>> casamentos);
-void encontra_aneis(list<Anel_aux*> aux, vector<list<Atributos_vertice*>> atual, list<Anel*> & destino, list<Atributos_vertice*> juncoes, list<list<int>> casamentos);
+void verifica_anel(vector<list<Atributos_vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas);
+void encontra_aneis(list<Anel_aux*> aux, vector<list<Atributos_vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas);
 void encontra_duplas_casamentos(vector<list<int>> casamentos, list<list<list<int>>>& destino);
 void encontra_combinacoes_dupla(list<list<int>> dupla_casamentos, list<list<list<int>>>& destino);
 void encontra_trios_casamentos(vector<list<int>> casamentos, list<list<list<int>>>& destino);
@@ -43,6 +43,7 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino);
 void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
 void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
 void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
+void casamentos_sem_juncao(vector<list<int>> casamentos, list<JuncoesDe*> juncoes, Grafo* g);
 
 //Metodos "Finais"
 extern void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz);
@@ -64,5 +65,7 @@ void encontra_juncoes(Grafo* g, list<Juncao*>& destino);
 void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino);
 
 void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos);
+
+void encontra_arvore_denominadores(Grafo* g, Nodo_dominadores* raiz);
 
 #endif /* ALGORITMO_H*/

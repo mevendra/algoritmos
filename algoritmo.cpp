@@ -1503,7 +1503,7 @@ void encontra_raizes(Grafo* g, list<Atributos_vertice*>& destino) {
 }
 
 //Encontra o Nodo_dominador que representa em seus sucessores_a_arv a arvore de dominadores
-void encontra_arvore_denominadores(Grafo* g, Nodo_dominadores* raiz) {
+void encontra_arvore_denominadores(Grafo* g, Nodo_dominadores* &raiz) {
 	//Criação de atributo "Raiz" que se liga aos raizes de g
 	Atributos_vertice* root = new Atributos_vertice(g -> atributos.size(), 99999, 'z');
 	list<Atributos_vertice*> raizes_g;

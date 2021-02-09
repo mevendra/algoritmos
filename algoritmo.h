@@ -66,6 +66,6 @@ void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino);
 
 void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos);
 
-void encontra_arvore_denominadores(Grafo* g, Nodo_dominadores* raiz);
+void encontra_arvore_denominadores(Grafo* g, Nodo_dominadores* &raiz);
 
 #endif /* ALGORITMO_H*/

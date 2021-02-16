@@ -421,8 +421,6 @@ void Anel::adicionar_elemento(vector<list<Atributos_vertice*>> caminho, list<lis
 			caminhos.clear();
 			casamentos.clear();
 			juncoes.clear();
-			linha_normal = "";
-			linha_ordem = "";
 
 			casamentos_.push_back(casamentos_.front());
 			casamentos_.pop_front();
@@ -528,6 +526,11 @@ void Nodo_dominadores::print_filhos_a_arv() {
 			d -> print_filhos_a_arv();
 		}
 	}
+}
+void Nodo_dominadores::pos_ordem_a_arv(list<Nodo_dominadores*> &destino) {
+	for (Nodo_dominadores* d: sucessores_a_arv)
+		d -> pos_ordem_a_arv(destino);
+	destino.push_back(this);
 }
 
 //A_arvore

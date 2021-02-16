@@ -52,9 +52,6 @@ class Vertice {
 	void adicionar_pai(Vertice* vertice);
 };
 class Atributos_vertice {
-	class a{
-
-	};
 	public:
 		int id;
 		int numero;
@@ -206,6 +203,7 @@ public:
 	bool contem_a_arv(Nodo_dominadores* a);
 	int max_caminho_a_arv();
 	void print_filhos_a_arv();
+	void pos_ordem_a_arv(list<Nodo_dominadores*> &destino);
 };
 
 class A_arvore {

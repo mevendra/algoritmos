@@ -673,6 +673,61 @@ void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> component
 	fclose(arquivo);
 }
 
+void escreve_cores_graphviz(Grafo* g, FILE* arquivo) {
+	//Colore os vertices
+	Hash* map = new Hash();	//Hash que ira guardar as cores relacionadas com cada numero
+	reinicia_cores();	//Reinicia as cores em list<Cor*> cores
+
+	//Atributos para coloracao
+	Cor* cor;
+	Cor* aux;
+	string rgb;
+	string lin;
+
+	//Percorre Vertices e escreve as cores
+	for (Atributos_vertice* a: g -> atributos)
+	{
+		cor = NULL;
+		//Para cada cor que coloriu o vertice
+		for (int cor_n: a -> cor)
+		{
+			aux = map -> encontrar_cor(cor_n);	//Encontra cor
+			//Se cor nao tiver sido encontrada ainda
+			if (aux == NULL) {
+				if (cores.empty()) //Se o numero de cores colocado na lista cores e muito pequeno
+				{ printf("Erro: falta cores\n"); return;}
+					//Pega a primeira cor
+				rgb = cores.front();
+				cores.pop_front();
+
+				//Inicia uma nova cor e a adiciona ao hash
+				aux = new Cor(rgb);
+				map -> adicionar_cor(cor_n, aux);
+			}
+
+			if (cor == NULL) {	//Se esta passando pela primeira vez copia a cor de aux
+				cor = new Cor(aux);
+			} else {	//Se ja tem cor definida realiza a soma da cor atual com a de aux
+				cor -> soma(aux);
+			}
+		}
+
+		if (cor == NULL) continue;	//Nao tem cor (a -> cor esta vazio)
+
+		lin = "";
+		lin += to_string(a -> id);
+		lin += " [color = \"";
+		lin += cor -> rgb;
+		lin += "\", style = \"filled\"];\n";
+		fputs(lin.c_str(), arquivo);
+		//Forma esperada: ID [color = "#HEX_VALUE", style = "filled"];\n
+		delete cor;
+	}
+
+	map->limpar();
+	delete map;	//Realiza delete de todas as cores contidas em map
+}
+
 void escreve_cores(Grafo* g, char* caminho) {
 	FILE* arquivo;
 	arquivo = fopen(caminho, "w");
@@ -774,34 +829,44 @@ void escreve_aneis_completo(list<Anel*> aneis, char* caminho) {
 		linha += "Ego";
 		if (tam > 1)
 			linha += to_string(i);
-		linha += ", SxEgo";
+		linha += ", ";
+		linha += "SxEgo";
 		if (tam > 1)
 			linha += to_string(i);
-		linha += ", Alter";
+		linha += ", ";
+		linha += "Alter";
 		if (tam > 1)
 			linha += to_string(i);
-		linha += ", SxAlter";
+		linha += ", ";
+		linha += "SxAlter";
 		if (tam > 1)
 			linha += to_string(i);
+		linha += ", ";
 	}
-	linha += ", Percurso, BarryPercurso, Parente, ";
+	linha += "Percurso, BarryPercurso, Parente, ";
 	for (int i = 0; i < tam; i++) {
 		linha += "Casal";
 		if (tam > 1)
 			linha += to_string(i);
+		linha += ", ";
 	}
 	for (int i = 0; i < tam; i++) {
-		linha += ", Geração";
+		linha += "Geração";
 		if (tam > 1)
 			linha += to_string(i);
-		linha += ", Lateral";
+		linha += ", ";
+
+		linha += "Lateral";
 		if (tam > 1)
 			linha += to_string(i);
+		linha += ", ";
 	}
 	for (int i = 0; i < tam; i++) {
-		linha += ", Cnx";
+		linha += "Cnx";
 		if (tam > 1)
 			linha += to_string(i);
+		if (i < tam - 1)
+			linha += ", ";
 	}
 	linha += "\n";
 
@@ -961,6 +1026,47 @@ void escreve_aneis_completo(list<Anel*> aneis, char* caminho) {
 		fputs(linha.c_str(), arquivo);
 	}
 
+	fclose(arquivo);
+}
+
+void escreve_arvore_graphviz(Grafo* g, Nodo_dominadores* raiz, bool colorir, char* caminho) {
+	//Atributos para leitura de arquivo
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string lin;
+
+	//Inicio do grafo e Instanciacao de vertices
+	fputs("digraph {\n", arquivo);
+	list<int> nao_desenhar;
+	instancia_vertices_graphviz(g, arquivo, nao_desenhar);
+
+	lin = "";
+	lin += to_string(raiz -> atributo -> id);	//Identificador do vertice
+	lin += " [label = ";
+	lin += to_string(raiz -> atributo -> numero);
+	lin += ", shape = square];\n";
+	fputs(lin.c_str(), arquivo);
+	//Forma esperada: ID [label = NUMERO, forma = FORMA];\n
+
+	list<Nodo_dominadores*> p;
+	raiz -> pos_ordem_a_arv(p);
+	for (Nodo_dominadores* d: p) {
+		for (Nodo_dominadores* f: d -> sucessores_a_arv) {
+			lin = "";
+			lin += to_string(d -> atributo -> id);	//Vertice do qual arco sai
+			lin += " -> ";
+			lin += to_string(f -> atributo -> id);	//Vertice em que arco chega
+			lin += ";\n";
+			fputs(lin.c_str(), arquivo);
+			//Forma esperada: ID -> ID;\n
+		}
+	}
+
+	if (colorir)
+		escreve_cores_graphviz(g, arquivo);
+
+	//Termina grafo e fecha arquivo
+	fputs("}\n", arquivo);
 	fclose(arquivo);
 }
 

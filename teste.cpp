@@ -260,11 +260,21 @@ int main(int argc, char *argv[]) {
 
 	list<Anel*> aneis_aux;
 	encontra_aneis(g, aneis_aux, 2);
-	escreve_aneis(aneis_aux, g, "entrada/aneis_padrao_2.txt");
-	escreve_aneis_ordem(aneis_aux, g, "entrada/aneis_ordem_2.txt");
+	//escreve_aneis(aneis_aux, g, "entrada/aneis_padrao_2.txt");
+	//escreve_aneis_ordem(aneis_aux, g, "entrada/aneis_ordem_2.txt");
 	escreve_aneis_completo(aneis_aux, "entrada/aneis_2.txt");
 */
+	//Escreve arvore de dominadores materno
+	colorir_grafo_mat(g);
+	Nodo_dominadores* raiz;
+	encontra_arvore_denominadores(g, raiz);
+	escreve_arvore_graphviz(g, raiz, true, "entrada/arvore_dominadores_colorido_mat.dot");
+	descolorir(g);
 
+	//Escreve arvore de dominadores paterno
+	colorir_grafo_pat(g);
+	escreve_arvore_graphviz(g, raiz, true, "entrada/arvore_dominadores_colorido_pat.dot");
+	descolorir(g);
 
 	bool escreve_grafos = false;
 	if (escreve_grafos) {

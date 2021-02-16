@@ -1600,6 +1600,8 @@ void encontra_arvore_denominadores(Grafo* g, Nodo_dominadores* &raiz) {
 
 	//Vertice raiz
 	raiz = a_arv -> raizes.front();
+
+	printf("Altura: %ld", raiz -> count);
 }
 
 

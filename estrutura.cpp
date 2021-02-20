@@ -29,7 +29,7 @@ void Vertice::adicionar_pai(Vertice* vertice) {
 }
 
 //Grafo
-Grafo::Grafo(int numero_vertices_, list<Atributos_vertice*> atributos_, int** grafo_) {
+Grafo::Grafo(int numero_vertices_, vector<Atributos_vertice*> atributos_, int** grafo_) {
 	numero_vertices = numero_vertices_;
 	atributos = atributos_;
 	grafo = grafo_;
@@ -59,12 +59,10 @@ void Grafo::adicionar_arco(int fonte, int destino) {
 }
 
 Atributos_vertice* Grafo::encontrar_atributo(int i) {
-	for (Atributos_vertice* v: atributos)
-	{
-		if (v -> id == i)
-			return v;
-	}
-	return new Atributos_vertice(-1, -1, 'e');
+	if (i > numero_vertices || i < 0)
+		return new Atributos_vertice(-1, -1, 'e');
+	else
+		return atributos[i];
 }
 
 //Atributos_vertice

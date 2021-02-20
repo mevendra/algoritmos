@@ -12,23 +12,23 @@ const int MAX_COLUNA_ARQUIVO = 40;
 
 
 int** cria_matriz(int tamanho);
-Grafo* trabalha_arquivo(char* caminho);
-void escreve_grafo_graphviz(Grafo* g, bool colorir, char* caminho);
-void escreve_arvore_graphviz(Grafo* g, int* arvore, char* caminho);
-void escreve_arvore_graphviz(Grafo* g, Nodo_dominadores* raiz, bool colorir, char* caminho);
-void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char* caminho);
-void escreve_componentes_sem_elementos_graphviz(Grafo* g, list<list<int>> componentes, char* caminho);
+Grafo* trabalha_arquivo(char const* caminho);
+void escreve_grafo_graphviz(Grafo* g, bool colorir, char const* caminho);
+void escreve_arvore_graphviz(Grafo* g, int* arvore, char const* caminho);
+void escreve_arvore_graphviz(Grafo* g, Nodo_dominadores* raiz, bool colorir, char const* caminho);
+void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char const* caminho);
+void escreve_componentes_sem_elementos_graphviz(Grafo* g, list<list<int>> componentes, char const* caminho);
 void escreve_cores_graphviz(Grafo* g, FILE* arquivo);
-void escreve_cores(Grafo* g, char* caminho);
-void escreve_max_cores(Grafo* g, char* caminho);
-void escreve_aneis(list<Anel*> aneis, Grafo* g, char* caminho);
-void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char* caminho);
-void escreve_aneis_completo(list<Anel*> aneis, char* caminho);
+void escreve_cores(Grafo* g, char const* caminho);
+void escreve_max_cores(Grafo* g, char const* caminho);
+void escreve_aneis(list<Anel*> aneis, Grafo* g, char const* caminho);
+void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char const* caminho);
+void escreve_aneis_completo(list<Anel*> aneis, char const* caminho);
 
-void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char* caminho);
+void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char const* caminho);
 void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenhar);
 void reinicia_cores();
-void coloca_transicoes(int** grafo, list<Atributos_vertice*> atributos);
+void coloca_transicoes(int** grafo, vector<Atributos_vertice*> atributos);
 
 
 enum Estados

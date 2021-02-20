@@ -79,9 +79,9 @@ class Grafo {
 	public:
 		int numero_vertices;
 		int** grafo;
-		list<Atributos_vertice*> atributos;
+		vector<Atributos_vertice*> atributos;
 
-		Grafo(int numero_vertices_, list<Atributos_vertice*> atributos_, int** grafo_);
+		Grafo(int numero_vertices_, vector<Atributos_vertice*> atributos_, int** grafo_);
 		void adicionar_aresta(int v1, int v2);
 		void adicionar_arco(int fonte, int destino);
 		Atributos_vertice* encontrar_atributo(int i);

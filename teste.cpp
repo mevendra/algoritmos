@@ -95,7 +95,7 @@ void testar_busca_largura_listas(Grafo* graf) {
 	for (Nodo *n : arvore) {
 		printf("%d ", graf -> encontrar_atributo(n->id) -> numero);
 	}
-	printf("\nNumero de raizes: %d\n", arvore.size());
+	printf("\nNumero de raizes: %ld\n", arvore.size());
 }
 void testar_busca_profundidade_listas(Grafo* graf) {
 	//
@@ -193,7 +193,7 @@ void testar_juncoes(Grafo* g) {
 		if (j -> juncao -> numero == num)
 			printf("Juncao %d sobre %d e %d encontrada\n", j -> juncao -> numero, j -> primeiro -> numero, j -> segundo -> numero);
 	}
-	printf("Numero de juncoes encontradas: %d\n", destino.size());
+	printf("Numero de juncoes encontradas: %ld\n", destino.size());
 }
 void testar_aneis(Grafo* g, int k) {
 	printf("Testando encontrar aneis com %d casamentos\n", k);
@@ -214,7 +214,7 @@ void testar_aneis(Grafo* g, int k) {
 
 
 
-	printf("Numero de aneis encontrados: %d\n", destino.size());
+	printf("Numero de aneis encontrados: %ld\n", destino.size());
 }
 
 void testar_dominadores(Grafo* g) {
@@ -233,8 +233,26 @@ void testar_dominadores(Grafo* g) {
 }
 
 int main(int argc, char *argv[]) {
-	Grafo *g = trabalha_arquivo("entrada/Arara4MaqPar.txt");
+	//Primeiro argumento = nome arquivo, segundo = numero de casamentos para testar aneis
+	string entrada = "entrada/";
+	int k = 2;
+	if (argc == 1) {
+		entrada += "Arara4MaqPar.txt";
+		//entrada += "rede_grande.txt";
+	} else if (argc == 2) {
+		entrada += argv[1];
+	} else if (argc == 3) {
+		entrada += argv[1];
+		k = atoi(argv[2]);
+	} else if (argc > 3)
+		return -1;
+
+	Grafo *g = trabalha_arquivo(entrada.c_str());
 	int **grafo = g->grafo;
+
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
+
 
 	testar_busca_largura(g);
 	testar_busca_profundidade(g);//Testando somente arestas, com arcos e totalmente conexo
@@ -247,69 +265,41 @@ int main(int argc, char *argv[]) {
 	testar_max_cores_ate_folha(g);
 	testar_juncoes(g);
 	testar_dominadores(g);
+	testar_aneis(g, k);
 
-	//testar_aneis(g,2);
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-/*
-	list<Anel*> aneis;
-	encontra_aneis(g, aneis, 1);
-	escreve_aneis(aneis, g, "entrada/aneis_padrao_1.txt");
-	escreve_aneis_ordem(aneis, g, "entrada/aneis_ordem_1.txt");
-	escreve_aneis_completo(aneis, "entrada/aneis_1.txt");
-
-
-	list<Anel*> aneis_aux;
-	encontra_aneis(g, aneis_aux, 2);
-	//escreve_aneis(aneis_aux, g, "entrada/aneis_padrao_2.txt");
-	//escreve_aneis_ordem(aneis_aux, g, "entrada/aneis_ordem_2.txt");
-	escreve_aneis_completo(aneis_aux, "entrada/aneis_2.txt");
-*/
-	//Escreve arvore de dominadores materno
-	colorir_grafo_mat(g);
-	Nodo_dominadores* raiz;
-	encontra_arvore_denominadores(g, raiz);
-	escreve_arvore_graphviz(g, raiz, true, "entrada/arvore_dominadores_colorido_mat.dot");
-	descolorir(g);
-
-	//Escreve arvore de dominadores paterno
-	colorir_grafo_pat(g);
-	escreve_arvore_graphviz(g, raiz, true, "entrada/arvore_dominadores_colorido_pat.dot");
-	descolorir(g);
+	std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
 
 	bool escreve_grafos = false;
 	if (escreve_grafos) {
-	//Escrita dos grafos
-	//Grafo normal (sem cores)
-	escreve_grafo_graphviz(g, false, "entrada/grafo_normal.dot");
-	printf("Escreveu grafo normal!\n");
-
 	//Arvore
 	int* arv = new int[g -> numero_vertices];
 	busca_em_largura(grafo, g -> numero_vertices, arv);
-	escreve_arvore_graphviz(g, arv, "entrada/arvore.dot");
+	escreve_arvore_graphviz(g, arv, "desenhos/arvore.dot");
 	printf("Escreveu arvore!\n");
 
 	//Componentes conexas
 	list<list<int>> lista;
 	busca_componentes_conexas(grafo, g -> numero_vertices, lista);
-	escreve_componentes_graphviz(g, lista, "entrada/componentes.dot");
+	escreve_componentes_graphviz(g, lista, "desenhos/componentes.dot");
 	printf("Escreveu componentes!\n");
 
 	//Grafo Colorido
 	colorir_grafo(g);
-	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido.dot");
+	escreve_grafo_graphviz(g, true, "desenhos/grafo_colorido.dot");
 	descolorir(g);
 	printf("Escreveu grafo colorido\n");
 
 	//Grafo materno colorido
 	colorir_grafo_mat(g);
-	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido_mat.dot");
+	escreve_grafo_graphviz(g, true, "desenhos/grafo_colorido_mat.dot");
 	descolorir(g);
 	printf("Escreveu grafo materno colorido!\n");
 
 	//Grafo paterno colorido
 	colorir_grafo_pat(g);
-	escreve_grafo_graphviz(g, true, "entrada/grafo_colorido_pat.dot");
+	escreve_grafo_graphviz(g, true, "desenhos/grafo_colorido_pat.dot");
 	descolorir(g);
 	printf("Escreveu e coloriu pat!\n");
 
@@ -318,14 +308,14 @@ int main(int argc, char *argv[]) {
 	//Componentes de casamento entre irmaos
 	destino.clear();
 	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
-	escreve_componentes_sem_elementos_graphviz(g, destino, "entrada/casamento_irmaos.dot");
+	escreve_componentes_sem_elementos_graphviz(g, destino, "desenhos/casamento_irmaos.dot");
 	printf("Escreveu Componentes de casamento entre irmaos!\n");
 
 	//Componentes de casamento entre irmaos + grafo colorido
 	destino.clear();
 	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
 	colorir_grafo(g);
-	escreve_grafo_com_componentes_especiais(g, destino, "entrada/grafo_colorido_com_casamento_irmaos.dot");
+	escreve_grafo_com_componentes_especiais(g, destino, "desenhos/grafo_colorido_com_casamento_irmaos.dot");
 	descolorir(g);
 	printf("Escreveu Componentes de casamento entre irmaos junto com grafo colorido!\n");
 
@@ -333,7 +323,7 @@ int main(int argc, char *argv[]) {
 	destino.clear();
 	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
 	colorir_grafo_mat(g);
-	escreve_grafo_com_componentes_especiais(g, destino, "entrada/grafo_colorido_materno_com_casamento_irmaos.dot");
+	escreve_grafo_com_componentes_especiais(g, destino, "desenhos/grafo_colorido_materno_com_casamento_irmaos.dot");
 	descolorir(g);
 	printf("Escreveu Componentes de casamento entre irmaos junto com grafo materno colorido!\n");
 
@@ -341,26 +331,26 @@ int main(int argc, char *argv[]) {
 	destino.clear();
 	encontra_casamento_irmaos(grafo, g -> numero_vertices, destino);
 	colorir_grafo_pat(g);
-	escreve_grafo_com_componentes_especiais(g, destino, "entrada/grafo_colorido_paterno_com_casamento_irmaos.dot");
+	escreve_grafo_com_componentes_especiais(g, destino, "desenhos/grafo_colorido_paterno_com_casamento_irmaos.dot");
 	descolorir(g);
 	printf("Escreveu Componentes de casamento entre irmaos junto com grafo paterno colorido!\n");
 
 	//Saida textual das cores
 	colorir_grafo(g);
-	escreve_cores(g, "entrada/cores.txt");
-	escreve_max_cores(g, "entrada/max_cores.txt");
+	escreve_cores(g, "outros/cores.txt");
+	escreve_max_cores(g, "outros/max_cores.txt");
 	descolorir(g);
 
 	//Saida textual das cores maternas
 	colorir_grafo_mat(g);
-	escreve_cores(g, "entrada/cores_mat.txt");
-	escreve_max_cores(g, "entrada/max_cores_mat.txt");
+	escreve_cores(g, "outros/cores_mat.txt");
+	escreve_max_cores(g, "outros/max_cores_mat.txt");
 	descolorir(g);
 
 	//Saida textual das cores paternas
 	colorir_grafo_pat(g);
-	escreve_cores(g, "entrada/cores_pat.txt");
-	escreve_max_cores(g, "entrada/max_cores_pat.txt");
+	escreve_cores(g, "outros/cores_pat.txt");
+	escreve_max_cores(g, "outros/max_cores_pat.txt");
 	descolorir(g);
 	}
 	return 0;

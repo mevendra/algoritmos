@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <chrono>
+#include <iostream>
+
+using namespace std;
 
 void testar_busca_largura(Grafo* grafo);
 void testar_busca_profundidade(Grafo* grafo);

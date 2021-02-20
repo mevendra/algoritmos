@@ -43,7 +43,7 @@ int** cria_matriz(int tamanho)
 	return a;
 }
 
-Grafo* trabalha_arquivo(char* caminho)
+Grafo* trabalha_arquivo(char const* caminho)
 {
 	bool first = true;
 	//Atributos para leitura de arquivo
@@ -55,7 +55,7 @@ Grafo* trabalha_arquivo(char* caminho)
 	//Atributos de criacao de um grafo
 	int numero_vertices = 0;
 	int** grafo;
-	list<Atributos_vertice*> atributos;
+	vector<Atributos_vertice*> atributos;
 	Grafo* retorno = NULL;
 
 	//Define o que sera feito na leitura de arquivo
@@ -212,7 +212,7 @@ Grafo* trabalha_arquivo(char* caminho)
 }
 
 
-void coloca_transicoes(int** grafo, list<Atributos_vertice*> atributos) {
+void coloca_transicoes(int** grafo, vector<Atributos_vertice*> atributos) {
 	int id;
 	for (Atributos_vertice* v: atributos)
 	{
@@ -284,7 +284,7 @@ void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenha
 	}
 }
 
-void escreve_componentes_sem_elementos_graphviz(Grafo* g, list<list<int>> componentes, char* caminho) {
+void escreve_componentes_sem_elementos_graphviz(Grafo* g, list<list<int>> componentes, char const* caminho) {
 	//Atributos para leitura de arquivo
 		FILE* arquivo;
 		string lin;
@@ -335,7 +335,7 @@ void escreve_componentes_sem_elementos_graphviz(Grafo* g, list<list<int>> compon
 		fclose(arquivo);
 }
 
-void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char* caminho) {
+void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char const* caminho) {
 	//Atributos para leitura de arquivo
 	FILE* arquivo;
 	string lin;
@@ -383,7 +383,7 @@ void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char* c
 	fclose(arquivo);
 }
 
-void escreve_arvore_graphviz(Grafo* g, int* arvore, char* caminho) {
+void escreve_arvore_graphviz(Grafo* g, int* arvore, char const* caminho) {
 	//Atributos para leitura de arquivo
 	FILE* arquivo;
 	string lin;
@@ -432,7 +432,7 @@ void escreve_arvore_graphviz(Grafo* g, int* arvore, char* caminho) {
 	fclose(arquivo);
 }
 
-void escreve_grafo_graphviz(Grafo* g, bool colorir, char* caminho) {
+void escreve_grafo_graphviz(Grafo* g, bool colorir, char const* caminho) {
 	//Atributos para leitura de arquivo
 	FILE* arquivo;
 	string lin;
@@ -543,7 +543,7 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char* caminho) {
 	fclose(arquivo);
 }
 
-void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char* caminho) {
+void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char const* caminho) {
 	//Atributos para leitura de arquivo
 	FILE* arquivo;
 	string lin;
@@ -728,7 +728,7 @@ void escreve_cores_graphviz(Grafo* g, FILE* arquivo) {
 	delete map;	//Realiza delete de todas as cores contidas em map
 }
 
-void escreve_cores(Grafo* g, char* caminho) {
+void escreve_cores(Grafo* g, char const* caminho) {
 	FILE* arquivo;
 	arquivo = fopen(caminho, "w");
 	string linha;
@@ -753,7 +753,7 @@ void escreve_cores(Grafo* g, char* caminho) {
 	fclose(arquivo);
 }
 
-void escreve_max_cores(Grafo* g, char* caminho) {
+void escreve_max_cores(Grafo* g, char const* caminho) {
 	FILE* arquivo;
 	arquivo = fopen(caminho, "w");
 	string linha;
@@ -790,7 +790,7 @@ Atributos_vertice* encontrar_casado(Anel* anel) {
 	return NULL;
 }
 
-void escreve_aneis(list<Anel*> aneis, Grafo* g, char* caminho) {
+void escreve_aneis(list<Anel*> aneis, Grafo* g, char const* caminho) {
 	FILE* arquivo;
 	arquivo = fopen(caminho, "w");
 	string linha;
@@ -801,7 +801,7 @@ void escreve_aneis(list<Anel*> aneis, Grafo* g, char* caminho) {
 	}
 	fclose(arquivo);
 }
-void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char* caminho){
+void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char const* caminho){
 	FILE* arquivo;
 	arquivo = fopen(caminho, "w");
 	string linha;
@@ -821,7 +821,7 @@ bool contem(Atributos_vertice* x, list<Atributos_vertice*> lista) {
 	return false;
 }
 
-void escreve_aneis_completo(list<Anel*> aneis, char* caminho) {
+void escreve_aneis_completo(list<Anel*> aneis, char const* caminho) {
 	int tam = aneis.front() -> casamentos.size();
 
 	string linha = "Anel, ";
@@ -1029,7 +1029,7 @@ void escreve_aneis_completo(list<Anel*> aneis, char* caminho) {
 	fclose(arquivo);
 }
 
-void escreve_arvore_graphviz(Grafo* g, Nodo_dominadores* raiz, bool colorir, char* caminho) {
+void escreve_arvore_graphviz(Grafo* g, Nodo_dominadores* raiz, bool colorir, char const* caminho) {
 	//Atributos para leitura de arquivo
 	FILE* arquivo;
 	arquivo = fopen(caminho, "w");

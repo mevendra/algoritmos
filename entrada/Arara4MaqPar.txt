@@ -364,7 +364,7 @@
 362 1504 triangle
 363 1505 ellipse
 364 1506 ellipse
-365 1507 n
+365 1507 triangle
 366 1508 ellipse
 367 1509 ellipse
 368 1510 ellipse

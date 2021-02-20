@@ -1176,7 +1176,6 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
 {
 	for (list<int> c: casamentos) {
-		printf("Operando sobre conjunto: (%d, %d) \n", c.front(), c.back());
 		//Encontra as juncoes do par
 		int id_front = c.front();
 		int id_back = c.back();
@@ -1192,7 +1191,6 @@ void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, l
 
 		if (par_juncao == NULL) {
 			//Nao existe juncao para o par
-			printf("Casamento sem Juncao: %d e %d\n", c.front(), c.back());
 			continue;
 		}
 
@@ -1229,10 +1227,6 @@ void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 
 	//Define conjunto c com 2 casamentos e trabalha nele
 	for (list<list<int>> conjunto_c: conjuntos_c) {
-		printf("Operando sobre conjunto: ");
-		for (list<int> i: conjunto_c)
-			printf("(%d,%d) ", i.front(), i.back());
-		printf("\n");
 
 		//Transforma casamentos em combinacoes
 		//(x1,y1) (x2, y2) -> (x1,x2) (y1,y2) e (x1, y2) (y1, x2)
@@ -1321,11 +1315,6 @@ void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 	//3.3
 	//Define conjunto c com numero_casamentos casamentos e trabalha nele
 	for (list<list<int>> conjunto_c: conjuntos_c) {
-		printf("Operando sobre conjunto: ");
-		for (list<int> i: conjunto_c)
-			printf("(%d,%d) ", i.front(), i.back());
-		printf("\n");
-
 		//Transforma casamentos em combinacoes
 		//(x1,y1) (x2, y2) (x3, y3) -> (x1,x2) (y2,y3) (x3, y1) && ...
 		list<list<list<int>>> combinacoes;

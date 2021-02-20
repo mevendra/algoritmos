@@ -96,7 +96,7 @@ Grafo* trabalha_arquivo(char const* caminho)
 						if (linha[i] == 'e') {tipo_vertice = 'e'; break;}
 						else if (linha[i] == 't') {tipo_vertice = 't'; break;}
 						printf("Erro ao ler arquivo, Vertices numero: %d\nLinha: %s", numero_vertices,linha);
-						break;
+						return 0;
 					} else if (esta_em_segunda_coluna) {
 						if (linha[i] == ' ') {esta_em_terceira_coluna = true; continue;}
 						segunda_coluna[indice_segunda_coluna++] = linha[i];

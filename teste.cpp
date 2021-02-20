@@ -233,43 +233,37 @@ void testar_dominadores(Grafo* g) {
 }
 
 int main(int argc, char *argv[]) {
-	//Primeiro argumento = nome arquivo, segundo = numero de casamentos para testar aneis
+	//Primeiro argumento(NOME) = nome arquivo, segundo(NUMERO) = numero de casamentos para testar aneis
+
 	string entrada = "entrada/";
-	int k = 2;
+	string resultado = "aneis/aneis_";
+	int k = 1;
 	if (argc == 1) {
 		entrada += "Arara4MaqPar.txt";
 		//entrada += "rede_grande.txt";
+		resultado += to_string(k);
 	} else if (argc == 2) {
 		entrada += argv[1];
+		resultado += to_string(k);
+		resultado += "_";
+		resultado += argv[1];
 	} else if (argc == 3) {
 		entrada += argv[1];
 		k = atoi(argv[2]);
+		resultado += to_string(k);
+		resultado += "_";
+		resultado += argv[1];
 	} else if (argc > 3)
 		return -1;
 
 	Grafo *g = trabalha_arquivo(entrada.c_str());
+	if (!g)
+		return 0;
 	int **grafo = g->grafo;
 
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-
-
-
-	testar_busca_largura(g);
-	testar_busca_profundidade(g);//Testando somente arestas, com arcos e totalmente conexo
-	testar_componentes_conexas(g);
-	testar_busca_largura_listas(g);
-	testar_colorir_grafo_mat(g);
-	testar_colorir_grafo_mat(g);
-	testar_colorir_grafo(g);
-	testar_casamento_entre_irmaos(g);
-	testar_max_cores_ate_folha(g);
-	testar_juncoes(g);
-	testar_dominadores(g);
-	testar_aneis(g, k);
-
-	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-
-	std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
+	list<Anel*> aneis;
+	encontra_aneis(g, aneis, k);
+	escreve_aneis_completo(aneis, resultado.c_str());
 
 	bool escreve_grafos = false;
 	if (escreve_grafos) {

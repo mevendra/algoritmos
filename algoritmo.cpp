@@ -837,7 +837,16 @@ bool sao_disjuntos(list<Atributos_vertice*> caminho_a, list<Atributos_vertice*> 
 	return true;
 }
 
-void verifica_anel(vector<list<Atributos_vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas)
+bool contem_a(Atributos_vertice* v, list<Atributos_vertice*> l)
+{
+	for (Atributos_vertice* x: l)
+		if (x == v)
+			return true;
+
+	return false;
+}
+
+void verifica_anel(vector<list<Atributos_vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, FILE* arquivo)
 {
 	//Verifica se Alguma juncao é repetida ou esta em algum caminho
 	list<Atributos_vertice*> aux;
@@ -865,25 +874,174 @@ void verifica_anel(vector<list<Atributos_vertice*>> caminhos, list<Anel*> &desti
 		}
 	}
 
-	Anel* novo = new Anel();
-	novo -> adicionar_elemento(caminhos, casamentos, juncoesUtilizadas);
+	Anel* a = new Anel();
+	a -> adicionar_elemento(caminhos, casamentos, juncoesUtilizadas);
 
-	destino.push_back(novo);
+
 
 	//Para escrever sempre que encontrar um anel
-	/*
-	FILE* arquivo;
-	arquivo = fopen("entrada/aneis_ordem_3.txt", "a");
-	fputs(novo -> linha_ordem.c_str(), arquivo);
-	fclose(arquivo);
-	*/
+	if (arquivo) {
+		count ++;
+		string linha = "\n";
+		linha += to_string(count);	//Anel
+		linha += ", ";
+
+		for (list<Atributos_vertice*> casamentos: a -> casamentos) {
+			if (casamentos.front() -> tipo == 't') {
+				linha += to_string(casamentos.front() -> numero);	//EgoX
+				linha += ", ";
+				linha += "m";		//SxEgoX
+				linha += ", ";
+				linha += to_string(casamentos.back() -> numero);	//AlterX
+				linha += ", ";
+				linha += "f";		//SxAlterX
+				linha += ", ";
+			} else {
+				linha += to_string(casamentos.back() -> numero);	//EgoX
+				linha += ", ";
+				linha += "m";		//SxEgoX
+				linha += ", ";
+				linha += to_string(casamentos.front() -> numero);	//AlterX
+				linha += ", ";
+				linha += "f";		//SxAlterX
+				linha += ", ";
+			}
+		}
+
+		//Percurso
+		for (Atributos_vertice* v: a -> anel) {
+			linha += to_string(v -> numero);
+			linha += " ";
+		}
+		linha += ", ";
+
+		//BaryryPercurso
+		for (Atributos_vertice* v: a -> anel) {
+			if (contem_a (v, a -> juncoes)) {
+				linha += "(";
+				if (v -> tipo == 't')
+					linha += "m";
+				else
+					linha += "f";
+				linha += to_string(v -> numero);
+				linha += ") ";
+			} else {
+				if (v -> tipo == 't')
+					linha += "m";
+				else
+					linha += "f";
+				linha += to_string(v -> numero);
+				linha += " ";
+
+			}
+		}
+		linha += ", ";
+
+		//Parente
+		Atributos_vertice* ultimo = a -> anel.front();
+		for (Atributos_vertice* v: a -> anel) {
+			if (contem_a(v, ultimo -> filhos)) {
+				if (v -> tipo == 'e') {
+					linha += "D";
+				} else {
+					linha += "S";
+				}
+			} else if (contem_a(v, ultimo -> pais)) {
+				if (v -> tipo == 'e') {
+					linha += "M";
+				} else {
+					linha += "F";
+				}
+			} else if (contem_a(v, ultimo -> casados)) {
+				if (v -> tipo == 'e') {
+					linha += "W";
+				} else {
+					linha += "H";
+				}
+			}
+			ultimo = v;
+		}
+
+		//CasalX
+		for (list<Atributos_vertice*> casamentos: a -> casamentos) {
+			linha += ", ";
+			linha += to_string(casamentos.front() -> numero);
+			linha += " ";
+			linha += to_string(casamentos.back() -> numero);
+		}
+
+		//Calculos de geracao,lateral e cnx
+		list<int> cnx;
+		list<int> geracao;
+		vector<int> lateral;
+		int lat_e = 0;
+		int lat_d = 0;
+		int num = 0;
+		int num_cnx = -1;
+		ultimo = a -> anel.front();
+		for (Atributos_vertice* v: a -> anel) {
+			num_cnx++;
+			if (contem_a(v, ultimo -> filhos)) {
+				num--;
+				lat_d++;
+			} else if (contem_a(v, ultimo -> pais)) {
+				num++;
+				lat_e++;
+			} else if (contem_a(v, ultimo -> casados)) {
+				if (lat_d > lat_e)
+					lateral.push_back(lat_e);
+				else
+					lateral.push_back(lat_d);
+				cnx.push_back(num_cnx);
+				geracao.push_back(num);
+				num = 0;
+				lat_e = 0;
+				lat_d = 0;
+				num_cnx = 0;
+			}
+			ultimo = v;
+		}
+		geracao.push_back(num);
+		cnx.push_back(num_cnx);
+		if (lat_d > lat_e)
+			lateral.push_back(lat_e);
+		else
+			lateral.push_back(lat_d);
+
+		int i_=0;
+
+		//Geracao e Lateral
+		for (int i: geracao) {
+			linha += ", ";
+			linha += "G";
+			linha += to_string(i);
+			linha += ", ";
+			linha += to_string(lateral[i_]);
+
+			i_++;
+		}
+
+		//Cnx
+		for (int i: cnx) {
+			linha += ", ";
+			linha += to_string(i);
+
+		}
+
+		fputs(linha.c_str(), arquivo);
+
+
+		delete a;
+	} else {
+		destino.push_back(a);
+	}
 }
 
-void encontra_aneis(list<Anel_aux*> aux, vector<list<Atributos_vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas)
+void encontra_aneis(list<Anel_aux*> aux, vector<list<Atributos_vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, FILE* arquivo)
 {
 	//Chegou ao ultimo grupo da combinação
 	if (aux.size() == 0) {
-		verifica_anel(atual, destino, casamentos, juncoesUtilizadas);
+		verifica_anel(atual, destino, casamentos, juncoesUtilizadas, arquivo);
 
 		return;
 	}
@@ -901,7 +1059,7 @@ void encontra_aneis(list<Anel_aux*> aux, vector<list<Atributos_vertice*>> atual,
 		vector<list<Atributos_vertice*>> atual_aux(atual);
 		// Verificar (Colocar 0 ou 2) em atual_aux
 
-		encontra_aneis(aux, atual_aux, destino, casamentos, juncoes_aux);
+		encontra_aneis(aux, atual_aux, destino, casamentos, juncoes_aux, arquivo);
 		return;
 	}
 
@@ -921,7 +1079,7 @@ void encontra_aneis(list<Anel_aux*> aux, vector<list<Atributos_vertice*>> atual,
 			atual_aux.push_back(anel_a -> caminhos_primeiro[i][y]);
 			atual_aux.push_back(anel_a -> caminhos_segundo[i][y]);
 
-			encontra_aneis(aux, atual_aux, destino, casamentos, juncoes_aux);
+			encontra_aneis(aux, atual_aux, destino, casamentos, juncoes_aux, arquivo);
 		}
 	}
 
@@ -1173,9 +1331,13 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 	}
 }
 
-void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
+void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino, FILE* arquivo)
 {
 	for (list<int> c: casamentos) {
+		tempo++;
+		if (tempo % 307 == 0) {
+			printf("Calculando...\n");
+		}
 		//Encontra as juncoes do par
 		int id_front = c.front();
 		int id_back = c.back();
@@ -1206,7 +1368,7 @@ void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, l
 		list<Juncao*> juncoesUtilizadas;
 		vector<list<Atributos_vertice*>> atual;
 		conjunto_c.push_back(c);
-		encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas);
+		encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas, arquivo);
 
 		//Para cada anel aux criado excluilo
 		while(c_aneis_aux.size() > 0) {
@@ -1219,7 +1381,7 @@ void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, l
 	}
 }
 
-void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
+void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino, FILE* arquivo)
 {
 	//Constroi todos os conjuntos de casamentos, cada 1 com 2 casamentos
 	list<list<list<int>>> conjuntos_c;
@@ -1227,6 +1389,10 @@ void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 
 	//Define conjunto c com 2 casamentos e trabalha nele
 	for (list<list<int>> conjunto_c: conjuntos_c) {
+		tempo++;
+		if (tempo % 307 == 0) {
+			cout << "Calculando..." << endl;
+		}
 
 		//Transforma casamentos em combinacoes
 		//(x1,y1) (x2, y2) -> (x1,x2) (y1,y2) e (x1, y2) (y1, x2)
@@ -1292,7 +1458,7 @@ void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 			//Se intersecção for vazia, encontrou um anel
 			list<Juncao*> juncoesUtilizadas;
 			vector<list<Atributos_vertice*>> atual;
-			encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas);
+			encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas, arquivo);
 
 			//Para cada anel aux criado excluilo
 			while(c_aneis_aux.size() > 0) {
@@ -1306,7 +1472,7 @@ void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 	}
 }
 
-void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
+void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino, FILE* arquivo)
 {
 	//Constroi todos os conjuntos de casamentos, cada 1 com numero_casamentos tamanho
 	list<list<list<int>>> conjuntos_c;
@@ -1315,6 +1481,10 @@ void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 	//3.3
 	//Define conjunto c com numero_casamentos casamentos e trabalha nele
 	for (list<list<int>> conjunto_c: conjuntos_c) {
+		tempo++;
+		if (tempo % 547 == 0) {
+			cout << "Calculando..." << endl;
+		}
 		//Transforma casamentos em combinacoes
 		//(x1,y1) (x2, y2) (x3, y3) -> (x1,x2) (y2,y3) (x3, y1) && ...
 		list<list<list<int>>> combinacoes;
@@ -1377,7 +1547,7 @@ void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 			//Se intersecção for vazia, encontrou um anel
 			list<Juncao*> juncoesUtilizadas;
 			vector<list<Atributos_vertice*>> atual;
-			encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas);
+			encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas, arquivo);
 
 			//Para cada anel aux criado excluilo
 			while(c_aneis_aux.size() > 0) {
@@ -1391,7 +1561,7 @@ void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 	}
 }
 
-void encontra_aneis(Grafo* g, list<Anel*>& destino, int numero_casamentos)
+void encontra_aneis(Grafo* g, list<Anel*>& destino, int numero_casamentos, char const* caminho)
 {
 	if (numero_casamentos > 3 || numero_casamentos < 1)
 		return;
@@ -1410,12 +1580,73 @@ void encontra_aneis(Grafo* g, list<Anel*>& destino, int numero_casamentos)
 
 	//3.3
 	//Define os conjuntos a serem trabalhados e operam encontrando os aneis sobre eles
-	if (numero_casamentos == 1)
-		encontra_aneis_a1(juncoes, casamentos, destino);
-	else if (numero_casamentos == 2)
-		encontra_aneis_a2(g, juncoes, casamentos, destino);
-	else
-		encontra_aneis_a3(g, juncoes, casamentos, destino);
+	count = 0;
+	tempo = 0;
+	if (caminho) {
+		int tam = numero_casamentos;
+		string linha = "Anel, ";
+		for (int i = 0; i < tam; i++) {
+			linha += "Ego";
+			if (tam > 1)
+				linha += to_string(i);
+			linha += ", ";
+			linha += "SxEgo";
+			if (tam > 1)
+				linha += to_string(i);
+			linha += ", ";
+			linha += "Alter";
+			if (tam > 1)
+				linha += to_string(i);
+			linha += ", ";
+			linha += "SxAlter";
+			if (tam > 1)
+				linha += to_string(i);
+			linha += ", ";
+		}
+		linha += "Percurso, BarryPercurso, Parente, ";
+		for (int i = 0; i < tam; i++) {
+			linha += "Casal";
+			if (tam > 1)
+				linha += to_string(i);
+			linha += ", ";
+		}
+		for (int i = 0; i < tam; i++) {
+			linha += "Geração";
+			if (tam > 1)
+				linha += to_string(i);
+			linha += ", ";
+
+			linha += "Lateral";
+			if (tam > 1)
+				linha += to_string(i);
+			linha += ", ";
+		}
+		for (int i = 0; i < tam; i++) {
+			linha += "Cnx";
+			if (tam > 1)
+				linha += to_string(i);
+			if (i < tam - 1)
+				linha += ", ";
+		}
+
+		FILE* arquivo;
+		arquivo = fopen(caminho, "w");
+		fputs(linha.c_str(), arquivo);
+
+		if (numero_casamentos == 1)
+			encontra_aneis_a1(juncoes, casamentos, destino, arquivo);
+		else if (numero_casamentos == 2)
+			encontra_aneis_a2(g, juncoes, casamentos, destino, arquivo);
+		else
+			encontra_aneis_a3(g, juncoes, casamentos, destino, arquivo);
+		fclose(arquivo);
+	} else
+		if (numero_casamentos == 1)
+			encontra_aneis_a1(juncoes, casamentos, destino, 0);
+		else if (numero_casamentos == 2)
+			encontra_aneis_a2(g, juncoes, casamentos, destino, 0);
+		else
+			encontra_aneis_a3(g, juncoes, casamentos, destino, 0);
 }
 
 void casamentos_sem_juncao(vector<list<int>> casamentos, list<JuncoesDe*> juncoes, Grafo* g)

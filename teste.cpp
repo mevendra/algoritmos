@@ -219,9 +219,10 @@ void testar_aneis(Grafo* g, int k) {
 
 void testar_dominadores(Grafo* g) {
 	printf("Testando encontrar dominadores no grafo\n");
+	printf("Primeiro Algoritmo:\n");
 	Nodo_dominadores* d = NULL;
 
-	encontra_arvore_denominadores(g, d);
+	encontra_arvore_dominadores(g, d);
 
 	if (d == NULL) {
 		printf("Erro ao encontrar dominadores\n");
@@ -229,16 +230,35 @@ void testar_dominadores(Grafo* g) {
 	}
 	d -> print_filhos_a_arv();
 
+	printf("Segundo Algoritmo:\n");
+	vector<Atributos_vertice*> dominadores;
+	encontra_arvore_dominadores(g, dominadores);
+	int i = 0;
+	int w;
+	for (Atributos_vertice* v: dominadores) {
+		printf("%d, %d", g-> atributos[i] -> numero, v -> numero);
+		w = v -> id;
+		while(w < g -> numero_vertices) {
+			Atributos_vertice* aux = dominadores[w];
+			w = aux -> id;
+			printf(" %d", aux -> numero);
+		}
+		printf("\n");
+
+	}
 	printf("Terminou!\n");
+	return;
 }
 
 int main(int argc, char *argv[]) {
 	//Primeiro argumento = nome arquivo, segundo = numero de casamentos para testar aneis
 	string entrada = "entrada/";
-	int k = 2;
+	int k = 1;
 	if (argc == 1) {
+		//entrada += "rede_pequena.txt";
 		entrada += "Arara4MaqPar.txt";
 		//entrada += "rede_grande.txt";
+		//entrada += "EN4MaqPar.txt";
 	} else if (argc == 2) {
 		entrada += argv[1];
 	} else if (argc == 3) {
@@ -248,12 +268,16 @@ int main(int argc, char *argv[]) {
 		return -1;
 
 	Grafo *g = trabalha_arquivo(entrada.c_str());
-	int **grafo = g->grafo;
+	int **grafo;
+	if (g)
+		grafo = g->grafo;
+	else
+		return 1;
 
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+	printf("Inicio\n");
 
-
-
+	/*
 	testar_busca_largura(g);
 	testar_busca_profundidade(g);//Testando somente arestas, com arcos e totalmente conexo
 	testar_componentes_conexas(g);
@@ -264,15 +288,32 @@ int main(int argc, char *argv[]) {
 	testar_casamento_entre_irmaos(g);
 	testar_max_cores_ate_folha(g);
 	testar_juncoes(g);
-	testar_dominadores(g);
 	testar_aneis(g, k);
+	testar_dominadores(g);*/
+
+	vector<Grafo*> subgrafos;
+	encontra_subgrafos(g, subgrafos);
+
+	printf("Encontrou subgrafos\n");
+	escreve_comum_entre_grafos(subgrafos, "outros/comum_sub");
 
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-
 	std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
+
 
 	bool escreve_grafos = false;
 	if (escreve_grafos) {
+	//Dominadores
+	vector<Atributos_vertice*> dominadores(g -> numero_vertices, 0);
+	colorir_grafo(g);
+	encontra_arvore_dominadores(g, dominadores);
+	escreve_arvore_graphviz(g, dominadores,true, "desenhos/arvore_dominadores_2_na.dot");
+
+	Nodo_dominadores* raiz;
+	colorir_grafo_mat(g);
+	encontra_arvore_dominadores(g, raiz);
+	escreve_arvore_graphviz(g, raiz,true, "desenhos/arvore_dominadores_2_aa.dot");
+
 	//Arvore
 	int* arv = new int[g -> numero_vertices];
 	busca_em_largura(grafo, g -> numero_vertices, arv);

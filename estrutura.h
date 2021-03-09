@@ -6,6 +6,7 @@
 #include <sstream>
 #include <vector>
 #include <math.h>
+#include <set>
 
 using namespace std;
 class Nodo;
@@ -57,7 +58,7 @@ class Atributos_vertice {
 		int numero;
 		int geracao;
 		char tipo;
-		list<int> cor;
+		set<int> cor;
 		list<Atributos_vertice*> pais;
 		list<Atributos_vertice*> filhos;
 		list<Atributos_vertice*> casados;
@@ -67,6 +68,9 @@ class Atributos_vertice {
 
 		int particao;
 		bool valor_bool;
+		bool valor_bool_2 = false;
+
+		void* ponteiro;
 
 		Atributos_vertice(int id, int numero, char tipo);
 		void adicionar_cor(int cor_);
@@ -79,9 +83,11 @@ class Grafo {
 	public:
 		int numero_vertices;
 		int** grafo;
+		Atributos_vertice* raiz = 0;
 		vector<Atributos_vertice*> atributos;
 
 		Grafo(int numero_vertices_, vector<Atributos_vertice*> atributos_, int** grafo_);
+		Grafo(int numero_vertices_, vector<Atributos_vertice*> atributos_, Atributos_vertice* raiz, int** grafo_);
 		void adicionar_aresta(int v1, int v2);
 		void adicionar_arco(int fonte, int destino);
 		Atributos_vertice* encontrar_atributo(int i);
@@ -241,6 +247,19 @@ public:
 	Region(Nodo_dominadores* header_);
 
 	void juntar(Region* r);
+};
+
+class Nodo_grafo {
+public:
+	Atributos_vertice* nodo;
+	list<Nodo_grafo*> sucessores;
+	list<Nodo_grafo*> antecessores;
+
+	Nodo_grafo(Atributos_vertice* nodo_);
+	void adicionar_sucessor(Nodo_grafo * sucessor);
+	void adicionar_antecessor(Nodo_grafo * antecessor);
+	void print_filhos();
+	void pos_ordem(list<Nodo_grafo*> &destino);
 };
 
 

@@ -35,6 +35,13 @@ Grafo::Grafo(int numero_vertices_, vector<Atributos_vertice*> atributos_, int** 
 	grafo = grafo_;
 }
 
+Grafo::Grafo(int numero_vertices_, vector<Atributos_vertice*> atributos_, Atributos_vertice* raiz_, int** grafo_) {
+	raiz = raiz_;
+	numero_vertices = numero_vertices_;
+	atributos = atributos_;
+	grafo = grafo_;
+}
+
 void Grafo::adicionar_aresta(int v1, int v2){
 	if (grafo[v1][v2] == 2) {
 		grafo[v1][v2] = 12;
@@ -78,7 +85,7 @@ Atributos_vertice::Atributos_vertice (int id_, int numero_, char tipo_) {
 }
 
 void Atributos_vertice::adicionar_cor(int cor_) {
-	cor.push_back(cor_);
+	cor.insert(cor_);
 }
 void Atributos_vertice::adicionar_casamento(Atributos_vertice* casamento) {
 	casados.push_back(casamento);
@@ -720,3 +727,50 @@ void Region::juntar(Region* r) {
 		s -> antecessores.push_back(this);
 	}
 }
+
+bool contem(Nodo_grafo* g, list<Nodo_grafo*> l) {
+	for (Nodo_grafo* n: l)
+		if (n == g)
+			return true;
+
+	return false;
+}
+
+Nodo_grafo::Nodo_grafo(Atributos_vertice* nodo_) {
+	nodo = nodo_;
+}
+void Nodo_grafo::adicionar_sucessor(Nodo_grafo * sucessor) {
+	if (!contem(sucessor, sucessores)) {
+		sucessores.push_back(sucessor);
+		sucessor -> antecessores.push_back(this);
+	}
+}
+void Nodo_grafo::adicionar_antecessor(Nodo_grafo * antecessor) {
+	if (!contem(antecessor, antecessores)) {
+		antecessores.push_back(antecessor);
+		antecessor -> sucessores.push_back(this);
+	}
+}
+
+void Nodo_grafo::print_filhos() {
+	if (sucessores.size() > 0) {
+		printf("%d: ", nodo -> numero);
+		for (Nodo_grafo* d: sucessores) {
+			printf("%d ", d -> nodo -> numero);
+		}
+		printf("\n");
+
+		for (Nodo_grafo* d: sucessores) {
+			d -> print_filhos();
+		}
+	}
+}
+
+void Nodo_grafo::pos_ordem(list<Nodo_grafo*> &destino) {
+	for (Nodo_grafo* d: sucessores)
+		d -> pos_ordem(destino);
+	destino.push_back(this);
+}
+
+
+

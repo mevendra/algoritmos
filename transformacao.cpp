@@ -43,6 +43,81 @@ int** cria_matriz(int tamanho)
 	return a;
 }
 
+void adicionar_alcancaveis (Atributos_vertice* fonte, vector<Atributos_vertice*> & destino)
+{
+	destino[fonte -> id] = fonte;
+	for (Atributos_vertice* filho: fonte -> filhos)
+		adicionar_alcancaveis(filho, destino);
+}
+
+Grafo* sub_grafo(Grafo* g, Atributos_vertice* fonte)
+{
+	Atributos_vertice* fonte_nova;
+
+	//Marca os vertices que fonte consegue alcançar
+	vector<Atributos_vertice*> alcancaveis(g -> numero_vertices, 0);
+	adicionar_alcancaveis(fonte, alcancaveis);
+
+	//Calcula o numero de vertices
+	int numero_vertices = 0;
+	for (int i = 0; i < g -> numero_vertices; i++)
+		if (alcancaveis[i])
+			numero_vertices++;
+
+	//Cria as estruturas para novo grafo
+	int** grafo = new int*[numero_vertices];
+	for (int i = 0; i < numero_vertices; i++)
+		grafo[i] = new int[numero_vertices];
+
+	vector<Atributos_vertice*> atributos(numero_vertices);
+	numero_vertices = 0;
+	for (int i = 0; i < g -> numero_vertices; i++) {
+		if (alcancaveis[i]) {
+			atributos[numero_vertices] = new Atributos_vertice(numero_vertices, alcancaveis[i] -> numero, alcancaveis[i] -> tipo);
+			atributos[numero_vertices] -> particao = alcancaveis[i] -> id;
+			if (alcancaveis[i] == fonte)
+				fonte_nova = atributos[numero_vertices];
+			numero_vertices++;
+		}
+	}
+
+	//Coloca informações
+	int id, id_atrib;
+	for (Atributos_vertice* v: atributos)
+	{
+		id = v -> particao;
+		id_atrib = v -> id;
+		for (Atributos_vertice* a: atributos)
+		{
+			int i = a -> particao;
+			int i_atrib = a -> id;
+			if (g -> grafo[id][i] == 0) {
+				grafo[id_atrib][i_atrib] = 0;
+			} else if (g -> grafo[id][i] == 1) {
+				grafo[id_atrib][i_atrib] = 1;
+				v -> adicionar_casamento(a);
+			} else if (g -> grafo[id][i] == 12) {
+				grafo[id_atrib][i_atrib] = 12;
+				v -> adicionar_casamento(a);
+				v -> adicionar_filho(a);
+			} else if (g -> grafo[id][i] == 13) {
+				grafo[id_atrib][i_atrib] = 13;
+				v -> adicionar_casamento(a);
+				v -> adicionar_pais(a);
+			} else if (g -> grafo[id][i] == 2) {
+				grafo[id_atrib][i_atrib] = 2;
+				v -> adicionar_filho(a);
+			} else {	//grafo[id][i] == 3
+				grafo[id_atrib][i_atrib] = 3;
+				v -> adicionar_pais(a);
+			}
+		}
+	}
+
+	Grafo *novo = new Grafo(numero_vertices, atributos, fonte_nova, grafo);
+	return novo;
+}
+
 Grafo* trabalha_arquivo(char const* caminho)
 {
 	bool first = true;
@@ -50,6 +125,7 @@ Grafo* trabalha_arquivo(char const* caminho)
 	FILE* arquivo;
 	char linha[MAX_COLUNA_ARQUIVO];
 	arquivo = fopen(caminho, "rt");
+	__asm__("label2:");
 	if (arquivo == NULL) return NULL;
 
 	//Atributos de criacao de um grafo
@@ -75,7 +151,10 @@ Grafo* trabalha_arquivo(char const* caminho)
 
 	while (!feof(arquivo))
 	{
-		fgets(linha, MAX_COLUNA_ARQUIVO, arquivo);
+		//Aqui
+		if (fgets(linha, MAX_COLUNA_ARQUIVO, arquivo) == NULL)
+			continue;
+
 		switch (estado) {
 			case VERTICE:		//Formato:ID ID_GERAL TIPO
 			{
@@ -204,7 +283,6 @@ Grafo* trabalha_arquivo(char const* caminho)
 	}
 
 	fclose(arquivo);
-
 
 	coloca_transicoes(grafo, atributos);	//Para facilitar algoritmos depois
 	retorno = new Grafo(numero_vertices, atributos, grafo);
@@ -514,7 +592,12 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char const* caminho) {
 				lin += "->";
 				lin += to_string(y);
 				lin += "[color = blue]";
-				lin += ";\n";
+				lin += ";\nsubgraph{rank = same;";
+				lin += to_string(i);
+				lin+=";";
+				lin += to_string(y);
+				lin += "}\n";
+
 				fputs(lin.c_str(), arquivo);
 				//Forma esperada: ID_MENOR -> ID_MAIOR [color = blue];\n
 			} else if(grafo[i][y] == 2) {	//Representa um arco de i para y
@@ -535,6 +618,32 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char const* caminho) {
 				fputs(lin.c_str(), arquivo);
 				//Forma esperada: ID -> ID[color = red];\n
 			}
+		}
+	}
+
+	if (g -> atributos[0] -> particao != -1) {
+		for (Atributos_vertice* v: g -> atributos) {
+			v -> valor_bool = false;
+			printf("Valor particao: %d\n", v -> particao);
+		}
+
+		int i = 0;
+		int atual = 0;
+		while (i < g -> numero_vertices) {
+			if (g -> atributos.front() -> particao == -1)
+				break;
+			lin = "subgraph{ rank = same ";
+			for (Atributos_vertice* v: g -> atributos) {
+				if (v -> particao == atual) {
+					i++;
+					lin += ";";
+					lin += to_string(v -> id);
+				}
+			}
+			lin += "}\n";
+
+			atual++;
+			fputs(lin.c_str(), arquivo);
 		}
 	}
 
@@ -822,6 +931,8 @@ bool contem(Atributos_vertice* x, list<Atributos_vertice*> lista) {
 }
 
 void escreve_aneis_completo(list<Anel*> aneis, char const* caminho) {
+	if (aneis.empty())
+		return;
 	int tam = aneis.front() -> casamentos.size();
 
 	string linha = "Anel, ";
@@ -1070,8 +1181,149 @@ void escreve_arvore_graphviz(Grafo* g, Nodo_dominadores* raiz, bool colorir, cha
 	fclose(arquivo);
 }
 
+void escreve_arvore_graphviz(Grafo* g, vector<Atributos_vertice*> dominadores, bool colorir, char const* caminho) {
+	//Atributos para leitura de arquivo
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string lin;
+
+	//Inicio do grafo e Instanciacao de vertices
+	fputs("digraph {\n", arquivo);
+	list<int> nao_desenhar;
+	instancia_vertices_graphviz(g, arquivo, nao_desenhar);
+
+	/*
+	lin = "";
+	lin += to_string(raiz -> nodo -> id);	//Identificador do vertice
+	lin += " [label = ";
+	lin += to_string(raiz -> nodo -> numero);
+	lin += ", shape = square];\n";
+	fputs(lin.c_str(), arquivo);*/
+	//Forma esperada: ID [label = NUMERO, forma = FORMA];\n
+
+	int i = 0;
+	for (Atributos_vertice* v: dominadores) {
+		lin = "";
+		lin += to_string(v -> id);
+		lin += " -> ";
+		lin += to_string(i);
+		lin += ";\n";
+		fputs(lin.c_str(), arquivo);
+		i++;
+		//Forma esperada: ID -> ID;\n
+	}
+
+	if (colorir)
+		escreve_cores_graphviz(g, arquivo);
+
+	//Termina grafo e fecha arquivo
+	fputs("}\n", arquivo);
+	fclose(arquivo);
+}
+
+
+void escreve_comum_entre_grafos(vector<Grafo*> grafos, char const* caminho)
+{
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string lin = "Subgrafo de A, Subgrafo de B, Comuns, Tem em A, Tem em B\n";
+	string tem_a = "";
+	fputs(lin.c_str(), arquivo);
+
+	for (int i = 0; i < grafos.size() - 1; i++) {
+		for (int y = i + 1; y < grafos.size(); y++) {
+			for (Atributos_vertice* v: grafos[y] -> atributos)
+				v -> valor_bool = true;
+			//Sub A
+			lin = to_string(grafos[i] -> raiz -> numero);
+			lin += ", ";
+
+			//Sub B
+			lin += to_string(grafos[y] -> raiz -> numero);
+			lin += ", ";
+
+			//Comuns
+			lin += "{ ";
+			tem_a = "{ ";
+			for (Atributos_vertice* i_: grafos[i] -> atributos) {
+				bool encontrou = false;
+				for (Atributos_vertice* y_: grafos[y] -> atributos) {
+					if (i_ -> numero == y_ -> numero) {
+						lin += to_string(i_ -> numero);
+						lin += ", ";
+						encontrou = true;
+						y_ -> valor_bool = false;
+						break;
+					}
+				}
+				if (!encontrou) {
+					tem_a += to_string(i_ -> numero);
+					tem_a += ", ";
+				}
+			}
+			lin += "}, ";
+			tem_a += "}, ";
+
+			//Tem em A
+			lin += tem_a;
+
+			//Tem em B
+			lin += "{ ";
+			for (Atributos_vertice* v: grafos[y] -> atributos)
+				if (v -> valor_bool) {
+					lin += to_string(v -> numero);
+					lin += ", ";
+				}
+			lin += "}\n";
+			fputs(lin.c_str(), arquivo);
+		}
+	}
+
+
+	fclose(arquivo);
+}
+
 void reinicia_cores() {
 	cores.clear();
+	cores.push_back("#0000FF");
+	cores.push_back("#FF0000");
+	cores.push_back("#00FF00");
+	cores.push_back("#FFFF00");
+	cores.push_back("#FF00FF");
+	cores.push_back("#00FFFF");
+	cores.push_back("#808080");
+	cores.push_back("#4682B4");
+	cores.push_back("#008080");
+	cores.push_back("#808000");
+	cores.push_back("#8B4513");
+	cores.push_back("#DEB887");
+	cores.push_back("#8B008B");
+	cores.push_back("#CD5C5C");
+	cores.push_back("#FF69B4");
+	cores.push_back("#B22222");
+	cores.push_back("#FF8C00");
+	cores.push_back("#D8BFD8");
+	cores.push_back("#EEE8AA");
+
+	cores.push_back("#0000FF");
+	cores.push_back("#FF0000");
+	cores.push_back("#00FF00");
+	cores.push_back("#FFFF00");
+	cores.push_back("#FF00FF");
+	cores.push_back("#00FFFF");
+	cores.push_back("#808080");
+	cores.push_back("#4682B4");
+	cores.push_back("#008080");
+	cores.push_back("#808000");
+	cores.push_back("#8B4513");
+	cores.push_back("#DEB887");
+	cores.push_back("#8B008B");
+	cores.push_back("#CD5C5C");
+	cores.push_back("#FF69B4");
+	cores.push_back("#B22222");
+	cores.push_back("#FF8C00");
+	cores.push_back("#D8BFD8");
+	cores.push_back("#EEE8AA");
 	cores.push_back("#0000FF");
 	cores.push_back("#FF0000");
 	cores.push_back("#00FF00");

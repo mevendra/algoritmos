@@ -173,7 +173,7 @@ void busca_em_largura_(int** grafo, int tamanho, list<int>& destino, int fonte)
 		vertice = fila.front();
 		fila.pop();
 		for (int i = 0; i < tamanho; i++) {
-			if (grafo[i][vertice] == 1)
+			if (grafo[i][vertice] == 2 || grafo[i][vertice] == 12)
 			{
 				if (atributos_vertices[i]->cor == 0)
 				{
@@ -330,7 +330,6 @@ void colorir_grafo(Grafo* g)
 	list<int> fontes;
 	busca_fontes(grafo, g -> numero_vertices, fontes);
 
-
 	//Colore apartir das fontes
 	for (int i: fontes)
 		colorir_apartir_de(g, i);
@@ -434,8 +433,8 @@ void colorir_grafo_pat(Grafo* g)
 		colorir_apartir_de_tipo(g, i, 't');
 }
 
-	void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
-	{
+void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
+{
 		bool eh_fonte;
 		int tamanho = g -> numero_vertices;
 		int** grafo = g-> grafo;
@@ -675,6 +674,45 @@ void ordem_topologica(Atributos_vertice* fonte, stack<Atributos_vertice*>& desti
 	//Quando termina busca de todos os filhos, insere vertice na pilha
 	destino.push(fonte);
 }
+void ordem_topologica(Atributos_vertice* fonte, list<Atributos_vertice*>& destino)
+{
+	fonte -> valor_bool = true;
+
+	//Busca em profundidade todos os filhos
+	for (Atributos_vertice* filho: fonte -> filhos) {
+		if (!filho -> valor_bool)
+			ordem_topologica(filho, destino);
+	}
+
+	//Quando termina busca de todos os filhos, insere vertice na pilha
+	destino.push_back(fonte);
+}
+
+void ordem_topologica(Atributos_vertice* fonte, vector<Atributos_vertice*>& destino)
+{
+	fonte -> valor_bool = true;
+
+	//Busca em profundidade todos os filhos
+	for (Atributos_vertice* filho: fonte -> filhos) {
+		if (!filho -> valor_bool)
+			ordem_topologica(filho, destino);
+	}
+
+	//Quando termina busca de todos os filhos, insere vertice na pilha
+	fonte -> particao = ordem_topologica_vector;
+	destino[ordem_topologica_vector++] = fonte;
+}
+
+bool eh_descendente_de(Atributos_vertice* w, Atributos_vertice* z) {
+	if (z == w)
+		return true;
+
+	for (Atributos_vertice* v: z -> filhos)
+		if (eh_descendente_de(w, v))
+			return true;
+
+	return false;
+}
 
 void encontra_juncoes(Grafo* g, list<Juncao*>& destino)
 {
@@ -821,7 +859,7 @@ void encontra_caminhos(Atributos_vertice* fonte, Atributos_vertice* destino,list
 		return;
 	}
 
-	for (Atributos_vertice* filho: fonte -> filhos) {
+	for (Atributos_vertice* filho: fonte -> filhos){
 		list<Atributos_vertice*> caminho_aux(caminho_atual);
 		caminho_aux.push_back(filho);
 		encontra_caminhos(filho, destino, caminho_aux, caminhos);
@@ -1227,6 +1265,8 @@ void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 	list<list<list<int>>> conjuntos_c;
 	encontra_duplas_casamentos(casamentos, conjuntos_c);
 
+	printf("Numero de casamentos: %ld", casamentos.size());
+
 	//Define conjunto c com 2 casamentos e trabalha nele
 	for (list<list<int>> conjunto_c: conjuntos_c) {
 		printf("Operando sobre conjunto: ");
@@ -1490,7 +1530,7 @@ void encontra_raizes(Grafo* g, list<Atributos_vertice*>& destino)
 }
 
 //Encontra o Nodo_dominador que representa em seus sucessores_a_arv a arvore de dominadores
-void encontra_arvore_denominadores(Grafo* g, Nodo_dominadores* &raiz)
+void encontra_arvore_dominadores(Grafo* g, Nodo_dominadores* &raiz)
 {
 	//Criação de atributo "Raiz" que se liga aos raizes de g
 	Atributos_vertice* root = new Atributos_vertice(g -> atributos.size(), 99999, 'z');
@@ -1591,5 +1631,374 @@ void encontra_arvore_denominadores(Grafo* g, Nodo_dominadores* &raiz)
 
 	printf("Altura: %d", raiz -> count);
 }
+
+bool contem(Atributos_vertice* v, vector<Atributos_vertice*> l)
+{
+	for (Atributos_vertice* x: l)
+		if (x == v)
+			return true;
+
+	return false;
+}
+
+void encontra_arvore_dominadores(Grafo* g, vector<Atributos_vertice*> &dominadores_imediatos)
+{
+	//Criação de atributo "Raiz" que se liga aos raizes de g
+	Atributos_vertice* root = new Atributos_vertice(g -> atributos.size(), 99999, 'z');
+	list<Atributos_vertice*> raizes_g;
+	encontra_raizes(g, raizes_g);
+	for (Atributos_vertice* v: raizes_g) {
+		v -> adicionar_pais(root);
+		root -> adicionar_filho(v);
+	}
+	g -> atributos.push_back(root);
+	g -> numero_vertices++;
+
+	//Algoritmo que chama recursivamente
+	for (Atributos_vertice* v: g -> atributos)
+		v -> valor_bool_2 = true;
+	procedimento_dominadores(g, g -> atributos, root, dominadores_imediatos);
+
+	//Retorna g ao normal
+	g -> atributos.pop_back();
+	g -> numero_vertices--;
+	for (Atributos_vertice* v: raizes_g) {
+		v -> pais.remove(root);
+	}
+}
+
+
+void procedimento_dominadores(Grafo *g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*> &dominadores_imediatos)
+{
+	//Array fd de retorno de cobertura_dominadores
+	vector<Atributos_vertice*> fd(g -> numero_vertices, 0);
+	cobertura_dominadores(g, u, s, fd);
+
+	for (Atributos_vertice* w: fd) {
+		//Para cada dominador em fd
+		if (w && w -> valor_bool_2) {
+			//procura todos os vertuces u | fd(u) = w
+			vector<Atributos_vertice*> u_aux(g -> numero_vertices, 0);
+			int i = 0;
+			for (Atributos_vertice* v: fd) {
+				if (v == w) {
+					u_aux[i] = g -> atributos[i];
+				}
+				i++;
+			}
+
+			w -> valor_bool_2 = false;
+			procedimento_dominadores(g, u_aux, w, dominadores_imediatos);
+			dominadores_imediatos[w -> id] = s;
+		}
+	}
+}
+
+/*
+void cobertura_dominadores(Grafo* g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*>& fd)
+{
+	printf("cobertura_dominadores\n");
+	vector<Atributos_vertice*> vs(g -> numero_vertices);
+	fd[s -> id] = s;
+
+	printf("1\n");
+	for(Atributos_vertice* a: g -> atributos)
+		a -> valor_bool = true;
+	for(Atributos_vertice* a: u)
+		if (a)
+			a -> valor_bool = false;
+	ordem_topologica(s, vs);
+
+	printf("ordem_topologica\n");
+	Atributos_vertice* z;
+	Atributos_vertice* w;
+	stack<Atributos_vertice*> p;
+	for (Atributos_vertice* si: s -> filhos) {
+		if (si -> valor_bool) {
+			printf("for\n");
+			p.push(si);
+			fd[si -> id] = si;
+
+			z = p.top();
+			w = vs[z -> particao + 1];
+
+			printf("2\n");
+			if (!w || !z)
+				continue;
+			while(encontrar_vertice(w, z)) {
+
+				printf("3\n");
+				bool encontrou = false;
+				if (z -> pais.size() == 2) {
+					if (!encontrar_vertice(z -> pais.front(), s)) {
+						if (fd[w -> id] != fd[z -> pais.front() -> id]) {
+							fd[w -> id] = w;
+							p.push(w);
+							z = p.top();
+							encontrou = true;
+						}
+					}
+					if (!encontrar_vertice(z -> pais.back(), s)) {
+						if (fd[w -> id] != fd[z -> pais.back() -> id]) {
+							fd[w -> id] = w;
+							p.push(w);
+							z = p.top();
+							encontrou = true;
+						}
+					}
+
+				} else if (z -> pais.size() == 1) {
+					if (!encontrar_vertice(z -> pais.front(), s)) {
+						if (fd[w -> id] != fd[z -> pais.front() -> id]) {
+							fd[w -> id] = w;
+							p.push(w);
+							z = p.top();
+							encontrou = true;
+						}
+					}
+				}
+
+				if (!encontrou)
+					fd[w -> id] = fd[z -> id];
+
+				w = vs[w -> particao + 1];
+
+				printf("4\n");
+				while(!p.empty() && !encontrar_vertice(w, s)) {
+					z = p.top();
+					p.pop();
+				}
+
+			}
+		}
+	}
+}*/
+
+void cobertura_dominadores(Grafo* g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*>& fd)
+{
+	stack<Atributos_vertice*> vs;
+
+	for(Atributos_vertice* a: g -> atributos)
+		a -> valor_bool = true;
+	for(Atributos_vertice* a: u)
+		if (a)
+			a -> valor_bool = false;
+
+	ordem_topologica(s, vs);
+
+	fd[s -> id] = s;
+	vs.pop();
+
+	Atributos_vertice* v;
+	while(!vs.empty())
+	{
+		v = vs.top();
+		vs.pop();
+
+		if (v -> pais.size() == 2) {
+			if ((!fd[v -> pais.front() -> id]) && (!fd[v -> pais.back() -> id])) {
+				printf("Erro, pais do vertice nao mapeados\n");
+				return;
+			} else if (v -> pais.front() -> id == s -> id || v -> pais.back() -> id == s -> id) {
+				fd[v -> id] = v;
+			} else if (!fd[v -> pais.front() -> id]) {
+				fd[v -> id] = fd[v -> pais.back() -> id];
+			} else if (!fd[v -> pais.back() -> id]) {
+				fd[v -> id] = fd[v -> pais.front() -> id];
+			} else if (fd[v -> pais.back() -> id] != fd[v -> pais.front() -> id]) {
+				fd[v -> id] = v;
+			} else {
+				fd[v -> id] = fd[v -> pais.front() -> id];
+			}
+
+		} else if (v -> pais.size() == 1) {
+			if (v -> pais.front() -> id == s -> id)
+				fd[v -> id] = v;
+			else
+				fd[v -> id] = fd[v -> pais.front() -> id];
+		} else {
+			printf("Erro, vertice fonte no meio da ordenacao");
+			return;
+		}
+	}
+}
+
+void passar_geracao_filhos(Atributos_vertice* v)
+{
+	for (Atributos_vertice* x: v-> filhos) {
+		x -> particao = v -> particao + 1;
+		passar_geracao_filhos(x);
+	}
+}
+
+void passar_geracao_pais(Atributos_vertice* v)
+{
+	for (Atributos_vertice* x: v-> pais) {
+		x -> particao = v -> particao + 1;
+		passar_geracao_pais(x);
+	}
+}
+
+void geracao_grafo_superior(Grafo* g)
+{
+	for (Atributos_vertice* v: g -> atributos)
+		v -> particao = -1;
+
+	list<Atributos_vertice*> raizes;
+	encontra_raizes(g, raizes);
+
+	for (Atributos_vertice* v: raizes) {
+		v -> particao = 0;
+		passar_geracao_filhos(v);
+	}
+}
+
+void encontra_folhas(Grafo* g, list<Atributos_vertice*> &destino)
+{
+	for (Atributos_vertice* v: g -> atributos)
+		if (v -> filhos.size() == 0)
+			destino.push_back(v);
+}
+
+void geracao_grafo_inferior(Grafo* g)
+{
+	for (Atributos_vertice* v: g -> atributos)
+		v -> particao = -1;
+
+	list<Atributos_vertice*> folhas;
+	encontra_folhas(g, folhas);
+
+	for (Atributos_vertice* v: folhas) {
+		v -> particao = 0;
+		passar_geracao_pais(v);
+	}
+}
+
+struct set_cmp {
+	bool operator() (const set<int>& esquerda,const set<int>& direita) const {
+		set<int>::iterator it_esq = esquerda.begin();
+		set<int>::iterator it_dir = direita.begin();
+
+		for (; it_esq != esquerda.end() && it_dir != direita.end(); it_esq++, it_dir++) {
+			if (*it_esq == *it_dir)
+				continue;
+			else
+				return *it_esq < *it_dir;
+		}
+
+		return esquerda.size() < direita.size();
+	}
+};
+
+struct set_set_cmp {
+	bool operator() (const set<set<int>, set_cmp>& esquerda,const set<set<int>, set_cmp>& direita) const {
+		set<set<int>, set_cmp>::iterator it_esq = esquerda.begin();
+		set<set<int>, set_cmp>::iterator it_dir = direita.begin();
+
+		set_cmp cmp;
+		for (; it_esq != esquerda.end() && it_dir != direita.end(); it_esq++, it_dir++) {
+			bool comp_e = cmp.operator ()(*it_esq, *it_dir);
+			bool comp_d = cmp.operator ()( *it_dir, *it_esq);
+			if (comp_e && comp_d)
+				continue;
+			else
+				return comp_e;
+		}
+
+		return esquerda.size() < direita.size();
+	}
+};
+
+void define_max_cores_v2(Grafo* g)
+{
+	//Encontra raiz de g(se não existe cria artificial)
+	Atributos_vertice* raiz;
+	list<Atributos_vertice*> raizes;
+	encontra_raizes(g, raizes);
+	bool raiz_artificial = false;
+	if (raizes.size() > 1) {
+		raiz_artificial = true;
+		raiz = new Atributos_vertice(g -> numero_vertices, -1, 'u');
+		for (Atributos_vertice* v: raizes) {
+			raiz -> adicionar_filho(v);
+			v -> adicionar_pais(raiz);
+		}
+		g -> numero_vertices++;
+	} else if (raizes.size() == 1)
+		raiz = raizes.front();
+	else
+		return;
+
+	//Estrutura que armazena conjuntos
+	vector<set<set<set<int>, set_cmp>, set_set_cmp>> cores(g -> numero_vertices);
+
+	//Adiciona cores para os folhas
+	for (Atributos_vertice* v: g -> atributos)
+		if (v -> filhos.size() == 0) {
+			set<int> cor_v(v -> cor);
+			set<set<int>, set_cmp> novo;
+			novo.insert(cor_v);
+			cores[v -> id].insert(novo);
+		}
+
+	//Ordenação topologica
+	list<Atributos_vertice*> ordenacao_topologica;
+	ordem_topologica(raiz, ordenacao_topologica);
+
+	//Algoritmo
+	for (Atributos_vertice* v: ordenacao_topologica) {
+		printf("Ordenacao topologica\n");
+		//Calcula super
+		v -> cores_ate_folha = 0;
+		for (set<set<int>, set_cmp> s: cores[v -> id])
+			if (s.size() > v -> cores_ate_folha)
+				v -> cores_ate_folha = s.size();
+
+
+		//Passa cores para os pais
+		printf("Passando cores de %d para os %ld pais\n", v -> numero, v -> pais.size());
+		for (Atributos_vertice* w: v -> pais) {
+			printf("Vertice %d passando %ld cores para %d", v -> numero,cores[v->id].size(), w -> numero);
+			int a = 3;
+			int c = 4;
+			int b = a + c;
+			int d = b*502;
+			int e = 8;
+			int f = e + b;
+			int g = f*2;
+			int h = g + d;
+			printf("Aqui_define_max_cores\n");
+			for (set<set<int>, set_cmp> conjunto: cores[v -> id]) {
+				set<set<int>, set_cmp> novo(conjunto);
+				novo.insert(w -> cor);
+				cores[w -> id].insert(novo);
+			}
+		}
+	}
+
+	//Se raiz artificial foi criada, a exclui
+	if (raiz_artificial) {
+		for (Atributos_vertice* v: raizes) {
+			raiz -> filhos.remove(v);
+			v -> pais.remove(raiz);
+		}
+		g->numero_vertices--;
+		delete raiz;
+	}
+}
+
+void encontra_subgrafos(Grafo* fonte, vector<Grafo*> &subgrafos)
+{
+	list<Atributos_vertice*> raizes;
+	encontra_raizes(fonte, raizes);
+
+	for (Atributos_vertice* v: raizes) {
+		Grafo* novo = sub_grafo(fonte, v);
+		subgrafos.push_back(novo);
+		printf("Subgrafo com %d como raiz, com %ld vertices criado\n", v -> numero, novo -> numero_vertices);
+	}
+}
+
+
 
 

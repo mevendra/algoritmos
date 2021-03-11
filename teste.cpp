@@ -294,8 +294,28 @@ int main(int argc, char *argv[]) {
 	vector<Grafo*> subgrafos;
 	encontra_subgrafos(g, subgrafos);
 
-	printf("Encontrou subgrafos\n");
-	escreve_comum_entre_grafos(subgrafos, "outros/comum_sub");
+	escreve_informacao_grafos(g, subgrafos, "outros/informacoes.txt");
+
+	/*
+	for (Grafo* g1: subgrafos) {
+		vector<Atributos_vertice*> dominadores(g1 -> numero_vertices + 1, 0);
+		cam = "desenhos/dominadores_mat_";
+		cam += to_string(g1 -> raiz -> numero);
+		cam += ".dot";
+		encontra_arvore_dominadores(g1, dominadores);
+		escreve_arvore_graphviz(g1, dominadores,true, cam.c_str());
+	}*/
+
+	/*
+	for (Grafo* g1: subgrafos) {
+		printf("aqui\n");
+		for (Atributos_vertice* v: g1 -> atributos)
+			v -> particao = -1;
+		cam = "desenhos/subgrafo_mat_";
+		cam += to_string(g1 -> raiz -> numero);
+		cam += ".dot";
+		escreve_grafo_graphviz(g1, true, cam.c_str());
+	}*/
 
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;

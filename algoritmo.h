@@ -82,4 +82,7 @@ void geracao_grafo_inferior(Grafo* g);
 
 void encontra_subgrafos(Grafo* fonte, vector<Grafo*> &subgrafos);
 
+int encontra_profundidade_dominadores(vector<Atributos_vertice*> dominadores, Atributos_vertice* raiz);
+int encontra_profundidade_de(Atributos_vertice* v);
+int encontra_profundidade_media_de(Atributos_vertice* v);
 #endif /* ALGORITMO_H*/

@@ -1995,8 +1995,60 @@ void encontra_subgrafos(Grafo* fonte, vector<Grafo*> &subgrafos)
 	for (Atributos_vertice* v: raizes) {
 		Grafo* novo = sub_grafo(fonte, v);
 		subgrafos.push_back(novo);
-		printf("Subgrafo com %d como raiz, com %ld vertices criado\n", v -> numero, novo -> numero_vertices);
+		printf("Subgrafo com %d como raiz, com %d vertices criado\n", v -> numero, novo -> numero_vertices);
 	}
+}
+
+int encontra_profundidade_dominadores(vector<Atributos_vertice*> dominadores, Atributos_vertice* raiz)
+{
+	//Muito nao otimizado
+	vector<int> profundidade(dominadores.size(), 1);
+	list<int> verificar;
+	verificar.push_back(raiz -> id);
+
+	while(!verificar.empty()) {
+		int atual = verificar.front();
+		verificar.remove(atual);
+
+		int i = -1;
+		for (Atributos_vertice* v: dominadores) {
+			i++;
+			if (v) {
+				if (v -> id == atual) {
+					profundidade[i] = profundidade[atual] + 1;
+					verificar.push_back(i);
+				}
+			}
+		}
+	}
+
+	int retorno = 0;
+	for (int i: profundidade)
+		retorno = retorno > i ? retorno : i;
+
+	return retorno;
+}
+
+int encontra_profundidade_de(Atributos_vertice* v)
+{
+	int profundidade = 0;
+	for (Atributos_vertice* f: v -> filhos) {
+		int aux = encontra_profundidade_de(f);
+		profundidade = profundidade > aux ? profundidade : aux;
+	}
+
+	return profundidade + 1;
+}
+
+int encontra_profundidade_media_de(Atributos_vertice* v) {
+	if (v -> filhos.size() == 0)
+		return 1;
+	int sum = 0;
+	for (Atributos_vertice* f: v -> filhos) {
+		sum += encontra_profundidade_media_de(f);
+	}
+
+	return (sum / v -> filhos.size()) + 1;
 }
 
 

@@ -2,6 +2,7 @@
 #define TRANSFORMACAO_H
 
 #include "estrutura.h"
+#include "algoritmo.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
@@ -27,6 +28,7 @@ void escreve_aneis(list<Anel*> aneis, Grafo* g, char const* caminho);
 void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char const* caminho);
 void escreve_aneis_completo(list<Anel*> aneis, char const* caminho);
 void escreve_comum_entre_grafos(vector<Grafo*> grafos, char const* caminho);
+void escreve_informacao_grafos(Grafo* g, vector<Grafo*> grafos, char const* caminho);
 
 void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char const* caminho);
 void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenhar);

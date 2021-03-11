@@ -114,6 +114,13 @@ Grafo* sub_grafo(Grafo* g, Atributos_vertice* fonte)
 		}
 	}
 
+	//Cola as cores
+	for (Atributos_vertice* v: atributos)
+	{
+		for (int cor: g -> atributos[v -> particao] -> cor)
+			v -> adicionar_cor(cor);
+	}
+
 	Grafo *novo = new Grafo(numero_vertices, atributos, fonte_nova, grafo);
 	return novo;
 }
@@ -1280,6 +1287,44 @@ void escreve_comum_entre_grafos(vector<Grafo*> grafos, char const* caminho)
 	}
 
 
+	fclose(arquivo);
+}
+
+void escreve_informacao_grafos(Grafo* g, vector<Grafo*> grafos, char const* caminho)
+{
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string lin = "Numero, Profundidade Geral, Profundidade Media(Sum(filhos.pm)/filhos), Profundidade Arvore Dominadores\n";
+	fputs(lin.c_str(), arquivo);
+
+	for (Atributos_vertice* v: g -> atributos) {
+		lin = to_string(v -> numero);
+		lin += ", ";
+
+		lin += to_string(encontra_profundidade_de(v));
+		lin += ", ";
+
+
+		lin += to_string(encontra_profundidade_media_de(v));
+		lin += ", ";
+
+		bool encontrou = false;
+		for (Grafo* g1: grafos) {
+			if (g1 -> raiz -> numero == v -> numero) {
+				encontrou = true;
+				vector<Atributos_vertice*> dominadores(g1 -> numero_vertices + 1, 0);
+				encontra_arvore_dominadores(g1, dominadores);
+
+				lin += to_string(encontra_profundidade_dominadores(dominadores, g1 -> raiz));
+				lin += "\n";
+				break;
+			}
+		}
+		if (!encontrou)
+			lin += "-1\n";
+
+		fputs(lin.c_str(), arquivo);
+	}
 	fclose(arquivo);
 }
 

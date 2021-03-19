@@ -47,7 +47,7 @@ void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, l
 void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
 void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
 void casamentos_sem_juncao(vector<list<int>> casamentos, list<JuncoesDe*> juncoes, Grafo* g);
-
+void encontra_raizes(Grafo* g, list<Atributos_vertice*>& destino);
 void procedimento_dominadores(Grafo* g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*> &dominadores_imediatos);
 void cobertura_dominadores(Grafo* g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*>& fd);
 Atributos_vertice* menos_um_ordem_topologica(Atributos_vertice* v, list<Atributos_vertice*> l);

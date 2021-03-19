@@ -291,20 +291,28 @@ int main(int argc, char *argv[]) {
 	testar_aneis(g, k);
 	testar_dominadores(g);*/
 
+	colorir_grafo_pat(g);
+	//colorir_grafo_mat(g);
+	escreve_grafo_graphviz(g, true, "desenhos/grafo_fonte_pat.dot");
+
 	vector<Grafo*> subgrafos;
 	encontra_subgrafos(g, subgrafos);
 
-	escreve_informacao_grafos(g, subgrafos, "outros/informacoes.txt");
 
-	/*
+
+	//escreve_informacao_grafos(g, subgrafos, "outros/informacoes.txt");
+
+	string cam;
 	for (Grafo* g1: subgrafos) {
+		for (Atributos_vertice* v: g1 -> atributos)
+			v -> particao = -1;
 		vector<Atributos_vertice*> dominadores(g1 -> numero_vertices + 1, 0);
-		cam = "desenhos/dominadores_mat_";
+		cam = "desenhos/dominadores_pat_";
 		cam += to_string(g1 -> raiz -> numero);
 		cam += ".dot";
 		encontra_arvore_dominadores(g1, dominadores);
 		escreve_arvore_graphviz(g1, dominadores,true, cam.c_str());
-	}*/
+	}
 
 	/*
 	for (Grafo* g1: subgrafos) {

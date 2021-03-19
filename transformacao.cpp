@@ -122,6 +122,8 @@ Grafo* sub_grafo(Grafo* g, Atributos_vertice* fonte)
 	}
 
 	Grafo *novo = new Grafo(numero_vertices, atributos, fonte_nova, grafo);
+	if (g -> map)
+		novo -> map = g -> map;
 	return novo;
 }
 
@@ -534,8 +536,14 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char const* caminho) {
 
 	//Colore os vertices
 	if (colorir) {
-		Hash* map = new Hash();	//Hash que ira guardar as cores relacionadas com cada numero
-		reinicia_cores();	//Reinicia as cores em list<Cor*> cores
+		Hash* map;
+		if (g -> map) {
+			map = g -> map;
+		} else {
+			map = new Hash();	//Hash que ira guardar as cores relacionadas com cada numero
+			g -> map = map;
+			reinicia_cores();	//Reinicia as cores em list<Cor*> cores
+		}
 
 		//Atributos para coloracao
 		Cor* cor;
@@ -584,8 +592,10 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char const* caminho) {
 			delete cor;
 		}
 
+		/*
 		map->limpar();
 		delete map;	//Realiza delete de todas as cores contidas em map
+		*/
 	}
 
 	//Definicao de arcos e arestas
@@ -791,8 +801,18 @@ void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> component
 
 void escreve_cores_graphviz(Grafo* g, FILE* arquivo) {
 	//Colore os vertices
-	Hash* map = new Hash();	//Hash que ira guardar as cores relacionadas com cada numero
-	reinicia_cores();	//Reinicia as cores em list<Cor*> cores
+	Hash* map;
+	if (g -> map)
+		map = g -> map;
+	else {
+		if (g -> raiz)
+			printf("Criando novo mapa para %d\n",g -> raiz -> numero);
+		else
+			printf("Criando novo mapa para Grafo inicial\n");
+		map = new Hash();	//Hash que ira guardar as cores relacionadas com cada numero
+		g -> map = map;
+		reinicia_cores();	//Reinicia as cores em list<Cor*> cores
+	}
 
 	//Atributos para coloracao
 	Cor* cor;
@@ -840,8 +860,10 @@ void escreve_cores_graphviz(Grafo* g, FILE* arquivo) {
 		delete cor;
 	}
 
+	/*
 	map->limpar();
 	delete map;	//Realiza delete de todas as cores contidas em map
+	*/
 }
 
 void escreve_cores(Grafo* g, char const* caminho) {
@@ -1350,42 +1372,4 @@ void reinicia_cores() {
 	cores.push_back("#D8BFD8");
 	cores.push_back("#EEE8AA");
 
-	cores.push_back("#0000FF");
-	cores.push_back("#FF0000");
-	cores.push_back("#00FF00");
-	cores.push_back("#FFFF00");
-	cores.push_back("#FF00FF");
-	cores.push_back("#00FFFF");
-	cores.push_back("#808080");
-	cores.push_back("#4682B4");
-	cores.push_back("#008080");
-	cores.push_back("#808000");
-	cores.push_back("#8B4513");
-	cores.push_back("#DEB887");
-	cores.push_back("#8B008B");
-	cores.push_back("#CD5C5C");
-	cores.push_back("#FF69B4");
-	cores.push_back("#B22222");
-	cores.push_back("#FF8C00");
-	cores.push_back("#D8BFD8");
-	cores.push_back("#EEE8AA");
-	cores.push_back("#0000FF");
-	cores.push_back("#FF0000");
-	cores.push_back("#00FF00");
-	cores.push_back("#FFFF00");
-	cores.push_back("#FF00FF");
-	cores.push_back("#00FFFF");
-	cores.push_back("#808080");
-	cores.push_back("#4682B4");
-	cores.push_back("#008080");
-	cores.push_back("#808000");
-	cores.push_back("#8B4513");
-	cores.push_back("#DEB887");
-	cores.push_back("#8B008B");
-	cores.push_back("#CD5C5C");
-	cores.push_back("#FF69B4");
-	cores.push_back("#B22222");
-	cores.push_back("#FF8C00");
-	cores.push_back("#D8BFD8");
-	cores.push_back("#EEE8AA");
 }

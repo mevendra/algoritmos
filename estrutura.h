@@ -52,6 +52,33 @@ class Vertice {
 	void adicionar_filho(Vertice* vertice);
 	void adicionar_pai(Vertice* vertice);
 };
+
+class Cor {
+public:
+	Cor();
+	Cor(int r, int g, int b);
+	Cor(string rgb);
+	Cor(Cor* cor);
+
+	string rgb;
+	int r;
+	int g;
+	int b;
+	void soma(Cor* c);
+};
+
+class Hash {
+vector<int> numeros;
+vector<Cor*> cores;
+
+public:
+	Hash();
+	~Hash();
+	Cor* encontrar_cor(int numero);
+	void adicionar_cor(int numero, Cor* cor);
+	void limpar();
+};
+
 class Atributos_vertice {
 	public:
 		int id;
@@ -84,6 +111,7 @@ class Grafo {
 		int numero_vertices;
 		int** grafo;
 		Atributos_vertice* raiz = 0;
+		Hash* map = 0;
 		vector<Atributos_vertice*> atributos;
 
 		Grafo(int numero_vertices_, vector<Atributos_vertice*> atributos_, int** grafo_);
@@ -103,32 +131,6 @@ class Nodo {
 		Nodo(int id_, Nodo* anterior_);
 		void adicionar_filho(Nodo* filho);
 	void adicionar_anterior(Nodo* anterior_);
-};
-
-class Cor {
-	public:
-		Cor();
-		Cor(int r, int g, int b);
-		Cor(string rgb);
-		Cor(Cor* cor);
-
-		string rgb;
-		int r;
-		int g;
-		int b;
-		void soma(Cor* c);
-};
-
-class Hash {
-	vector<int> numeros;
-	vector<Cor*> cores;
-
-	public:
-		Hash();
-		~Hash();
-		Cor* encontrar_cor(int numero);
-		void adicionar_cor(int numero, Cor* cor);
-		void limpar();
 };
 
 class Juncao {

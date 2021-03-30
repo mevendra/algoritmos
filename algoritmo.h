@@ -1,88 +1,132 @@
 #ifndef ALGORITMO_H
 #define ALGORITMO_H
 
-#include "list"
-#include <array>
-#include <queue>
-#include <vector>
-#include <stack>
-#include <stdlib.h>
-#include <fstream>
 #include "estrutura.h"
 #include "transformacao.h"
-#include "lista.h"
-#include <set>
-using namespace std;
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <thread>
+#include <mutex>
+#include <fstream>
+#include <climits>
+#include <iostream>
+#include <time.h>
 
 static int tempo;
 static int ordem_topologica_vector;
 
-//Metodos utilizados por outros metodos
-void busca_em_profundidade_(int** grafo, int tamanho, Atributos_profundidade* atributos_vertices[], int vertice, int* arvore, list<int>& sem_set);
-void busca_em_profundidade_listas_adjacencia_(list<Vertice*>& grafo, Vertice* v);
-void busca_em_largura_(int** grafo, int tamanho, list<int>& destino, int fonte);
-void busca_fontes(int** grafo, int tamanho, list<int>& destino);
+static clock_t tempo_encontra_anel_p = clock();
+static clock_t tempo_verifica_anel = tempo_encontra_anel_p;
+static clock_t tempo_encontra_anel = tempo_encontra_anel_p;
 
-void colorir_apartir_de(Grafo* g,int vertice);
-void descolorir(Grafo* g);
-void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino);
-void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo);
+static clock_t tempo_procura_caminhos = tempo_encontra_anel;
+static clock_t tempo_sao_disjuntos = tempo_encontra_anel;
+
+//Metodos utilizados por outros metodos
+//0
+void busca_em_profundidade(int** grafo, int tamanho, Atributos_profundidade* Vertices[], int vertice, int* arvore, list<int>& sem_set);
+void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, Vertice* v);
+void busca_em_largura(int** grafo, int tamanho, list<int>& destino, int fonte);
+
+//1
 bool verifica_irmaos(int** grafo, int tamanho, int a, int b);
 
-void ordem_topologica(Atributos_vertice* fonte, queue<Atributos_vertice*>& destino);
-bool contem(int elem, list<int> fonte);
-void encontra_casamentos(Grafo* g, list<list<int>>& casamentos);
-void encontra_casamentos(Grafo* g, vector<list<int>>& casamentos);
+//2
+void busca_fontes(int** grafo, int tamanho, list<int>& destino);
+void colorir_apartir_de(Grafo* g,int vertice);
+void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino);
+void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo);
 
-void encontra_caminhos(Atributos_vertice* fonte, Atributos_vertice* destino,list<Atributos_vertice*> caminho_atual, list<list<Atributos_vertice*>> &caminhos);
-bool sao_disjuntos(list<Atributos_vertice*> caminho_a, list<Atributos_vertice*> caminho_b);
-void verifica_anel(vector<list<Atributos_vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas);
-void encontra_aneis(list<Anel_aux*> aux, vector<list<Atributos_vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas);
+//3
+void init_map(Grafo* g);
+void encontra_raizes(Grafo* g, list<Vertice*>& destino);
+template<typename T>
+void ordem_topologica(Vertice* fonte, T& destino);
+void ordem_topologica(Vertice* fonte, stack<Vertice*>& destino);
+void procedimento_min_max(Vertice* f, Vertice* a, set<int> colors);
+
+//4
+void encontra_juncoes(Grafo* g, list<Juncao*>& destino);
+void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino);
+
+//5
+void procedimento_dominadores(Grafo* g, vector<Vertice*> u, Vertice* s, vector<Vertice*> &dominadores_imediatos);
+void cobertura_dominadores(Grafo* g, vector<Vertice*> u, Vertice* s, vector<Vertice*>& fd);
+
+;
+
+//7
+void passar_geracao_filhos(Vertice* v);
+void passar_geracao_pais(Vertice* v);
+void encontra_folhas(Grafo* g, list<Vertice*>& destino);
+
+//8
+void encontra_casamentos(Grafo* g, vector<list<int>>& casamentos);
+void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
+void encontra_aneis_a2(Grafo* g, Juncoes* juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
+void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
 void encontra_duplas_casamentos(vector<list<int>> casamentos, list<list<list<int>>>& destino);
 void encontra_combinacoes_dupla(list<list<int>> dupla_casamentos, list<list<list<int>>>& destino);
 void encontra_trios_casamentos(vector<list<int>> casamentos, list<list<list<int>>>& destino);
 void encontra_combinacoes_trio(list<list<int>> trio_casamentos, list<list<list<int>>>& destino);
 void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino);
-void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
-void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
-void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
-void casamentos_sem_juncao(vector<list<int>> casamentos, list<JuncoesDe*> juncoes, Grafo* g);
-void encontra_raizes(Grafo* g, list<Atributos_vertice*>& destino);
-void procedimento_dominadores(Grafo* g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*> &dominadores_imediatos);
-void cobertura_dominadores(Grafo* g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*>& fd);
-Atributos_vertice* menos_um_ordem_topologica(Atributos_vertice* v, list<Atributos_vertice*> l);
+void encontra_caminhos(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<list<Vertice*>> &caminhos);
+bool sao_disjuntos(list<Vertice*> caminho_a, list<Vertice*> caminho_b);
+void encontra_aneis(list<Anel_aux*> aux, vector<list<Vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas);
+void verifica_anel(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas);
+
+//9
+void encontra_aneis_coloridos_a2(Grafo* g, Juncoes* juncoes, vector<list<int>> casamentos, list<Anel*>& destino, int numero_cores);
+void define_anel_aux_cores(JuncoesDe* juncao, Anel_aux* destino, int c);
+void encontra_caminhos_cores(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<list<Vertice*>> &caminhos, int cores_restantes, vector<set<int>> &l_cores, set<int> cores);
+set<int> soma(set<int> a, set<int> b);
+void encontra_aneis_coloridos(list<Anel_aux*> aux, vector<list<Vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, set<int> cores, int numero_cores);
+void verifica_anel_colorido(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, int numero_cores);
 
 //Metodos "Finais"
-extern void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz);
-extern void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz);
-extern void busca_em_largura(int**grafo, int tamanho, int* arvore);
-extern void busca_em_profundidade(int**grafo, int tamanho, int* arvore);
-extern void busca_componentes_conexas(int** grafo, int tamanho, list<list<int>>& destino);
-void encontrar_combinacoes(list<int> fonte, list<int>& atual, list<list<int>>& destino);
+//0
+void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz);
+void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz);
+void busca_em_largura(int**grafo, int tamanho, int* arvore);
+void busca_em_profundidade(int**grafo, int tamanho, int* arvore);
+void busca_componentes_conexas(int** grafo, int tamanho, list<list<int>>& destino);
 
+//1
 void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destino);
 
+//2
 void colorir_grafo(Grafo* g);
 void colorir_grafo_mat(Grafo* g);
 void colorir_grafo_pat(Grafo* g);
+void descolorir(Grafo* g);
 
+//3
 void define_max_cores(Grafo* g);
-void define_max_cores_v2(Grafo* g);
+template<typename T>
+void ordem_topologica(Grafo* g, Vertice* fonte, T& destino);
+void define_min_max_cores(Grafo* g);
 
-void encontra_juncoes(Grafo* g, list<Juncao*>& destino);
-void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino);
+//4
+void encontra_juncoes(Grafo* g, Juncoes* destino);
 
-void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos);
+//5
+void encontra_arvore_dominadores(Grafo* g, vector<Vertice*> &dominadores_imediatos);
 
-void encontra_arvore_dominadores(Grafo* g, Nodo_dominadores* &raiz);
-void encontra_arvore_dominadores(Grafo* g, vector<Atributos_vertice*> &dominadores_imediatos);
+//6
+void encontra_subgrafos(Grafo* fonte, vector<Grafo*> &subgrafos);
 
+//7
+int encontra_profundidade_dominadores(vector<Vertice*> dominadores, Vertice* raiz);
+int encontra_profundidade_de(Vertice* v);
+int encontra_profundidade_media_de(Vertice* v);
 void geracao_grafo_superior(Grafo* g);
 void geracao_grafo_inferior(Grafo* g);
 
-void encontra_subgrafos(Grafo* fonte, vector<Grafo*> &subgrafos);
+//8
+void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos);
 
-int encontra_profundidade_dominadores(vector<Atributos_vertice*> dominadores, Atributos_vertice* raiz);
-int encontra_profundidade_de(Atributos_vertice* v);
-int encontra_profundidade_media_de(Atributos_vertice* v);
+//9
+void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamentos);
+
 #endif /* ALGORITMO_H*/

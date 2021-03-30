@@ -1,6 +1,126 @@
 #include "algoritmo.h"
 
-void busca_em_largura(int** grafo, int tamanho, int* arvore) {
+void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz)
+{
+	//Atributos
+	queue<Vertice*> fila;
+	list<Vertice*> sem_set;
+	Atributos_largura_lista* atributos;
+	Vertice* atual;
+	Nodo* aux;
+
+	//Alocacao do espaco para  os atributos
+	for (Vertice* v: grafo)
+	{
+		atributos = (Atributos_largura_lista*) malloc(sizeof(Atributos_largura_lista));
+		atributos -> cor = 0;
+		atributos -> nodo = new Nodo(v);
+		v-> ponteiro = atributos;
+		sem_set.push_back(v);
+	}
+
+	while (!sem_set.empty())
+	{
+		//Primeiro vertice que nao esta em nenhuma arvore
+		atual = sem_set.front();
+		sem_set.pop_front();
+
+		//Vertice sera uma raiz
+		aux = ((Atributos_largura_lista* )atual -> ponteiro) -> nodo;
+		raiz.push_back(aux);
+
+		//Marca vertice
+		((Atributos_largura_lista* )atual -> ponteiro) -> cor = 1;
+		fila.push(atual);
+
+		//Procura os alcancaveis por ele
+		while (!fila.empty())
+		{
+			atual = fila.front();
+			fila.pop();
+			aux = ((Atributos_largura_lista* )atual -> ponteiro) -> nodo;
+			for (Vertice* v: atual -> filhos)
+			{
+				if (((Atributos_largura_lista* )v -> ponteiro) -> cor == 0) {
+					((Atributos_largura_lista* )v -> ponteiro) -> cor = 1;
+					((Atributos_largura_lista* )v -> ponteiro) -> nodo -> adicionar_antecessor(aux);
+					fila.push(v);
+
+				}
+			}
+			sem_set.remove(atual);
+		}
+	}
+
+	//Liberacao do espaco alocado aos ponteiros
+	for (Vertice* v: grafo)
+	{
+		free(v -> ponteiro);
+	}
+}
+
+void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz)
+{
+	//Atributos
+	Atributos_profundidade_lista* atributos;
+
+	//Alocacao do espaco para  os atributos
+	for (Vertice* v: grafo)
+	{
+		atributos = (Atributos_profundidade_lista*) malloc(sizeof(Atributos_profundidade_lista));
+		atributos -> cor = 0;
+		v-> ponteiro = atributos;
+	}
+
+	Nodo* aux;
+
+	for (Vertice* v: grafo)
+	{
+		if (((Atributos_profundidade_lista*) v -> ponteiro) -> cor == 0) {
+			//Vertice sera uma raiz
+			aux = new Nodo(v);
+			((Atributos_profundidade_lista* )v -> ponteiro) -> nodo = aux;
+			raiz.push_back(aux);
+
+
+			((Atributos_profundidade_lista* )v -> ponteiro) -> tempo = 0;
+			busca_em_profundidade_listas_adjacencia(grafo, v);
+		}
+	}
+
+	//Liberacao do espaco alocado aos atributos
+	for (Vertice* v: grafo)
+	{
+		free(v -> ponteiro);
+	}
+}
+
+void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, Vertice* v)
+{
+	((Atributos_profundidade_lista* )v -> ponteiro) -> cor = 1;
+	Nodo* aux;
+	Nodo* aux1;
+	Atributos_profundidade_lista* att_v = ((Atributos_profundidade_lista* )v -> ponteiro);
+	Atributos_profundidade_lista* att_vertice;
+
+	for (Vertice* vertice: v -> filhos)
+	{
+		att_vertice = (Atributos_profundidade_lista*) vertice -> ponteiro;
+		if (att_vertice -> cor == 0) {
+			aux1 = ((Atributos_profundidade_lista*) v -> ponteiro) -> nodo;
+			aux = new Nodo(vertice);
+			aux -> adicionar_antecessor(aux1);
+			aux1 -> adicionar_sucessor(aux);
+
+			att_vertice -> cor = 1;
+			att_vertice -> tempo = att_v -> tempo + 1;
+			busca_em_profundidade_listas_adjacencia(grafo, vertice);
+		}
+	}
+}
+
+void busca_em_largura(int** grafo, int tamanho, int* arvore)
+{
 	int vertice;
 	queue<int> fila;
 	list<int> sem_set;
@@ -58,7 +178,8 @@ void busca_em_largura(int** grafo, int tamanho, int* arvore) {
 	}
 }
 
-void busca_em_profundidade(int**grafo, int tamanho, int* arvore) {
+void busca_em_profundidade(int**grafo, int tamanho, int* arvore)
+{
 	list<int> sem_set;
 	int vertice;
 
@@ -83,7 +204,7 @@ void busca_em_profundidade(int**grafo, int tamanho, int* arvore) {
 
 		tempo = 0;
 		arvore[vertice] = -1;
-		busca_em_profundidade_(grafo, tamanho, atributos_vertices, vertice, arvore, sem_set);
+		busca_em_profundidade(grafo, tamanho, atributos_vertices, vertice, arvore, sem_set);
 	}
 
 	//desaloca os atributos
@@ -93,7 +214,7 @@ void busca_em_profundidade(int**grafo, int tamanho, int* arvore) {
 	}
 }
 
-void busca_em_profundidade_(int** grafo, int tamanho, Atributos_profundidade* atributos_vertices[], int vertice, int* arvore, list<int>& sem_set)
+void busca_em_profundidade(int** grafo, int tamanho, Atributos_profundidade* atributos_vertices[], int vertice, int* arvore, list<int>& sem_set)
 {
 	atributos_vertices[vertice]->tempo_init = ++tempo;
 	atributos_vertices[vertice]->cor = 1;
@@ -107,7 +228,7 @@ void busca_em_profundidade_(int** grafo, int tamanho, Atributos_profundidade* at
 				atributos_vertices[i]->predecessor = vertice;
 				arvore[i] = vertice;
 				sem_set.remove(i);
-				busca_em_profundidade_(grafo, tamanho, atributos_vertices, i, arvore, sem_set);
+				busca_em_profundidade(grafo, tamanho, atributos_vertices, i, arvore, sem_set);
 			}
 		}
 	}
@@ -115,7 +236,8 @@ void busca_em_profundidade_(int** grafo, int tamanho, Atributos_profundidade* at
 	atributos_vertices[vertice]->tempo_fim = ++tempo;
 }
 
-void busca_componentes_conexas(int** grafo, int tamanho, list<list<int>>& destino) {
+void busca_componentes_conexas(int** grafo, int tamanho, list<list<int>>& destino)
+{
 	list<int> lista;
 	list<int> sem_set;
 	int vertice;
@@ -131,7 +253,7 @@ void busca_componentes_conexas(int** grafo, int tamanho, list<list<int>>& destin
 		vertice = sem_set.front();
 		sem_set.pop_front();
 
-		busca_em_largura_(grafo, tamanho, lista, vertice);
+		busca_em_largura(grafo, tamanho, lista, vertice);
 
 		//cria componente
 		list<int> matriz;
@@ -148,7 +270,7 @@ void busca_componentes_conexas(int** grafo, int tamanho, list<list<int>>& destin
 	}
 }
 
-void busca_em_largura_(int** grafo, int tamanho, list<int>& destino, int fonte)
+void busca_em_largura(int** grafo, int tamanho, list<int>& destino, int fonte)
 {
 	int vertice;
 	queue<int> fila;
@@ -196,139 +318,52 @@ void busca_em_largura_(int** grafo, int tamanho, list<int>& destino, int fonte)
 
 }
 
-void busca_em_largura_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz)
+void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destino)
 {
-	//Atributos
-	queue<Vertice*> fila;
-	list<Vertice*> sem_set;
-	Atributos_largura_lista* atributos;
-	Vertice* atual;
-	Nodo* aux;
+	list<int> casamento;
+	for (int i = 0; i < tamanho; i++) {
+		for (int y = 0; y < i; y++) {
+			if (grafo[i][y] == 1) {
+				if (verifica_irmaos(grafo, tamanho, i, y)) {
+					casamento = list<int>();
+					casamento.push_back(i);
+					casamento.push_back(y);
 
-	//Alocacao do espaco para  os atributos
-	for (Vertice* v: grafo)
-	{
-		atributos = (Atributos_largura_lista*) malloc(sizeof(Atributos_largura_lista));
-		atributos -> cor = 0;
-		atributos -> nodo = new Nodo(v -> id);
-		v-> atributo = atributos;
-		sem_set.push_back(v);
-	}
-
-	while (!sem_set.empty())
-	{
-		//Primeiro vertice que nao esta em nenhuma arvore
-		atual = sem_set.front();
-		sem_set.pop_front();
-
-		//Vertice sera uma raiz
-		aux = ((Atributos_largura_lista* )atual -> atributo) -> nodo;
-		raiz.push_back(aux);
-
-		//Marca vertice
-		((Atributos_largura_lista* )atual -> atributo) -> cor = 1;
-		fila.push(atual);
-
-		//Procura os alcancaveis por ele
-		while (!fila.empty())
-		{
-			atual = fila.front();
-			fila.pop();
-			aux = ((Atributos_largura_lista* )atual -> atributo) -> nodo;
-			for (Vertice* v: atual -> adjs)
-			{
-				if (((Atributos_largura_lista* )v -> atributo) -> cor == 0) {
-					((Atributos_largura_lista* )v -> atributo) -> cor = 1;
-					((Atributos_largura_lista* )v -> atributo) -> nodo -> adicionar_anterior(aux);
-					fila.push(v);
-
+					destino.push_back(casamento);
 				}
 			}
-			sem_set.remove(atual);
 		}
-	}
-
-	//Liberacao do espaco alocado aos atributos
-	for (Vertice* v: grafo)
-	{
-		free(v -> atributo);
 	}
 }
 
-void busca_em_profundidade_listas_adjacencia(list<Vertice*>& grafo, list<Nodo*>& raiz)
+bool verifica_irmaos(int** grafo,int tamanho,int a,int b)
 {
-	//Atributos
-	Atributos_profundidade_lista* atributos;
-
-	//Alocacao do espaco para  os atributos
-	for (Vertice* v: grafo)
+	list<int> pais_a;
+	for (int i = 0; i < tamanho; i++)
 	{
-		atributos = (Atributos_profundidade_lista*) malloc(sizeof(Atributos_profundidade_lista));
-		atributos -> cor = 0;
-		v-> atributo = atributos;
-	}
-
-	Nodo* aux;
-
-	for (Vertice* v: grafo)
-	{
-		if (((Atributos_profundidade_lista*) v -> atributo) -> cor == 0) {
-			//Vertice sera uma raiz
-			aux = new Nodo(v -> id);
-			((Atributos_profundidade_lista* )v -> atributo) -> nodo = aux;
-			raiz.push_back(aux);
-
-
-			((Atributos_profundidade_lista* )v -> atributo) -> tempo = 0;
-			busca_em_profundidade_listas_adjacencia_(grafo, v);
+		if (grafo[a][i] == 3 || grafo[a][i] == 13) {
+			pais_a.push_back(i);
 		}
 	}
 
-	//Liberacao do espaco alocado aos atributos
-	for (Vertice* v: grafo)
+	for (int i: pais_a)
 	{
-		free(v -> atributo);
-	}
-}
-
-void busca_em_profundidade_listas_adjacencia_(list<Vertice*>& grafo, Vertice* v) {
-	((Atributos_profundidade_lista* )v -> atributo) -> cor = 1;
-	Nodo* aux;
-	Nodo* aux1;
-	Atributos_profundidade_lista* att_v = ((Atributos_profundidade_lista* )v -> atributo);
-	Atributos_profundidade_lista* att_vertice;
-
-	for (Vertice* vertice: v -> adjs)
-	{
-		att_vertice = (Atributos_profundidade_lista*) vertice -> atributo;
-		if (att_vertice -> cor == 0) {
-			aux1 = ((Atributos_profundidade_lista*) v -> atributo) -> nodo;
-			aux = new Nodo(vertice -> id, aux1);
-			aux1 -> adicionar_filho(aux);
-
-			att_vertice -> cor = 1;
-			att_vertice -> tempo = att_v ->tempo + 1;
-			busca_em_profundidade_listas_adjacencia_(grafo, vertice);
+		if (grafo[b][i] == 3 || grafo[b][i] == 13) {
+			return true;
 		}
 	}
-}
 
-void descolorir(Grafo* g)
-{
-	for (Atributos_vertice* v: g -> atributos)
-	{
-		v -> cor.clear();
-	}
+	return false;
 }
 
 void colorir_grafo(Grafo* g)
 {
 	int** grafo = g -> grafo;
-	if (grafo == NULL) return;
+	if (!grafo) throw runtime_error("Erro em colorir_grafo(), matriz invalida");
 
 	//Busca fontes
 	list<int> fontes;
-	busca_fontes(grafo, g -> numero_vertices, fontes);
+	busca_fontes(grafo, g -> g_numero_vertices(), fontes);
 
 	//Colore apartir das fontes
 	for (int i: fontes)
@@ -350,14 +385,14 @@ void busca_fontes(int** grafo, int tamanho, list<int>& destino)
 	}
 }
 
-void colorir_apartir_de(Grafo* g,int vertice)
+void colorir_apartir_de(Grafo* g, int vertice)
 {
 	int** grafo = g -> grafo;
-	if (grafo == NULL) return;
+	if (!grafo) throw runtime_error("Erro em colorir_apartir_de(), matriz invalida");
 
 	//Atributos
 	queue<int> fila;
-	int tamanho = g -> numero_vertices;
+	int tamanho = g -> g_numero_vertices();
 	int vertice_atual;
 	Atributos_largura* atributos_vertices[tamanho];
 	Atributos_largura* atributo;
@@ -405,7 +440,7 @@ void colorir_apartir_de(Grafo* g,int vertice)
 void colorir_grafo_mat(Grafo* g)
 {
 	int** grafo = g -> grafo;
-	if (grafo == NULL) return;
+	if (!grafo) throw runtime_error("Erro em colorir_grafo_mat(), matriz invalida");
 
 	//Busca fontes
 	list<int> fontes;
@@ -415,13 +450,12 @@ void colorir_grafo_mat(Grafo* g)
 	//Colore apartir das fontes
 	for (int i: fontes)
 		colorir_apartir_de_tipo(g, i, 'e');
-
 }
 
 void colorir_grafo_pat(Grafo* g)
 {
 	int** grafo = g -> grafo;
-	if (grafo == NULL) return;
+	if (!grafo) throw runtime_error("Erro em colorir_grafo_pat(), matriz invalida");
 
 	//Busca fontes
 	list<int> fontes;
@@ -435,10 +469,12 @@ void colorir_grafo_pat(Grafo* g)
 
 void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
 {
-		bool eh_fonte;
-		int tamanho = g -> numero_vertices;
-		int** grafo = g-> grafo;
-		for (int i = 0; i < tamanho; i++)
+	bool eh_fonte;
+	int tamanho = g -> g_numero_vertices();
+	int** grafo = g-> grafo;
+	if (!grafo)	throw runtime_error("Erro em busca_fontes_tipo(), matriz invalida");
+
+	for (int i = 0; i < tamanho; i++)
 	{
 		eh_fonte = true;
 		for (int y = 0; y < tamanho; y++)
@@ -446,7 +482,7 @@ void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
 			if (grafo[i][y] == 3 || grafo[i][y] == 13)
 				{eh_fonte = false; break;}	//Vertice i tem um arco chegando nele
 		}
-		if (eh_fonte && g -> encontrar_atributo(i) -> tipo == tipo)
+		if (eh_fonte && g -> encontrar_atributo(i) -> g_tipo() == tipo)
 			{destino.push_back(i);}	//adiciona i como fonte na lista
 	}
 }
@@ -454,11 +490,11 @@ void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
 void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo)
 {
 	int** grafo = g -> grafo;
-	if (grafo == NULL) return;
+	if (!grafo)	throw runtime_error("Erro em colorir_apartir_de_tipo(), matriz invalida");
 
 	//Atributos
 	queue<int> fila;
-	int tamanho = g -> numero_vertices;
+	int tamanho = g -> g_numero_vertices();
 	int vertice_atual;
 	Atributos_largura* atributos_vertices[tamanho];
 	Atributos_largura* atributo;
@@ -486,7 +522,7 @@ void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo)
 				if (atributos_vertices[i] -> cor == 0)	//Se i nao esta marcado
 				{
 					atributos_vertices[i] -> cor = 1;
-					if (g -> encontrar_atributo(i) -> tipo == tipo)
+					if (g -> encontrar_atributo(i) -> g_tipo() == tipo)
 						fila.push(i);
 				}
 			}
@@ -504,169 +540,168 @@ void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo)
 	}
 }
 
-bool verifica_irmaos(int** grafo,int tamanho,int a,int b)
+void descolorir(Grafo* g)
 {
-	list<int> pais_a;
-	for (int i = 0; i < tamanho; i++)
+	for (Vertice* v: g -> atributos)
 	{
-		if (grafo[a][i] == 3 || grafo[a][i] == 13) {
-			pais_a.push_back(i);
-		}
-	}
-
-	for (int i: pais_a)
-	{
-		if (grafo[b][i] == 3 || grafo[b][i] == 13) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destino)
-{
-	list<int> casamento;
-	for (int i = 0; i < tamanho; i++) {
-		for (int y = 0; y < i; y++) {
-			if (grafo[i][y] == 1) {
-				if (verifica_irmaos(grafo, tamanho, i, y)) {
-					casamento = list<int>();
-					casamento.push_back(i);
-					casamento.push_back(y);
-
-					destino.push_back(casamento);
-				}
-			}
-		}
+		v -> cor.clear();
+		v -> cores.clear();
+		v -> cor_int = 0;
+		v -> cores_ate_folha = 1;
 	}
 }
 
 void define_max_cores(Grafo* g)
 {
-	queue<Atributos_vertice*> fila;
-	list<Lista_lista*> lista_cores[g -> numero_vertices];
+	init_map(g);	//Coloca cores em g -> map
 
-	//Para saber qual folha tem o maior numero de cores
-	vector<Atributos_vertice*> folhas[g -> numero_vertices];
+	//Encontra raiz de g(se não existe cria artificial)
+	Vertice* raiz;
+	list<Vertice*> raizes;
+	encontra_raizes(g, raizes);
+	bool raiz_artificial = false;
+	if (raizes.size() > 1) {
+		raiz_artificial = true;
+		raiz = new Vertice(g -> g_numero_vertices(), -1, 'u');
+		for (Vertice* v: raizes) {
+			raiz -> adicionar_filho(v);
+			v -> adicionar_pais(raiz);
+		}
+		g -> adicionar_vertice(raiz);
+	} else if (raizes.size() == 1)
+		raiz = raizes.front();
+	else
+		return;
 
-	for (Atributos_vertice* v: g -> atributos)
-	{
-		v -> valor_bool = false;
+	Cor* cor;
+	Hash* map = g -> map;
+	//Adiciona cores para os folhas
+	for (Vertice* v: g -> atributos) {
+		if (v -> filhos.size() == 0) {
+			cor = map -> encontrar_cor(v -> cor);
+			if (!cor)
+				throw runtime_error("Erro em define_max_cores(), cor não encontrada");
 
-		if (v -> filhos.size() == 0) {	//if eh_folha
-			int id = v -> id;
-			Lista_int* v_cor = new Lista_int();
-			for (int i: v -> cor) {
-				v_cor -> adicionar(i);
-			}
-			Lista_lista* nova_lista = new Lista_lista();
-			nova_lista -> adicionar(v_cor);
-
-			//Para saber qual folha tem o maior numero de cores
-			folhas[id].push_back(v);
-
-			lista_cores[id].push_back(nova_lista);
-			fila.push(v);
+			set<int> cor_v;
+			cor_v.insert(cor->to_int());
+			set<set<int>, set_cmp> novo;
+			novo.insert(cor_v);
+			v -> cores = novo;
+		} else {
+			set<set<int>, set_cmp> novo;
+			v -> cores = novo;
 		}
 	}
 
-	Atributos_vertice* v;
-	while(!fila.empty())
-	{
-		v = fila.front();
-		fila.pop();
+	//Ordenação topologica
+	list<Vertice*> ordenacao_topologica;
+	ordem_topologica(g, raiz, ordenacao_topologica);
 
-		if (v -> valor_bool)
-			continue;
+	//Algoritmo
+	for (Vertice* v: ordenacao_topologica) {
+		//Calcula super
+		v -> cores_ate_folha = 0;
+		for (set<int> s: v -> cores)
+			if (s.size() > v -> cores_ate_folha)
+				v -> cores_ate_folha = s.size();
 
-		int v_id = v -> id;
-
-		bool prox_while= false;
-		for (Atributos_vertice* filho: v -> filhos) {
-			if (filho -> valor_bool == false) {
-				prox_while = true;
-				fila.push(v);
-				break;
+		//Passa cores para os pais
+		for (Vertice* w: v -> pais) {
+			if (w == raiz)
+				continue;
+			for (set<int> conjunto: v -> cores) {
+				set<int> novo(conjunto);
+				cor = map -> encontrar_cor(w -> cor);
+				novo.insert(cor -> to_int());
+				w -> cores.insert(novo);
 			}
 		}
-		if (prox_while) continue;
-
-		for (Atributos_vertice* pai: v -> pais)
-		{
-			int i = pai -> id;
-			Lista_int* pai_cor = new Lista_int();
-			for (int y: pai -> cor) {
-				pai_cor -> adicionar(y);
-			}
-			Lista_lista* nova_lista_pai;
-			int id_vector = 0;
-			for (Lista_lista* lista: lista_cores[v_id])
-			{
-				bool adicionar = true;
-				nova_lista_pai = lista -> copiar();
-				nova_lista_pai -> adicionar(pai_cor -> copiar_lista());
-				for (Lista_lista* l: lista_cores[i])
-				{
-					if (l -> eh_igual(nova_lista_pai)) {
-						adicionar = false;
-						break;
-					}
-				}
-				if (adicionar) {
-					lista_cores[i].push_back(nova_lista_pai);
-
-					//Para saber qual folha tem o maior numero de cores
-					folhas[i].push_back(folhas[v_id][id_vector]);
-				} else
-					delete nova_lista_pai;
-				id_vector++;
-			}
-			delete pai_cor;
-			fila.push(pai);
-		}
-
-		v -> valor_bool = true;
 	}
 
-	int tamanho;
-	int id_folha;
-	int y;
-	for (int i = 0; i < g -> numero_vertices; i++)
-	{
-		tamanho = 0;
-		y = 0;
-		id_folha = 0;
-		for (Lista_lista* lista: lista_cores[i])
-		{
-			if (lista -> tamanho > tamanho) {
-				tamanho = lista -> tamanho;
-				id_folha = y;
-			}
-			delete lista;
-			y++;
+	//Se raiz artificial foi criada, a exclui
+	if (raiz_artificial) {
+		g -> remover_vertice(raiz);
+		for (Vertice* v: raizes) {
+			raiz -> filhos.remove(v);
+			v -> pais.remove(raiz);
 		}
-		Atributos_vertice* v = g -> encontrar_atributo(i);
-		v -> cores_ate_folha = tamanho;
 
-
-		//Para saber qual folha tem o maior numero de cores
-		y = 0;
-		v -> folha_cores = v;
-		for (Atributos_vertice* a: folhas[i]) {
-			if (y == id_folha)
-				v -> folha_cores = a;
-			y++;
-		}
+		delete raiz;
 	}
 }
 
-void ordem_topologica(Atributos_vertice* fonte, stack<Atributos_vertice*>& destino)
+void init_map(Grafo* g)
+{
+	if (!g -> map) {
+		g -> map = new Hash();
+		reinicia_cores();
+	}
+	Hash* map = g -> map;
+
+	//Atributos para coloracao
+	Cor* cor;
+	Cor* aux;
+	string rgb;
+	string lin;
+
+	//Percorre Vertices e escreve as cores
+	for (Vertice* a: g -> atributos)
+	{
+		cor = map -> encontrar_cor(a -> cor);
+
+		if (!cor) {	//Primeira ocorrencia do set
+			//Para cada cor que coloriu o vertice
+			for (int cor_n: a -> cor)
+			{
+				aux = map -> encontrar_cor(cor_n);	//Encontra cor
+				//Se cor nao tiver sido encontrada ainda
+				if (!aux) {
+					string cor = primeira_cor();
+					if (cor == "") //Se o numero de cores colocado na lista cores e muito pequeno
+					{ throw runtime_error("Erro em init_map(), Falta Cores!"); }
+						//Pega a primeira cor
+					rgb = cor;
+
+					//Inicia uma nova cor e a adiciona ao hash
+					aux = new Cor(rgb);
+					map -> adicionar_cor(cor_n, aux);
+				}
+
+				if (!cor) {	//Se esta passando pela primeira vez copia a cor de aux
+					cor = new Cor(aux);
+				} else {	//Se ja tem cor definida realiza a soma da cor atual com a de aux
+					cor -> soma(aux);
+				}
+			}
+			if (!cor) {	//Vertice n tem cor, adiciona cor especial
+				a -> cor.insert(-1);
+				cor = map -> encontrar_cor(a -> cor);
+				if (!cor) {
+					cor = new Cor("#BD9A9A");
+					map -> adicionar_cor(a -> cor, cor);
+				}
+				continue;
+			}
+			map -> adicionar_cor(a -> cor, cor);
+		}
+
+		a -> cor_int = cor -> to_int();
+	}
+}
+
+void encontra_raizes(Grafo* g, list<Vertice*>& destino)
+{
+	for (Vertice* v: g -> atributos)
+		if (v -> pais.size() == 0)
+			destino.push_back(v);
+}
+
+void ordem_topologica(Vertice* fonte, stack<Vertice*>& destino)
 {
 	fonte -> valor_bool = true;
 
 	//Busca em profundidade todos os filhos
-	for (Atributos_vertice* filho: fonte -> filhos) {
+	for (Vertice* filho: fonte -> filhos) {
 		if (!filho -> valor_bool)
 			ordem_topologica(filho, destino);
 	}
@@ -674,12 +709,14 @@ void ordem_topologica(Atributos_vertice* fonte, stack<Atributos_vertice*>& desti
 	//Quando termina busca de todos os filhos, insere vertice na pilha
 	destino.push(fonte);
 }
-void ordem_topologica(Atributos_vertice* fonte, list<Atributos_vertice*>& destino)
+
+template<typename T>
+void ordem_topologica(Vertice* fonte, T& destino)
 {
 	fonte -> valor_bool = true;
 
 	//Busca em profundidade todos os filhos
-	for (Atributos_vertice* filho: fonte -> filhos) {
+	for (Vertice* filho: fonte -> filhos) {
 		if (!filho -> valor_bool)
 			ordem_topologica(filho, destino);
 	}
@@ -688,98 +725,102 @@ void ordem_topologica(Atributos_vertice* fonte, list<Atributos_vertice*>& destin
 	destino.push_back(fonte);
 }
 
-void ordem_topologica(Atributos_vertice* fonte, vector<Atributos_vertice*>& destino)
+void define_min_max_cores(Grafo* g)
 {
-	fonte -> valor_bool = true;
-
-	//Busca em profundidade todos os filhos
-	for (Atributos_vertice* filho: fonte -> filhos) {
-		if (!filho -> valor_bool)
-			ordem_topologica(filho, destino);
+	for (Vertice* v: g -> atributos) {
+		v -> min_cores = vector<int>(g -> g_numero_vertices(), INT_MAX);
+		v -> max_cores = vector<int>(g -> g_numero_vertices(), 0);
 	}
 
-	//Quando termina busca de todos os filhos, insere vertice na pilha
-	fonte -> particao = ordem_topologica_vector;
-	destino[ordem_topologica_vector++] = fonte;
+	for (Vertice* v: g -> atributos) {
+		set<int> colors;
+		procedimento_min_max(v, v, colors);
+		for (int i = 0; i < g -> g_numero_vertices(); i++) {
+			if (v -> min_cores[i] == INT_MAX)
+				v -> min_cores[i] = 0;
+		}
+	}
+
 }
 
-bool eh_descendente_de(Atributos_vertice* w, Atributos_vertice* z) {
-	if (z == w)
-		return true;
+void procedimento_min_max(Vertice* f, Vertice* a, set<int> colors)
+{
+	colors.insert(a -> cor_int);
 
-	for (Atributos_vertice* v: z -> filhos)
-		if (eh_descendente_de(w, v))
-			return true;
+	if (f -> min_cores[a -> g_id()] > colors.size())
+		f -> min_cores[a -> g_id()] = colors.size();
 
-	return false;
+	if (f -> max_cores[a -> g_id()] < colors.size())
+		f -> max_cores[a -> g_id()] = colors.size();
+
+
+	for (Vertice* v: a -> filhos)
+		procedimento_min_max(f, v, colors);
+}
+
+template<typename T>
+void ordem_topologica(Grafo* g, Vertice* fonte, T& destino)
+{
+	g -> resetar();
+
+	ordem_topologica(fonte, destino);
 }
 
 void encontra_juncoes(Grafo* g, list<Juncao*>& destino)
 {
-	stack<Atributos_vertice*> vs;
+	stack<Vertice*> vs;
 
-	for(Atributos_vertice* s: g -> atributos)
+	for(Vertice* s: g -> atributos)
 	{
-		for(Atributos_vertice* a: g -> atributos)
-			a -> valor_bool = false;
+		ordem_topologica(g, s, vs);
+		g -> resetar();
 
-		ordem_topologica(s, vs);
-		for(Atributos_vertice* a: g -> atributos)
-		{
-			a -> particao = -1;
-			a -> valor_bool = false;
-		}
-
-		s -> particao = s -> id;
+		s -> valor_int = s -> g_id();
 		vs.pop();
 
-		Atributos_vertice* v;
+		Vertice* v;
 		while(!vs.empty())
 		{
 			v = vs.top();
 			vs.pop();
 
 			if (v -> pais.size() == 2) {
-				if ((v -> pais.front() -> particao == -1) && (v -> pais.back() -> particao == -1)) {
-					printf("Erro, pais do vertice nao mapeados");
-					destino.clear();
-					return;
-				} else if (v -> pais.front() -> id == s -> id || v -> pais.back() -> id == s -> id) {
-					v -> particao = v -> id;
-				} else if (v -> pais.front() -> particao == -1) {
-					v -> particao = v -> pais.back() -> particao;
-				} else if (v -> pais.back() -> particao == -1) {
-					v -> particao = v -> pais.front() -> particao;
-				} else if (v -> pais.front() -> particao != v -> pais.back() -> particao) {
-					v -> particao = v -> id;
+				if ((v -> pais.front() -> valor_int == -1) && (v -> pais.back() -> valor_int == -1)) {
+					throw runtime_error("Erro em encontra_juncoes(), Ambos pais de vertice nao mapeados");
+				} else if (v -> pais.front() -> g_id() == s -> g_id() || v -> pais.back() -> g_id() == s -> g_id()) {
+					v -> valor_int = v -> g_id();
+				} else if (v -> pais.front() -> valor_int == -1) {
+					v -> valor_int = v -> pais.back() -> valor_int;
+				} else if (v -> pais.back() -> valor_int == -1) {
+					v -> valor_int = v -> pais.front() -> valor_int;
+				} else if (v -> pais.front() -> valor_int != v -> pais.back() -> valor_int) {
+					v -> valor_int = v -> g_id();
 				} else {
-					v -> particao = v -> pais.front() -> particao;
+					v -> valor_int = v -> pais.front() -> valor_int;
 				}
 
 			} else if (v -> pais.size() == 1) {
-				if (v -> pais.front() -> id == s -> id)
-					v -> particao = v -> id;
+				if (v -> pais.front() -> g_id() == s -> g_id())
+					v -> valor_int = v -> g_id();
 				else
-					v -> particao = v -> pais.front() -> particao;
+					v -> valor_int = v -> pais.front() -> valor_int;
 			} else {
-				printf("Erro, vertice fonte no meio da ordenacao");
-				destino.clear();
-				return;
+				throw runtime_error("Erro em encontra_juncoes(), Vertice fonte no meio da ordenação");
 			}
 		}
 
 		//Juncoes
-		Atributos_vertice* a1;
-		Atributos_vertice* a2;
-		for (int i = 0; i < g -> numero_vertices; i++)
+		Vertice* a1;
+		Vertice* a2;
+		for (int i = 0; i < g -> g_numero_vertices(); i++)
 		{
 			a1 = g -> atributos[i];
-			if (a1 -> particao != -1)
-				for (int j = i + 1; j < g -> numero_vertices; j++)
+			if (a1 -> valor_int != -1)
+				for (int j = i + 1; j < g -> g_numero_vertices(); j++)
 				{
 					a2 = g -> atributos[j];
-					if (a2 -> particao != -1)
-						if (a1 -> particao != a2 -> particao)
+					if (a2 -> valor_int != -1)
+						if (a1 -> valor_int != a2 -> valor_int)
 							destino.push_back(new Juncao(a1, a2, s));
 				}
 		}
@@ -791,14 +832,14 @@ void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino)
 	list<Juncao*> juncoes;
 	encontra_juncoes(g, juncoes);
 
-	//JuncoesDe* jun[g -> numero_vertices][g->numero_vertices];
-	vector<vector<JuncoesDe*>> jun(g -> numero_vertices, vector<JuncoesDe*> (g -> numero_vertices));
+	//JuncoesDe* jun[g -> g_numero_vertices()][g->numero_vertices];
+	vector<vector<JuncoesDe*>> jun(g -> g_numero_vertices(), vector<JuncoesDe*> (g -> g_numero_vertices()));
 	JuncoesDe* aux;
 
-	Atributos_vertice* e1;
-	Atributos_vertice* e2;
-	for (int i = 0; i < g -> numero_vertices; i++) {
-		for (int j = i + 1; j < g -> numero_vertices; j++) {
+	Vertice* e1;
+	Vertice* e2;
+	for (int i = 0; i < g -> g_numero_vertices(); i++) {
+		for (int j = i + 1; j < g -> g_numero_vertices(); j++) {
 			e1 = g -> atributos[i];
 			e2 = g -> atributos[j];
 			aux = new JuncoesDe(e1, e2);
@@ -810,28 +851,278 @@ void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino)
 	}
 
 	for (Juncao* j: juncoes)
-		jun[j -> primeiro -> id][j -> segundo -> id] -> adicionar_juncao(j -> juncao);
+		jun[j -> primeiro -> g_id()][j -> segundo -> g_id()] -> adicionar_juncao(j -> juncao);
 }
 
-void encontra_casamentos(Grafo* g, list<list<int>>& casamentos)
+void encontra_juncoes(Grafo* g, Juncoes* destino)
 {
-	for (int i = 0; i < g -> numero_vertices; i++) {
-		for (int j = i + 1; j < g -> numero_vertices; j++) {
-			if (g -> grafo[i][j] == 1 || g -> grafo[i][j] == 12 || g -> grafo[i][j] == 13) {
-				list<int> casamento;
-				casamento.push_back(i);
-				casamento.push_back(j);
+	list<JuncoesDe*> l;
+	encontra_juncoes(g, l);
 
-				casamentos.push_back(casamento);
+	for (JuncoesDe* j: l)
+		destino -> adicionarJuncoes(j);
+
+}
+
+void encontra_arvore_dominadores(Grafo* g, vector<Vertice*> &dominadores_imediatos)
+{
+	//Criação de atributo "Raiz" que se liga aos raizes de g
+	Vertice* root = new Vertice(g -> atributos.size(), g -> g_numero_vertices(), 'z');
+	list<Vertice*> raizes_g;
+	encontra_raizes(g, raizes_g);
+	for (Vertice* v: raizes_g) {
+		v -> adicionar_pais(root);
+		root -> adicionar_filho(v);
+	}
+	g -> adicionar_vertice(root);
+
+	//Algoritmo que chama recursivamente
+	for (Vertice* v: g -> atributos)
+		v -> valor_bool = true;
+
+	procedimento_dominadores(g, g -> atributos, root, dominadores_imediatos);
+
+	//Retorna g ao normal
+	g -> remover_vertice(root);
+	for (Vertice* v: raizes_g) {
+		v -> pais.remove(root);
+	}
+}
+
+void procedimento_dominadores(Grafo *g, vector<Vertice*> u, Vertice* s, vector<Vertice*> &dominadores_imediatos)
+{
+	//Array fd de retorno de cobertura_dominadores
+	vector<Vertice*> fd(g -> g_numero_vertices(), 0);
+	cobertura_dominadores(g, u, s, fd);
+
+	for (Vertice* w: fd) {
+		//Para cada dominador em fd
+		if (w && w -> valor_bool_2) {
+			//procura todos os vertuces u | fd(u) = w
+			vector<Vertice*> u_aux(g -> g_numero_vertices(), 0);
+			int i = 0;
+			for (Vertice* v: fd) {
+				if (v == w) {
+					u_aux[i] = g -> atributos[i];
+				}
+				i++;
+			}
+
+			w -> valor_bool_2 = false;
+			procedimento_dominadores(g, u_aux, w, dominadores_imediatos);
+			dominadores_imediatos[w -> g_id()] = s;
+		}
+	}
+}
+
+void cobertura_dominadores(Grafo* g, vector<Vertice*> u, Vertice* s, vector<Vertice*>& fd)
+{
+	stack<Vertice*> vs;
+
+	for(Vertice* a: g -> atributos)
+		a -> valor_bool = true;
+	for(Vertice* a: u)
+		if (a)
+			a -> valor_bool = false;
+
+	ordem_topologica(s, vs);
+
+	fd[s -> g_id()] = s;
+	vs.pop();
+
+	Vertice* v;
+	while(!vs.empty())
+	{
+		v = vs.top();
+		vs.pop();
+
+		if (v -> pais.size() == 2) {
+			if ((!fd[v -> pais.front() -> g_id()]) && (!fd[v -> pais.back() -> g_id()])) {
+				throw runtime_error("Erro em cobertura_dominadores(), Ambos pais de vertice nao mapeados");
+			} else if (v -> pais.front() -> g_id() == s -> g_id() || v -> pais.back() -> g_id() == s -> g_id()) {
+				fd[v -> g_id()] = v;
+			} else if (!fd[v -> pais.front() -> g_id()]) {
+				fd[v -> g_id()] = fd[v -> pais.back() -> g_id()];
+			} else if (!fd[v -> pais.back() -> g_id()]) {
+				fd[v -> g_id()] = fd[v -> pais.front() -> g_id()];
+			} else if (fd[v -> pais.back() -> g_id()] != fd[v -> pais.front() -> g_id()]) {
+				fd[v -> g_id()] = v;
+			} else {
+				fd[v -> g_id()] = fd[v -> pais.front() -> g_id()];
+			}
+
+		} else if (v -> pais.size() == 1) {
+			if (v -> pais.front() -> g_id() == s -> g_id())
+				fd[v -> g_id()] = v;
+			else
+				fd[v -> g_id()] = fd[v -> pais.front() -> g_id()];
+		} else {
+			throw runtime_error("Erro em cobertura_dominadores(), Vertice fonte no meio da ordenação");
+		}
+	}
+}
+
+void encontra_subgrafos(Grafo* fonte, vector<Grafo*> &subgrafos)
+{
+	list<Vertice*> raizes;
+	encontra_raizes(fonte, raizes);
+
+	for (Vertice* v: raizes) {
+		Grafo* novo = sub_grafo(fonte, v);
+		subgrafos.push_back(novo);
+		printf("Subgrafo com %d como raiz, com %d vertices criado\n", v -> g_numero(), novo -> g_numero_vertices());
+	}
+}
+
+int encontra_profundidade_dominadores(vector<Vertice*> dominadores, Vertice* raiz)
+{
+	//Muito nao otimizado
+	vector<int> profundidade(dominadores.size(), 1);
+	list<int> verificar;
+	verificar.push_back(raiz -> g_id());
+
+	while(!verificar.empty()) {
+		int atual = verificar.front();
+		verificar.remove(atual);
+
+		int i = -1;
+		for (Vertice* v: dominadores) {
+			i++;
+			if (v) {
+				if (v -> g_id() == atual) {
+					profundidade[i] = profundidade[atual] + 1;
+					verificar.push_back(i);
+				}
 			}
 		}
 	}
+
+	int retorno = 0;
+	for (int i: profundidade)
+		retorno = retorno > i ? retorno : i;
+
+	return retorno;
+}
+
+int encontra_profundidade_de(Vertice* v)
+{
+	int profundidade = 0;
+	for (Vertice* f: v -> filhos) {
+		int aux = encontra_profundidade_de(f);
+		profundidade = profundidade > aux ? profundidade : aux;
+	}
+
+	return profundidade + 1;
+}
+
+int encontra_profundidade_media_de(Vertice* v)
+{
+	if (v -> filhos.size() == 0)
+		return 1;
+	int sum = 0;
+	for (Vertice* f: v -> filhos) {
+		sum += encontra_profundidade_media_de(f);
+	}
+
+	return (sum / v -> filhos.size()) + 1;
+}
+
+void geracao_grafo_superior(Grafo* g)
+{
+	g -> resetar();
+
+	list<Vertice*> raizes;
+	encontra_raizes(g, raizes);
+
+	for (Vertice* v: raizes) {
+		v -> valor_int = 0;
+		passar_geracao_filhos(v);
+	}
+}
+
+void passar_geracao_filhos(Vertice* v)
+{
+	for (Vertice* x: v-> filhos) {
+		x -> valor_int = v -> valor_int + 1;
+		passar_geracao_filhos(x);
+	}
+}
+
+void geracao_grafo_inferior(Grafo* g)
+{
+	for (Vertice* v: g -> atributos)
+		v -> valor_int = -1;
+
+	list<Vertice*> folhas;
+	encontra_folhas(g, folhas);
+
+	for (Vertice* v: folhas) {
+		v -> valor_int = 0;
+		passar_geracao_pais(v);
+	}
+}
+
+void passar_geracao_pais(Vertice* v)
+{
+	for (Vertice* x: v-> pais) {
+		x -> valor_int = v -> valor_int + 1;
+		passar_geracao_pais(x);
+	}
+}
+
+void encontra_folhas(Grafo* g, list<Vertice*> &destino)
+{
+	for (Vertice* v: g -> atributos)
+		if (v -> filhos.size() == 0)
+			destino.push_back(v);
+}
+
+void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos)
+{
+	if (numero_casamentos > 3 || numero_casamentos < 1)
+		throw runtime_error("Erro em encontra_aneis(), Numero de casamentos não suportado");
+
+	//3.1
+	//Encontra todas as junções do grafo
+	list<JuncoesDe*> juncoes;
+	encontra_juncoes(g, juncoes);
+	printf("Encontrou junções\n");
+	Juncoes* jun = new Juncoes(g -> g_numero_vertices());
+	encontra_juncoes(g, jun);
+
+	//3.2
+	//Encontra todos os casamentos do grafo (list<int> = 1 casamento)
+	vector<list<int>> casamentos;
+	encontra_casamentos(g, casamentos);
+	printf("Encontrou casamentos\n");
+
+	//3.3
+	//Define os conjuntos a serem trabalhados e operam encontrando os aneis sobre eles
+	if (numero_casamentos == 1)
+		encontra_aneis_a1(juncoes, casamentos, destino);
+	else if (numero_casamentos == 2)
+		encontra_aneis_a2(g, jun, casamentos, destino);
+	else
+		encontra_aneis_a3(g, juncoes, casamentos, destino);
+
+	cout << " tempo_encontra_anel_p " << (double) tempo_encontra_anel_p << endl;
+	cout << " tempo_verifica_anel " << (double) tempo_verifica_anel  << endl;
+	cout << " tempo_encontra_anel " << (double) tempo_encontra_anel << endl;
+	cout << " tempo_procura_caminhos " << (double) tempo_procura_caminhos  << endl;
+	cout << " tempo_sao_disjuntos " << (double) tempo_sao_disjuntos << endl << endl;
+
+
+	cout << " tempo_encontra_anel_p " << (double) tempo_encontra_anel_p / CLOCKS_PER_SEC << endl;
+	cout << " tempo_verifica_anel " << (double) tempo_verifica_anel / CLOCKS_PER_SEC  << endl;
+	cout << " tempo_encontra_anel " << (double) tempo_encontra_anel / CLOCKS_PER_SEC<< endl;
+	cout << " tempo_procura_caminhos " << (double) tempo_procura_caminhos / CLOCKS_PER_SEC << endl;
+	cout << " tempo_sao_disjuntos " << (double) tempo_sao_disjuntos /CLOCKS_PER_SEC << endl;
 }
 
 void encontra_casamentos(Grafo* g, vector<list<int>>& casamentos)
 {
-	for (int i = 0; i < g -> numero_vertices; i++) {
-		for (int j = i + 1; j < g -> numero_vertices; j++) {
+	for (int i = 0; i < g -> g_numero_vertices(); i++) {
+		for (int j = i + 1; j < g -> g_numero_vertices(); j++) {
 			if (g -> grafo[i][j] == 1 || g -> grafo[i][j] == 12 || g -> grafo[i][j] == 13) {
 				list<int> casamento;
 				casamento.push_back(i);
@@ -843,128 +1134,235 @@ void encontra_casamentos(Grafo* g, vector<list<int>>& casamentos)
 	}
 }
 
-bool contem(int elem, list<int> fonte)
+void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
 {
-	for (int i: fonte)
-		if (i == elem)
-			return true;
+	for (list<int> c: casamentos) {
+		printf("Operando sobre conjunto: (%d, %d) \n", c.front(), c.back());
+		//Encontra as juncoes do par
+		int id_front = c.front();
+		int id_back = c.back();
+		JuncoesDe* par_juncao = 0;
+		for (JuncoesDe* j: juncoes) {
+			if (id_front == j -> primeiro -> g_id() || id_front == j -> segundo -> g_id())  {
+				if (id_back == j -> primeiro -> g_id() || id_back == j -> segundo -> g_id()) {
+					par_juncao = j;
+					break;
+				}
+			}
+		}
 
-	return false;
+		if (!par_juncao) {
+			//Nao existe juncao para o par
+			printf("Casamento sem Juncao: %d e %d\n", c.front(), c.back());
+			continue;
+		}
+
+		//Define anel_aux, que contem juncoes e caminhos ate par
+		list<Anel_aux*> c_aneis_aux;
+		Anel_aux* par_anel_aux = new Anel_aux();
+		define_anel_aux(par_juncao, par_anel_aux);
+		c_aneis_aux.push_back(par_anel_aux);
+
+		//Para todo grupo de caminhos disjuntos fazer intersecção
+		//Se intersecção for vazia, encontrou um anel
+		list<list<int>> conjunto_c;
+		list<Juncao*> juncoesUtilizadas;
+		vector<list<Vertice*>> atual;
+		conjunto_c.push_back(c);
+		encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas);
+
+		//Para cada anel aux criado excluilo
+		while(c_aneis_aux.size() > 0) {
+			Anel_aux* a = c_aneis_aux.front();
+			c_aneis_aux.pop_front();
+			delete a;
+		}
+		for (Juncao* j: juncoesUtilizadas)
+			delete j;
+	}
 }
 
-void encontra_caminhos(Atributos_vertice* fonte, Atributos_vertice* destino,list<Atributos_vertice*> caminho_atual, list<list<Atributos_vertice*>> &caminhos)
+void encontra_aneis_a2(Grafo* g, Juncoes* juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
 {
-	if (fonte == destino) {
-		caminhos.push_back(caminho_atual);
-		return;
-	}
+	clock_t inicio = clock();
+	//Constroi todos os conjuntos de casamentos, cada 1 com 2 casamentos
+	list<list<list<int>>> conjuntos_c;
+	encontra_duplas_casamentos(casamentos, conjuntos_c);
 
-	for (Atributos_vertice* filho: fonte -> filhos){
-		list<Atributos_vertice*> caminho_aux(caminho_atual);
-		caminho_aux.push_back(filho);
-		encontra_caminhos(filho, destino, caminho_aux, caminhos);
-	}
-}
+	printf("Numero de casamentos: %ld\n", casamentos.size());
 
-bool sao_disjuntos(list<Atributos_vertice*> caminho_a, list<Atributos_vertice*> caminho_b)
-{
-	for (Atributos_vertice* i: caminho_a)
-		for (Atributos_vertice* y: caminho_b)
-			if (i == y)
-				return false;
-	return true;
-}
+	//Define conjunto c com 2 casamentos e trabalha nele
+	for (list<list<int>> conjunto_c: conjuntos_c) {
+		printf("Operando sobre conjunto: ");
+		for (list<int> i: conjunto_c)
+			printf("(%d,%d) ", i.front(), i.back());
+		printf("\n");
 
-void verifica_anel(vector<list<Atributos_vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas)
-{
-	//Verifica se Alguma juncao é repetida ou esta em algum caminho
-	list<Atributos_vertice*> aux;
-	for (Juncao* j: juncoesUtilizadas) {
-		for (Atributos_vertice* v: aux)
-			if (v == j -> juncao)
-				return;
+		//Transforma casamentos em combinacoes
+		//(x1,y1) (x2, y2) -> (x1,x2) (y1,y2) e (x1, y2) (y1, x2)
+		list<list<list<int>>> combinacoes;
+		encontra_combinacoes_dupla(conjunto_c, combinacoes);
 
-		aux.push_back(j -> juncao);
-	}
-	for (list<Atributos_vertice*> l: caminhos)
-		for (Atributos_vertice* v: l)
-			for (Atributos_vertice* v1: aux)
-				if (v == v1)
-					return;
+		//Para cada possibilidade de agrupamento(combinacao)
+		bool proximo = false;
+		for (list<list<int>> c: combinacoes) {
+			//Estrutura que armazena caminhos e juncoes para cada par em c
+			list<Anel_aux*> c_aneis_aux;
+
+			//Para cada par da combinação
+			for (list<int> par: c) {
+				int id_front = par.front();
+				int id_back = par.back();
+
+				//Anel auxiliar do par
+				Anel_aux* par_anel_aux = new Anel_aux();
+				c_aneis_aux.push_back(par_anel_aux);
 
 
+				//Se par é o mesmo elemento continua busca em outros pares
+				if (id_front == id_back) {
+					proximo = true;	//mudar para encontrar AxCk, x != k (comentar linha)
+					par_anel_aux -> primeiro = g -> encontrar_atributo(id_front);
+					par_anel_aux -> segundo = par_anel_aux -> primeiro;
+					continue;
+				}
 
+				//Encontra as juncoes do par
+				JuncoesDe* par_juncao = juncoes -> juncoes[id_front][id_back];
 
-	//verifica se intersecção é vazia
-	for (int i = 0; i < caminhos.size(); i++) {
-		for (int y = i + 1; y < caminhos.size(); y++) {
-			if (!sao_disjuntos(caminhos[i], caminhos[y]))
-				return;
+				if (!par_juncao) {
+					//Nao existe juncao para o par
+					proximo = true;
+					break;
+				}
+				tempo_encontra_anel_p += clock() - inicio;
+
+				//Define caminhos disjuntos das juncoes ate o par
+				define_anel_aux(par_juncao, par_anel_aux);
+
+				inicio = clock();
+			}
+
+			//Algum par nao tem juncao
+			if (proximo) {
+				while(c_aneis_aux.size() > 0) {
+					Anel_aux* a = c_aneis_aux.front();
+					c_aneis_aux.pop_front();
+					delete a;
+				}
+				continue;
+			}
+
+			tempo_encontra_anel_p += clock() - inicio;
+			//Para todo grupo de caminhos disjuntos fazer intersecção
+			//Se intersecção for vazia, encontrou um anel
+			list<Juncao*> juncoesUtilizadas;
+			vector<list<Vertice*>> atual;
+			encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas);
+			inicio = clock();
+
+			//Para cada anel aux criado excluilo
+			while(c_aneis_aux.size() > 0) {
+				Anel_aux* a = c_aneis_aux.front();
+				c_aneis_aux.pop_front();
+				delete a;
+			}
+			for (Juncao* j: juncoesUtilizadas)
+				delete j;
 		}
 	}
 
-	Anel* novo = new Anel();
-	novo -> adicionar_elemento(caminhos, casamentos, juncoesUtilizadas);
-
-	destino.push_back(novo);
-
-	//Para escrever sempre que encontrar um anel
-	/*
-	FILE* arquivo;
-	arquivo = fopen("entrada/aneis_ordem_3.txt", "a");
-	fputs(novo -> linha_ordem.c_str(), arquivo);
-	fclose(arquivo);
-	*/
+	tempo_encontra_anel_p += clock() - inicio;
 }
 
-void encontra_aneis(list<Anel_aux*> aux, vector<list<Atributos_vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas)
+void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
 {
-	//Chegou ao ultimo grupo da combinação
-	if (aux.size() == 0) {
-		verifica_anel(atual, destino, casamentos, juncoesUtilizadas);
+	//Constroi todos os conjuntos de casamentos, cada 1 com numero_casamentos tamanho
+	list<list<list<int>>> conjuntos_c;
+	encontra_trios_casamentos(casamentos, conjuntos_c);
 
-		return;
-	}
+	//3.3
+	//Define conjunto c com numero_casamentos casamentos e trabalha nele
+	for (list<list<int>> conjunto_c: conjuntos_c) {
+		printf("Operando sobre conjunto: ");
+		for (list<int> i: conjunto_c)
+			printf("(%d,%d) ", i.front(), i.back());
+		printf("\n");
 
-	//Remove proximo da lista
-	Anel_aux* anel_a = aux.front();
-	aux.pop_front();
+		//Transforma casamentos em combinacoes
+		//(x1,y1) (x2, y2) (x3, y3) -> (x1,x2) (y2,y3) (x3, y1) && ...
+		list<list<list<int>>> combinacoes;
+		encontra_combinacoes_trio(conjunto_c, combinacoes);
 
-	//Se proximo da lista tem elementos iguais
-	if (anel_a -> primeiro == anel_a -> segundo) {
-		return;	//Mudar p incluir AxCk, x != k
-		list<Juncao*> juncoes_aux(juncoesUtilizadas);
-		juncoes_aux.push_back(new Juncao(anel_a -> primeiro, anel_a -> segundo, anel_a -> primeiro));
+		//Para cada possibilidade de agrupamento(combinacao)
+		bool proximo = false;
+		for (list<list<int>> c: combinacoes) {
+			//Estrutura que armazena caminhos e juncoes para cada par em c
+			list<Anel_aux*> c_aneis_aux;
 
-		vector<list<Atributos_vertice*>> atual_aux(atual);
-		// Verificar (Colocar 0 ou 2) em atual_aux
+			//Para cada par da combinação
+			for (list<int> par: c) {
+				int id_front = par.front();
+				int id_back = par.back();
 
-		encontra_aneis(aux, atual_aux, destino, casamentos, juncoes_aux);
-		return;
-	}
+				//Anel auxiliar do par
+				Anel_aux* par_anel_aux = new Anel_aux();
+				c_aneis_aux.push_back(par_anel_aux);
 
+				//Se par é o mesmo elemento continua busca em outros pares (AxCk, x != k)
+				if (id_front == id_back) {
+					proximo = true;	//mudar para encontrar AxCk, x != k (comentar linha)
+					par_anel_aux -> primeiro = g -> encontrar_atributo(id_front);
+					par_anel_aux -> segundo = par_anel_aux -> primeiro;
+					continue;
+				}
 
-	Juncao* novaJuncao = 0;
-	for (int i = 0; i < anel_a -> juncoes.size(); i++) {
-		list<Juncao*> juncoes_aux(juncoesUtilizadas);
-		novaJuncao = new Juncao(anel_a -> primeiro, anel_a -> segundo, anel_a -> juncoes[i]);
-		juncoes_aux.push_back(novaJuncao);
+				//Encontra as juncoes do par
+				JuncoesDe* par_juncao = 0;
+				for (JuncoesDe* j: juncoes) {
+					if (id_front == j -> primeiro -> g_id() || id_front == j -> segundo -> g_id())  {
+						if (id_back == j -> primeiro -> g_id() || id_back == j -> segundo -> g_id()) {
+							par_juncao = j;
+							break;
+						}
+					}
+				}
 
-		for (int y = 0; y < anel_a -> caminhos_primeiro[i].size(); y++) {
-			if (anel_a -> caminhos_primeiro[i][y].size() == 0 && anel_a -> caminhos_segundo[i][y].size() == 0)
-				break;
+				if (!par_juncao) {
+					//Nao existe juncao para o par
+					proximo = true;
+					break;
+				}
 
-			vector<list<Atributos_vertice*>> atual_aux(atual);
+				//Define caminhos disjuntos das juncoes ate o par
+				define_anel_aux(par_juncao, par_anel_aux);
+			}
 
-			atual_aux.push_back(anel_a -> caminhos_primeiro[i][y]);
-			atual_aux.push_back(anel_a -> caminhos_segundo[i][y]);
+			if (proximo) {
+				while(c_aneis_aux.size() > 0) {
+					Anel_aux* a = c_aneis_aux.front();
+					c_aneis_aux.pop_front();
+					delete a;
+				}
+				continue;
+			}
 
-			encontra_aneis(aux, atual_aux, destino, casamentos, juncoes_aux);
+			//Para todo grupo de caminhos disjuntos fazer intersecção
+			//Se intersecção for vazia, encontrou um anel
+			list<Juncao*> juncoesUtilizadas;
+			vector<list<Vertice*>> atual;
+			encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas);
+
+			//Para cada anel aux criado excluilo
+			while(c_aneis_aux.size() > 0) {
+				Anel_aux* a = c_aneis_aux.front();
+				c_aneis_aux.pop_front();
+				delete a;
+			}
+			for (Juncao* j: juncoesUtilizadas)
+				delete j;
 		}
 	}
-
-	if (!novaJuncao)
-		delete novaJuncao;
 }
 
 void encontra_duplas_casamentos(vector<list<int>> casamentos, list<list<list<int>>>& destino)
@@ -1169,7 +1567,6 @@ void encontra_combinacoes_trio(list<list<int>> trio_casamentos, list<list<list<i
 	linha_8.push_back(nova_2_8);
 	linha_8.push_back(nova_3_8);
 	destino.push_back(linha_8);
-
 }
 
 void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
@@ -1179,27 +1576,31 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 
 
 	//Encontra os caminhos da juncao até os mebros do par
-	list<list<Atributos_vertice*>> caminhos_front[juncao -> juncoes.size()];
-	list<list<Atributos_vertice*>> caminhos_back[juncao -> juncoes.size()];
+	list<list<Vertice*>> caminhos_front[juncao -> juncoes.size()];
+	list<list<Vertice*>> caminhos_back[juncao -> juncoes.size()];
 	int indice = 0;
-	for (Atributos_vertice* juncoes: juncao->juncoes) {
-		list<Atributos_vertice*> caminho_atual;
+	for (Vertice* juncoes: juncao->juncoes) {
+		list<Vertice*> caminho_atual;
+
+		clock_t inicio = clock();
 		encontra_caminhos(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
 		encontra_caminhos(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
+		tempo_procura_caminhos += clock() - inicio;
+
 		indice++;
 	}
 
 	//Encontra os caminhos disjuntos da juncao até os membros do par
 	destino -> mudar_tamanho(juncao -> juncoes.size());
 	indice = 0;
-	for (Atributos_vertice* juncoes: juncao -> juncoes) {
+	for (Vertice* juncoes: juncao -> juncoes) {
 		int i = 0;
 		int tam_max = (caminhos_front[indice].size() + 1) * (caminhos_back[indice].size() + 1);
 		destino -> juncoes[indice] = juncoes;
 		destino -> caminhos_primeiro[indice].resize(tam_max);
 		destino -> caminhos_segundo[indice].resize(tam_max);
-		for (list<Atributos_vertice*> caminho_a: caminhos_front[indice]) {
-			for (list<Atributos_vertice*> caminho_b: caminhos_back[indice]) {
+		for (list<Vertice*> caminho_a: caminhos_front[indice]) {
+			for (list<Vertice*> caminho_b: caminhos_back[indice]) {
 				if (sao_disjuntos(caminho_a, caminho_b)) {
 					destino -> caminhos_primeiro[indice][i] = caminho_a;
 					destino -> caminhos_segundo[indice][i] = caminho_b;
@@ -1211,69 +1612,218 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 	}
 }
 
-void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
+void encontra_caminhos(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<list<Vertice*>> &caminhos)
 {
-	for (list<int> c: casamentos) {
-		printf("Operando sobre conjunto: (%d, %d) \n", c.front(), c.back());
-		//Encontra as juncoes do par
-		int id_front = c.front();
-		int id_back = c.back();
-		JuncoesDe* par_juncao = NULL;
-		for (JuncoesDe* j: juncoes) {
-			if (id_front == j -> primeiro -> id || id_front == j -> segundo -> id)  {
-				if (id_back == j -> primeiro -> id || id_back == j -> segundo -> id) {
-					par_juncao = j;
-					break;
-				}
-			}
-		}
+	if (fonte == destino) {
+		caminhos.push_back(caminho_atual);
+		return;
+	}
 
-		if (par_juncao == NULL) {
-			//Nao existe juncao para o par
-			printf("Casamento sem Juncao: %d e %d\n", c.front(), c.back());
-			continue;
-		}
-
-		//Define anel_aux, que contem juncoes e caminhos ate par
-		list<Anel_aux*> c_aneis_aux;
-		Anel_aux* par_anel_aux = new Anel_aux();
-		define_anel_aux(par_juncao, par_anel_aux);
-		c_aneis_aux.push_back(par_anel_aux);
-
-		//Para todo grupo de caminhos disjuntos fazer intersecção
-		//Se intersecção for vazia, encontrou um anel
-		list<list<int>> conjunto_c;
-		list<Juncao*> juncoesUtilizadas;
-		vector<list<Atributos_vertice*>> atual;
-		conjunto_c.push_back(c);
-		encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas);
-
-		//Para cada anel aux criado excluilo
-		while(c_aneis_aux.size() > 0) {
-			Anel_aux* a = c_aneis_aux.front();
-			c_aneis_aux.pop_front();
-			delete a;
-		}
-		for (Juncao* j: juncoesUtilizadas)
-			delete j;
+	for (Vertice* filho: fonte -> filhos){
+		list<Vertice*> caminho_aux(caminho_atual);
+		caminho_aux.push_back(filho);
+		encontra_caminhos(filho, destino, caminho_aux, caminhos);
 	}
 }
 
-void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
+bool sao_disjuntos(list<Vertice*> caminho_a, list<Vertice*> caminho_b)
 {
+	for (Vertice* i: caminho_a)
+		for (Vertice* y: caminho_b)
+			if (i == y)
+				return false;
+	return true;
+}
+
+void encontra_aneis(list<Anel_aux*> aux, vector<list<Vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas)
+{
+	//Chegou ao ultimo grupo da combinação
+	if (aux.size() == 0) {
+		verifica_anel(atual, destino, casamentos, juncoesUtilizadas);
+
+		return;
+	}
+
+	//Remove proximo da lista
+	Anel_aux* anel_a = aux.front();
+	aux.pop_front();
+
+	//Se proximo da lista tem elementos iguais
+	if (anel_a -> primeiro == anel_a -> segundo) {
+		return;	//Mudar p incluir AxCk, x != k
+		list<Juncao*> juncoes_aux(juncoesUtilizadas);
+		juncoes_aux.push_back(new Juncao(anel_a -> primeiro, anel_a -> segundo, anel_a -> primeiro));
+
+		vector<list<Vertice*>> atual_aux(atual);
+		// Verificar (Colocar 0 ou 2) em atual_aux
+
+		encontra_aneis(aux, atual_aux, destino, casamentos, juncoes_aux);
+		return;
+	}
+
+
+	Juncao* novaJuncao = 0;
+	for (int i = 0; i < anel_a -> juncoes.size(); i++) {
+		list<Juncao*> juncoes_aux(juncoesUtilizadas);
+		novaJuncao = new Juncao(anel_a -> primeiro, anel_a -> segundo, anel_a -> juncoes[i]);
+		juncoes_aux.push_back(novaJuncao);
+
+		for (int y = 0; y < anel_a -> caminhos_primeiro[i].size(); y++) {
+			if (anel_a -> caminhos_primeiro[i][y].size() == 0 && anel_a -> caminhos_segundo[i][y].size() == 0)
+				break;
+
+			vector<list<Vertice*>> atual_aux(atual);
+
+			atual_aux.push_back(anel_a -> caminhos_primeiro[i][y]);
+			atual_aux.push_back(anel_a -> caminhos_segundo[i][y]);
+
+			encontra_aneis(aux, atual_aux, destino, casamentos, juncoes_aux);
+		}
+	}
+
+	if (!novaJuncao)
+		delete novaJuncao;
+}
+
+void verifica_anel(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas)
+{
+	clock_t inicio = clock();
+	//Verifica se Alguma juncao é repetida ou esta em algum caminho
+	list<Vertice*> aux;
+	for (Juncao* j: juncoesUtilizadas) {
+		for (Vertice* v: aux)
+			if (v == j -> juncao)
+				return;
+
+		aux.push_back(j -> juncao);
+	}
+	for (list<Vertice*> l: caminhos)
+		for (Vertice* v: l)
+			for (Vertice* v1: aux)
+				if (v == v1)
+					return;
+
+
+
+
+	tempo_verifica_anel += clock() - inicio;
+
+	clock_t inicio_ = clock();
+	//verifica se intersecção é vazia
+	for (int i = 0; i < caminhos.size(); i++) {
+		for (int y = i + 1; y < caminhos.size(); y++) {
+			if (!sao_disjuntos(caminhos[i], caminhos[y])) {
+				tempo_sao_disjuntos += clock() - inicio_;
+				return;
+			}
+		}
+	}
+	tempo_sao_disjuntos += clock() - inicio_;
+	inicio = clock();
+
+	Anel* novo = new Anel();
+	novo -> adicionar_elemento(caminhos, casamentos, juncoesUtilizadas);
+
+	destino.push_back(novo);
+
+	//Para escrever sempre que encontrar um anel
+	/*
+	FILE* arquivo;
+	arquivo = fopen("entrada/aneis_ordem_3.txt", "a");
+	fputs(novo -> linha_ordem.c_str(), arquivo);
+	fclose(arquivo);
+	*/
+
+	tempo_verifica_anel += clock() - inicio;
+}
+
+void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamentos)
+{
+	if (numero_casamentos > 3 || numero_casamentos < 1)
+		return;
+
+	//3.1
+	//Encontra todas as junções do grafo
+	list<JuncoesDe*> juncoes;
+	encontra_juncoes(g, juncoes);
+	printf("Encontrou junções\n");
+	Juncoes* jun = new Juncoes(g -> g_numero_vertices());
+	encontra_juncoes(g, jun);
+
+	//3.2
+	//Encontra todos os casamentos do grafo (list<int> = 1 casamento)
+	vector<list<int>> casamentos;
+	encontra_casamentos(g, casamentos);
+	printf("Encontrou casamentos\n");
+
+	//Colorir o grafo e encontrar max_cores
+	define_max_cores(g);
+	define_min_max_cores(g);
+
+	//3.3
+	//Define os conjuntos a serem trabalhados e operam encontrando os aneis sobre eles
+	if (numero_casamentos == 1)
+		encontra_aneis_a1(juncoes, casamentos, destino);
+	else if (numero_casamentos == 2) {
+		//int tam = g -> atributos[0] -> cores_ate_folha;
+		//int tam = g -> map -> tam();
+		int tam = 0;
+		for (Vertice* v: g -> atributos) {
+			if (v -> cores_ate_folha > tam)
+				tam = v -> cores_ate_folha;
+		}
+		tam *= 4;
+		thread threads[tam];
+		//encontra_aneis_coloridos_a2(g, juncoes, casamentos, destino, 3);
+
+		for (int i = 1; i < tam; i++) {
+			//threads[i] = thread(encontra_aneis_coloridos_a2, ref(g), ref(jun), casamentos, ref(destino), i);
+			encontra_aneis_coloridos_a2(g, jun, casamentos, destino, i);
+		}
+
+		for (int i = 1; i < tam; i++) {
+			//threads[i].join();
+		}
+	}
+	else
+		encontra_aneis_a3(g, juncoes, casamentos, destino);
+	int i = 0;
+	for (vector<JuncoesDe*> j: jun -> juncoes) {
+		for (JuncoesDe* d: j) {
+			if (d)
+				i++;
+		}
+	}
+
+	printf("Numero de juncoes: %d\n", i);
+
+	cout << " tempo_encontra_anel_p " << (double) tempo_encontra_anel_p << endl;
+	cout << " tempo_verifica_anel " << (double) tempo_verifica_anel  << endl;
+	cout << " tempo_encontra_anel " << (double) tempo_encontra_anel << endl;
+	cout << " tempo_procura_caminhos " << (double) tempo_procura_caminhos  << endl;
+	cout << " tempo_sao_disjuntos " << (double) tempo_sao_disjuntos << endl << endl;
+
+
+	cout << " tempo_encontra_anel_p " << (double) tempo_encontra_anel_p / CLOCKS_PER_SEC << endl;
+	cout << " tempo_verifica_anel " << (double) tempo_verifica_anel / CLOCKS_PER_SEC  << endl;
+	cout << " tempo_encontra_anel " << (double) tempo_encontra_anel / CLOCKS_PER_SEC<< endl;
+	cout << " tempo_procura_caminhos " << (double) tempo_procura_caminhos / CLOCKS_PER_SEC << endl;
+	cout << " tempo_sao_disjuntos " << (double) tempo_sao_disjuntos /CLOCKS_PER_SEC << endl;
+}
+
+void encontra_aneis_coloridos_a2(Grafo* g, Juncoes* juncoes, vector<list<int>> casamentos, list<Anel*>& destino, int numero_cores)
+{
+	clock_t inicio = clock();
+	printf("Procurando aneis com %d cores\n", numero_cores);
 	//Constroi todos os conjuntos de casamentos, cada 1 com 2 casamentos
 	list<list<list<int>>> conjuntos_c;
 	encontra_duplas_casamentos(casamentos, conjuntos_c);
 
-	printf("Numero de casamentos: %ld", casamentos.size());
-
 	//Define conjunto c com 2 casamentos e trabalha nele
+	int vezes = 0;
 	for (list<list<int>> conjunto_c: conjuntos_c) {
-		printf("Operando sobre conjunto: ");
-		for (list<int> i: conjunto_c)
-			printf("(%d,%d) ", i.front(), i.back());
-		printf("\n");
-
+		if (++vezes % 2500 == 0)
+			printf("Procurando %d\n", vezes);
 		//Transforma casamentos em combinacoes
 		//(x1,y1) (x2, y2) -> (x1,x2) (y1,y2) e (x1, y2) (y1, x2)
 		list<list<list<int>>> combinacoes;
@@ -1284,44 +1834,58 @@ void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 		for (list<list<int>> c: combinacoes) {
 			//Estrutura que armazena caminhos e juncoes para cada par em c
 			list<Anel_aux*> c_aneis_aux;
+			list<JuncoesDe*> jun;
 
 			//Para cada par da combinação
 			for (list<int> par: c) {
 				int id_front = par.front();
 				int id_back = par.back();
 
-				//Anel auxiliar do par
-				Anel_aux* par_anel_aux = new Anel_aux();
-				c_aneis_aux.push_back(par_anel_aux);
-
 
 				//Se par é o mesmo elemento continua busca em outros pares
 				if (id_front == id_back) {
-					proximo = true;	//mudar para encontrar AxCk, x != k (comentar linha)
-					par_anel_aux -> primeiro = g -> encontrar_atributo(id_front);
-					par_anel_aux -> segundo = par_anel_aux -> primeiro;
+					proximo = true;	//mudar para encontrar AxCk, x != k (comentar linha), adicionar ela no proximo loop for com atribuicoes
 					continue;
 				}
 
 				//Encontra as juncoes do par
-				JuncoesDe* par_juncao = NULL;
-				for (JuncoesDe* j: juncoes) {
-					if (id_front == j -> primeiro -> id || id_front == j -> segundo -> id)  {
-						if (id_back == j -> primeiro -> id || id_back == j -> segundo -> id) {
-							par_juncao = j;
-							break;
-						}
-					}
-				}
+				JuncoesDe* par_juncao = juncoes ->juncoes[id_front][id_back];
 
-				if (par_juncao == NULL) {
+				if (!par_juncao) {
 					//Nao existe juncao para o par
 					proximo = true;
 					break;
 				}
 
-				//Define caminhos disjuntos das juncoes ate o par
-				define_anel_aux(par_juncao, par_anel_aux);
+				jun.push_back(par_juncao);
+			}
+
+			if (!proximo) {
+				int soma = 0;
+				for (JuncoesDe* par_juncao: jun) {
+					Vertice* primeiro = par_juncao -> primeiro;
+					Vertice* segundo = par_juncao -> segundo;
+					int aux_1 = 0;
+					int aux;
+					for (Vertice* j: par_juncao -> juncoes) {
+						aux = j -> max_cores[primeiro -> g_id()] + j -> max_cores[segundo -> g_id()];
+						aux_1 = aux > aux_1 ? aux : aux_1;
+					}
+					soma += aux_1;
+				}
+				if (soma < numero_cores) {
+					proximo = true;
+				} else
+					for (JuncoesDe* par_juncao: jun) {
+						//Anel auxiliar do par
+						Anel_aux* par_anel_aux = new Anel_aux();
+						c_aneis_aux.push_back(par_anel_aux);
+
+						tempo_encontra_anel_p += clock() - inicio;
+						//Define caminhos disjuntos das juncoes ate o par
+						define_anel_aux_cores(par_juncao, par_anel_aux, numero_cores);
+						inicio = clock();
+					}
 			}
 
 			//Algum par nao tem juncao
@@ -1334,11 +1898,16 @@ void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 				continue;
 			}
 
+			tempo_encontra_anel_p += clock() - inicio;
 			//Para todo grupo de caminhos disjuntos fazer intersecção
 			//Se intersecção for vazia, encontrou um anel
 			list<Juncao*> juncoesUtilizadas;
-			vector<list<Atributos_vertice*>> atual;
-			encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas);
+			vector<list<Vertice*>> atual;
+			set<int> cores;
+			clock_t inicio_ = clock();
+			encontra_aneis_coloridos(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas, cores, numero_cores);
+			tempo_encontra_anel += clock() - inicio_;
+			inicio = clock();
 
 			//Para cada anel aux criado excluilo
 			while(c_aneis_aux.size() > 0) {
@@ -1350,707 +1919,153 @@ void encontra_aneis_a2(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> cas
 				delete j;
 		}
 	}
+	printf("Terminou de encontrar aneis com %d cores\n", numero_cores);
+	tempo_encontra_anel_p += clock() - inicio;
 }
 
-void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino)
+void define_anel_aux_cores(JuncoesDe* juncao, Anel_aux* destino, int c)
 {
-	//Constroi todos os conjuntos de casamentos, cada 1 com numero_casamentos tamanho
-	list<list<list<int>>> conjuntos_c;
-	encontra_trios_casamentos(casamentos, conjuntos_c);
+	destino -> primeiro = juncao -> primeiro;
+	destino -> segundo = juncao -> segundo;
 
-	//3.3
-	//Define conjunto c com numero_casamentos casamentos e trabalha nele
-	for (list<list<int>> conjunto_c: conjuntos_c) {
-		printf("Operando sobre conjunto: ");
-		for (list<int> i: conjunto_c)
-			printf("(%d,%d) ", i.front(), i.back());
-		printf("\n");
 
-		//Transforma casamentos em combinacoes
-		//(x1,y1) (x2, y2) (x3, y3) -> (x1,x2) (y2,y3) (x3, y1) && ...
-		list<list<list<int>>> combinacoes;
-		encontra_combinacoes_trio(conjunto_c, combinacoes);
+	//Encontra os caminhos da juncao até os mebros do par que tenham no maximo c cores
+	list<list<Vertice*>> caminhos_front[juncao -> juncoes.size()];
+	list<list<Vertice*>> caminhos_back[juncao -> juncoes.size()];
 
-		//Para cada possibilidade de agrupamento(combinacao)
-		bool proximo = false;
-		for (list<list<int>> c: combinacoes) {
-			//Estrutura que armazena caminhos e juncoes para cada par em c
-			list<Anel_aux*> c_aneis_aux;
-
-			//Para cada par da combinação
-			for (list<int> par: c) {
-				int id_front = par.front();
-				int id_back = par.back();
-
-				//Anel auxiliar do par
-				Anel_aux* par_anel_aux = new Anel_aux();
-				c_aneis_aux.push_back(par_anel_aux);
-
-				//Se par é o mesmo elemento continua busca em outros pares (AxCk, x != k)
-				if (id_front == id_back) {
-					proximo = true;	//mudar para encontrar AxCk, x != k (comentar linha)
-					par_anel_aux -> primeiro = g -> encontrar_atributo(id_front);
-					par_anel_aux -> segundo = par_anel_aux -> primeiro;
-					continue;
-				}
-
-				//Encontra as juncoes do par
-				JuncoesDe* par_juncao = NULL;
-				for (JuncoesDe* j: juncoes) {
-					if (id_front == j -> primeiro -> id || id_front == j -> segundo -> id)  {
-						if (id_back == j -> primeiro -> id || id_back == j -> segundo -> id) {
-							par_juncao = j;
-							break;
-						}
-					}
-				}
-
-				if (par_juncao == NULL) {
-					//Nao existe juncao para o par
-					proximo = true;
-					break;
-				}
-
-				//Define caminhos disjuntos das juncoes ate o par
-				define_anel_aux(par_juncao, par_anel_aux);
-			}
-
-			if (proximo) {
-				while(c_aneis_aux.size() > 0) {
-					Anel_aux* a = c_aneis_aux.front();
-					c_aneis_aux.pop_front();
-					delete a;
-				}
+	vector<set<int>> l_cores_front;
+	vector<set<int>> l_cores_back;
+	int indice = 0;
+	for (Vertice* juncoes: juncao->juncoes) {
+		if (juncoes -> min_cores[destino -> primeiro -> g_id()] > c || juncoes -> min_cores[destino -> segundo -> g_id()] > c) {
+				indice++;
 				continue;
-			}
-
-			//Para todo grupo de caminhos disjuntos fazer intersecção
-			//Se intersecção for vazia, encontrou um anel
-			list<Juncao*> juncoesUtilizadas;
-			vector<list<Atributos_vertice*>> atual;
-			encontra_aneis(c_aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas);
-
-			//Para cada anel aux criado excluilo
-			while(c_aneis_aux.size() > 0) {
-				Anel_aux* a = c_aneis_aux.front();
-				c_aneis_aux.pop_front();
-				delete a;
-			}
-			for (Juncao* j: juncoesUtilizadas)
-				delete j;
 		}
+
+		list<Vertice*> caminho_atual;
+		set<int> cores;
+		clock_t inicio = clock();
+		encontra_caminhos_cores(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice], c, l_cores_front, cores);
+		encontra_caminhos_cores(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice], c, l_cores_back, cores);
+		tempo_procura_caminhos += clock() - inicio;
+		indice++;
 	}
-}
 
-void encontra_aneis(Grafo* g, list<Anel*>& destino, int numero_casamentos)
-{
-	if (numero_casamentos > 3 || numero_casamentos < 1)
-		return;
-
-	//3.1
-	//Encontra todas as junções do grafo
-	list<JuncoesDe*> juncoes;
-	encontra_juncoes(g, juncoes);
-	printf("Encontrou junções\n");
-
-	//3.2
-	//Encontra todos os casamentos do grafo (list<int> = 1 casamento)
-	vector<list<int>> casamentos;
-	encontra_casamentos(g, casamentos);
-	printf("Encontrou casamentos\n");
-
-	//3.3
-	//Define os conjuntos a serem trabalhados e operam encontrando os aneis sobre eles
-	if (numero_casamentos == 1)
-		encontra_aneis_a1(juncoes, casamentos, destino);
-	else if (numero_casamentos == 2)
-		encontra_aneis_a2(g, juncoes, casamentos, destino);
-	else
-		encontra_aneis_a3(g, juncoes, casamentos, destino);
-}
-
-void casamentos_sem_juncao(vector<list<int>> casamentos, list<JuncoesDe*> juncoes, Grafo* g)
-{
-	for (list<int> c: casamentos) {
-		//Encontra as juncoes do par
-		int id_front = c.front();
-		int id_back = c.back();
-		JuncoesDe* par_juncao = NULL;
-		for (JuncoesDe* j: juncoes) {
-			if (id_front == j -> primeiro -> id || id_front == j -> segundo -> id)  {
-				if (id_back == j -> primeiro -> id || id_back == j -> segundo -> id) {
-					par_juncao = j;
-					break;
+	//Encontra os caminhos disjuntos da juncao até os membros do par, com o maximo de cores
+	destino -> mudar_tamanho(juncao -> juncoes.size());
+	indice = 0;
+	for (Vertice* juncoes: juncao -> juncoes) {
+		int i = 0;
+		int tam_max = (caminhos_front[indice].size() + 1) * (caminhos_back[indice].size() + 1);
+		destino -> juncoes[indice] = juncoes;
+		destino -> caminhos_primeiro[indice].resize(tam_max);
+		destino -> caminhos_segundo[indice].resize(tam_max);
+		destino -> cores[indice].resize(tam_max);
+		int x = 0;
+		for (list<Vertice*> caminho_a: caminhos_front[indice]) {
+			set<int> cores_front = l_cores_front[x];
+			int y = 0;
+			for (list<Vertice*> caminho_b: caminhos_back[indice]) {
+				set<int> cores_back = l_cores_back[y];
+				set<int> soma_ = soma(l_cores_back[y], l_cores_front[x]);
+				if (soma_.size() <= c) {
+					clock_t inicio_ = clock();
+					if (sao_disjuntos(caminho_a, caminho_b)) {
+						destino -> caminhos_primeiro[indice][i] = caminho_a;
+						destino -> caminhos_segundo[indice][i] = caminho_b;
+						destino -> cores[indice][i] = soma_;
+						i++;
+					}
+					tempo_sao_disjuntos += clock() - inicio_;
 				}
+				y++;
 			}
+			x++;
 		}
-
-		if (par_juncao == NULL) {
-			string casamento = "";
-			casamento += to_string(g -> encontrar_atributo(c.front()) -> numero);
-			casamento += " e ";
-			casamento += to_string(g -> encontrar_atributo(c.back()) -> numero);
-			casamento += "\n";
-			FILE* arquivo;
-			arquivo = fopen("entrada/casamentos_sem_juncao.txt", "a");
-			fputs(casamento.c_str(), arquivo);
-			fclose(arquivo);
-		}
+		indice++;
 	}
 }
 
-//Procura por um Nodo_dominadores em uma lista, dado seu atributo
-Nodo_dominadores* encontra_nodo(Atributos_vertice* i, list<Nodo_dominadores*> l)
+void encontra_caminhos_cores(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<list<Vertice*>> &caminhos, int cores_restantes, vector<set<int>> &l_cores, set<int> cores)
 {
-	for (Nodo_dominadores* d: l)
-		if (d -> atributo == i)
-			return d;
-
-	return NULL;
-}
-
-//Procura por regiao sabendo seu Nodo
-Region* encontra_regiao(Nodo_dominadores* i, list<Region*> l)
-{
-	for (Region* r: l)
-		for (Nodo_dominadores* d: r -> membros)
-			if (d == i)
-				return r;
-
-
-	return NULL;
-}
-
-//Coloca em destino os Atributos de g que nao tenham vertices de entrada
-void encontra_raizes(Grafo* g, list<Atributos_vertice*>& destino)
-{
-	for (Atributos_vertice* v: g -> atributos)
-		if (v -> pais.size() == 0)
-			destino.push_back(v);
-}
-
-//Encontra o Nodo_dominador que representa em seus sucessores_a_arv a arvore de dominadores
-void encontra_arvore_dominadores(Grafo* g, Nodo_dominadores* &raiz)
-{
-	//Criação de atributo "Raiz" que se liga aos raizes de g
-	Atributos_vertice* root = new Atributos_vertice(g -> atributos.size(), 99999, 'z');
-	list<Atributos_vertice*> raizes_g;
-	encontra_raizes(g, raizes_g);
-	for (Atributos_vertice* v: raizes_g) {
-		v -> adicionar_pais(root);
-		root -> adicionar_filho(v);
-	}
-	g -> atributos.push_back(root);
-
-	//Instaciação e valoração dos Nodo_dominadores e das regioes
-	list<Nodo_dominadores*> raizes;
-	list<Region*> regioes;
-	for (Atributos_vertice* v: g -> atributos) {
-		Nodo_dominadores* novo = new Nodo_dominadores(v);
-		raizes.push_back(novo);
-
-		Region* nova = new Region(novo);
-		regioes.push_back(nova);
-	}
-	for (Region* r: regioes) {
-		for (Atributos_vertice* v: r -> header -> atributo -> filhos) {
-			Nodo_dominadores* prox = encontra_nodo(v, raizes);
-			Region* prox_r = encontra_regiao(prox, regioes);
-
-			r -> sucessores.push_back(prox_r);
-		}
-		for (Atributos_vertice* v: r -> header -> atributo -> pais) {
-			Nodo_dominadores* prox = encontra_nodo(v, raizes);
-			Region* prox_r = encontra_regiao(prox, regioes);
-
-			r -> antecessores.push_back(prox_r);
-		}
+	bool nova_cor = cores.insert(fonte -> cor_int).second;
+	if (nova_cor)
+		cores_restantes--;
+	if (cores_restantes < 0)
+		return;
+	if (fonte == destino) {
+		l_cores.push_back(cores);
+		caminhos.push_back(caminho_atual);
+		return;
 	}
 
-	//Estruturas que serão utilizadas no calculo
-	A_arvore* a_arv = new A_arvore(raizes);
-	D_arvore* d_arv = new D_arvore(raizes);
-	while (regioes.size() > 1) {
-		bool terminar = true;
-		Region* retirar;
-		Region* consome;
+	for (Vertice* filho: fonte -> filhos){
+		//MUDAR  colocar condicao
+		list<Vertice*> caminho_aux(caminho_atual);
+		caminho_aux.push_back(filho);
+		encontra_caminhos_cores(filho, destino, caminho_aux, caminhos, cores_restantes, l_cores, cores);
+	}
+}
 
-		//encontra regiao com somente um antecessor
-		for (Region* r: regioes) {
-			if (r -> antecessores.size() == 1) {
-				terminar = false;
-				retirar = r;
+set<int> soma(set<int> a, set<int> b)
+{
+	set<int> ret(a);
+
+	for (int i: b)
+		ret.insert(i);
+
+	return ret;
+}
+
+void encontra_aneis_coloridos(list<Anel_aux*> aux, vector<list<Vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, set<int> cores, int numero_cores)
+{
+	//Chegou ao ultimo grupo da combinação
+	if (aux.size() == 0) {
+		//verifica_anel_colorido(atual, destino, casamentos, juncoesUtilizadas, numero_cores);
+		if (cores.size() == numero_cores)
+			verifica_anel(atual, destino, casamentos, juncoesUtilizadas);
+		return;
+	}
+
+	//Remove proximo da lista
+	Anel_aux* anel_a = aux.front();
+	aux.pop_front();
+
+	//Se proximo da lista tem elementos iguais
+	if (anel_a -> primeiro == anel_a -> segundo) {
+		return;	//Mudar p incluir AxCk, x != k
+	}
+
+
+	Juncao* novaJuncao = 0;
+	for (int i = 0; i < anel_a -> juncoes.size(); i++) {
+		list<Juncao*> juncoes_aux(juncoesUtilizadas);
+		novaJuncao = new Juncao(anel_a -> primeiro, anel_a -> segundo, anel_a -> juncoes[i]);
+		juncoes_aux.push_back(novaJuncao);
+
+		for (int y = 0; y < anel_a -> caminhos_primeiro[i].size(); y++) {
+			if (anel_a -> caminhos_primeiro[i][y].size() == 0 && anel_a -> caminhos_segundo[i][y].size() == 0)
 				break;
-			}
-		}
 
-		if (terminar) {
-			//Ocorreu erro, deletar regioes, Nodos e retirar root do grafo
-			raiz =  NULL;
-			return;
-		}
+			vector<list<Vertice*>> atual_aux(atual);
+			set<int> cores_aux = soma(cores, anel_a -> cores[i][y]);
 
-		//Regiao que irá consumir retirar
-		consome = retirar -> antecessores.front();
-		consome -> juntar(retirar);
-
-		//Encontra o Nodo que irá linkar com o header de consome
-		Nodo_dominadores* proximo = NULL;
-		if (retirar -> header -> atributo -> pais.size() == 2) {	//Se tem dois pais em g, proximo = ancestral em comum mais baixo
-			Nodo_dominadores* a = encontra_nodo(retirar -> header -> atributo -> pais.front(), raizes);
-			Nodo_dominadores* b = encontra_nodo(retirar -> header -> atributo -> pais.back(), raizes);
-
-			//proximo = d_arv -> lowest(a, b, a_arv);
-			proximo = a_arv -> lowest(a, b, d_arv);
-		} else if (retirar -> header -> atributo -> pais.size() == 1) {		//Se tem somente um pai, proximo = pai
-			proximo = encontra_nodo(retirar -> header -> atributo -> pais.front(), raizes);
-		}
-
-		if (proximo != NULL) {
-			a_arv -> link(retirar -> header, proximo);
-			d_arv -> merge(retirar -> header, proximo);
-		} else {
-			//Ocorreu erro, deletar regioes, Nodos e retirar root do grafo
-			raiz =  NULL;
-			return;
-		}
-
-		//Deleta regiao que foi consumida
-		regioes.remove(retirar);
-		delete retirar;
-	}
-
-	//Retorna g ao normal
-	g -> atributos.pop_back();
-	for (Atributos_vertice* v: raizes_g) {
-		v -> pais.remove(root);
-	}
-
-	//Vertice raiz
-	raiz = a_arv -> raizes.front();
-
-	printf("Altura: %d", raiz -> count);
-}
-
-bool contem(Atributos_vertice* v, vector<Atributos_vertice*> l)
-{
-	for (Atributos_vertice* x: l)
-		if (x == v)
-			return true;
-
-	return false;
-}
-
-void encontra_arvore_dominadores(Grafo* g, vector<Atributos_vertice*> &dominadores_imediatos)
-{
-	//Criação de atributo "Raiz" que se liga aos raizes de g
-	Atributos_vertice* root = new Atributos_vertice(g -> atributos.size(), 99999, 'z');
-	list<Atributos_vertice*> raizes_g;
-	encontra_raizes(g, raizes_g);
-	for (Atributos_vertice* v: raizes_g) {
-		v -> adicionar_pais(root);
-		root -> adicionar_filho(v);
-	}
-	g -> atributos.push_back(root);
-	g -> numero_vertices++;
-
-	//Algoritmo que chama recursivamente
-	for (Atributos_vertice* v: g -> atributos)
-		v -> valor_bool_2 = true;
-	procedimento_dominadores(g, g -> atributos, root, dominadores_imediatos);
-
-	//Retorna g ao normal
-	g -> atributos.pop_back();
-	g -> numero_vertices--;
-	for (Atributos_vertice* v: raizes_g) {
-		v -> pais.remove(root);
-	}
-}
-
-
-void procedimento_dominadores(Grafo *g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*> &dominadores_imediatos)
-{
-	//Array fd de retorno de cobertura_dominadores
-	vector<Atributos_vertice*> fd(g -> numero_vertices, 0);
-	cobertura_dominadores(g, u, s, fd);
-
-	for (Atributos_vertice* w: fd) {
-		//Para cada dominador em fd
-		if (w && w -> valor_bool_2) {
-			//procura todos os vertuces u | fd(u) = w
-			vector<Atributos_vertice*> u_aux(g -> numero_vertices, 0);
-			int i = 0;
-			for (Atributos_vertice* v: fd) {
-				if (v == w) {
-					u_aux[i] = g -> atributos[i];
-				}
-				i++;
-			}
-
-			w -> valor_bool_2 = false;
-			procedimento_dominadores(g, u_aux, w, dominadores_imediatos);
-			dominadores_imediatos[w -> id] = s;
-		}
-	}
-}
-
-/*
-void cobertura_dominadores(Grafo* g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*>& fd)
-{
-	printf("cobertura_dominadores\n");
-	vector<Atributos_vertice*> vs(g -> numero_vertices);
-	fd[s -> id] = s;
-
-	printf("1\n");
-	for(Atributos_vertice* a: g -> atributos)
-		a -> valor_bool = true;
-	for(Atributos_vertice* a: u)
-		if (a)
-			a -> valor_bool = false;
-	ordem_topologica(s, vs);
-
-	printf("ordem_topologica\n");
-	Atributos_vertice* z;
-	Atributos_vertice* w;
-	stack<Atributos_vertice*> p;
-	for (Atributos_vertice* si: s -> filhos) {
-		if (si -> valor_bool) {
-			printf("for\n");
-			p.push(si);
-			fd[si -> id] = si;
-
-			z = p.top();
-			w = vs[z -> particao + 1];
-
-			printf("2\n");
-			if (!w || !z)
+			if (cores_aux.size() > numero_cores)
 				continue;
-			while(encontrar_vertice(w, z)) {
 
-				printf("3\n");
-				bool encontrou = false;
-				if (z -> pais.size() == 2) {
-					if (!encontrar_vertice(z -> pais.front(), s)) {
-						if (fd[w -> id] != fd[z -> pais.front() -> id]) {
-							fd[w -> id] = w;
-							p.push(w);
-							z = p.top();
-							encontrou = true;
-						}
-					}
-					if (!encontrar_vertice(z -> pais.back(), s)) {
-						if (fd[w -> id] != fd[z -> pais.back() -> id]) {
-							fd[w -> id] = w;
-							p.push(w);
-							z = p.top();
-							encontrou = true;
-						}
-					}
+			atual_aux.push_back(anel_a -> caminhos_primeiro[i][y]);
+			atual_aux.push_back(anel_a -> caminhos_segundo[i][y]);
 
-				} else if (z -> pais.size() == 1) {
-					if (!encontrar_vertice(z -> pais.front(), s)) {
-						if (fd[w -> id] != fd[z -> pais.front() -> id]) {
-							fd[w -> id] = w;
-							p.push(w);
-							z = p.top();
-							encontrou = true;
-						}
-					}
-				}
-
-				if (!encontrou)
-					fd[w -> id] = fd[z -> id];
-
-				w = vs[w -> particao + 1];
-
-				printf("4\n");
-				while(!p.empty() && !encontrar_vertice(w, s)) {
-					z = p.top();
-					p.pop();
-				}
-
-			}
-		}
-	}
-}*/
-
-void cobertura_dominadores(Grafo* g, vector<Atributos_vertice*> u, Atributos_vertice* s, vector<Atributos_vertice*>& fd)
-{
-	stack<Atributos_vertice*> vs;
-
-	for(Atributos_vertice* a: g -> atributos)
-		a -> valor_bool = true;
-	for(Atributos_vertice* a: u)
-		if (a)
-			a -> valor_bool = false;
-
-	ordem_topologica(s, vs);
-
-	fd[s -> id] = s;
-	vs.pop();
-
-	Atributos_vertice* v;
-	while(!vs.empty())
-	{
-		v = vs.top();
-		vs.pop();
-
-		if (v -> pais.size() == 2) {
-			if ((!fd[v -> pais.front() -> id]) && (!fd[v -> pais.back() -> id])) {
-				printf("Erro, pais do vertice nao mapeados\n");
-				return;
-			} else if (v -> pais.front() -> id == s -> id || v -> pais.back() -> id == s -> id) {
-				fd[v -> id] = v;
-			} else if (!fd[v -> pais.front() -> id]) {
-				fd[v -> id] = fd[v -> pais.back() -> id];
-			} else if (!fd[v -> pais.back() -> id]) {
-				fd[v -> id] = fd[v -> pais.front() -> id];
-			} else if (fd[v -> pais.back() -> id] != fd[v -> pais.front() -> id]) {
-				fd[v -> id] = v;
-			} else {
-				fd[v -> id] = fd[v -> pais.front() -> id];
-			}
-
-		} else if (v -> pais.size() == 1) {
-			if (v -> pais.front() -> id == s -> id)
-				fd[v -> id] = v;
-			else
-				fd[v -> id] = fd[v -> pais.front() -> id];
-		} else {
-			printf("Erro, vertice fonte no meio da ordenacao");
-			return;
-		}
-	}
-}
-
-void passar_geracao_filhos(Atributos_vertice* v)
-{
-	for (Atributos_vertice* x: v-> filhos) {
-		x -> particao = v -> particao + 1;
-		passar_geracao_filhos(x);
-	}
-}
-
-void passar_geracao_pais(Atributos_vertice* v)
-{
-	for (Atributos_vertice* x: v-> pais) {
-		x -> particao = v -> particao + 1;
-		passar_geracao_pais(x);
-	}
-}
-
-void geracao_grafo_superior(Grafo* g)
-{
-	for (Atributos_vertice* v: g -> atributos)
-		v -> particao = -1;
-
-	list<Atributos_vertice*> raizes;
-	encontra_raizes(g, raizes);
-
-	for (Atributos_vertice* v: raizes) {
-		v -> particao = 0;
-		passar_geracao_filhos(v);
-	}
-}
-
-void encontra_folhas(Grafo* g, list<Atributos_vertice*> &destino)
-{
-	for (Atributos_vertice* v: g -> atributos)
-		if (v -> filhos.size() == 0)
-			destino.push_back(v);
-}
-
-void geracao_grafo_inferior(Grafo* g)
-{
-	for (Atributos_vertice* v: g -> atributos)
-		v -> particao = -1;
-
-	list<Atributos_vertice*> folhas;
-	encontra_folhas(g, folhas);
-
-	for (Atributos_vertice* v: folhas) {
-		v -> particao = 0;
-		passar_geracao_pais(v);
-	}
-}
-
-struct set_cmp {
-	bool operator() (const set<int>& esquerda,const set<int>& direita) const {
-		set<int>::iterator it_esq = esquerda.begin();
-		set<int>::iterator it_dir = direita.begin();
-
-		for (; it_esq != esquerda.end() && it_dir != direita.end(); it_esq++, it_dir++) {
-			if (*it_esq == *it_dir)
-				continue;
-			else
-				return *it_esq < *it_dir;
-		}
-
-		return esquerda.size() < direita.size();
-	}
-};
-
-struct set_set_cmp {
-	bool operator() (const set<set<int>, set_cmp>& esquerda,const set<set<int>, set_cmp>& direita) const {
-		set<set<int>, set_cmp>::iterator it_esq = esquerda.begin();
-		set<set<int>, set_cmp>::iterator it_dir = direita.begin();
-
-		set_cmp cmp;
-		for (; it_esq != esquerda.end() && it_dir != direita.end(); it_esq++, it_dir++) {
-			bool comp_e = cmp.operator ()(*it_esq, *it_dir);
-			bool comp_d = cmp.operator ()( *it_dir, *it_esq);
-			if (comp_e && comp_d)
-				continue;
-			else
-				return comp_e;
-		}
-
-		return esquerda.size() < direita.size();
-	}
-};
-
-void define_max_cores_v2(Grafo* g)
-{
-	//Encontra raiz de g(se não existe cria artificial)
-	Atributos_vertice* raiz;
-	list<Atributos_vertice*> raizes;
-	encontra_raizes(g, raizes);
-	bool raiz_artificial = false;
-	if (raizes.size() > 1) {
-		raiz_artificial = true;
-		raiz = new Atributos_vertice(g -> numero_vertices, -1, 'u');
-		for (Atributos_vertice* v: raizes) {
-			raiz -> adicionar_filho(v);
-			v -> adicionar_pais(raiz);
-		}
-		g -> numero_vertices++;
-	} else if (raizes.size() == 1)
-		raiz = raizes.front();
-	else
-		return;
-
-	//Estrutura que armazena conjuntos
-	vector<set<set<set<int>, set_cmp>, set_set_cmp>> cores(g -> numero_vertices);
-
-	//Adiciona cores para os folhas
-	for (Atributos_vertice* v: g -> atributos)
-		if (v -> filhos.size() == 0) {
-			set<int> cor_v(v -> cor);
-			set<set<int>, set_cmp> novo;
-			novo.insert(cor_v);
-			cores[v -> id].insert(novo);
-		}
-
-	//Ordenação topologica
-	list<Atributos_vertice*> ordenacao_topologica;
-	ordem_topologica(raiz, ordenacao_topologica);
-
-	//Algoritmo
-	for (Atributos_vertice* v: ordenacao_topologica) {
-		printf("Ordenacao topologica\n");
-		//Calcula super
-		v -> cores_ate_folha = 0;
-		for (set<set<int>, set_cmp> s: cores[v -> id])
-			if (s.size() > v -> cores_ate_folha)
-				v -> cores_ate_folha = s.size();
-
-
-		//Passa cores para os pais
-		printf("Passando cores de %d para os %ld pais\n", v -> numero, v -> pais.size());
-		for (Atributos_vertice* w: v -> pais) {
-			printf("Vertice %d passando %ld cores para %d", v -> numero,cores[v->id].size(), w -> numero);
-			int a = 3;
-			int c = 4;
-			int b = a + c;
-			int d = b*502;
-			int e = 8;
-			int f = e + b;
-			int g = f*2;
-			int h = g + d;
-			printf("Aqui_define_max_cores\n");
-			for (set<set<int>, set_cmp> conjunto: cores[v -> id]) {
-				set<set<int>, set_cmp> novo(conjunto);
-				novo.insert(w -> cor);
-				cores[w -> id].insert(novo);
-			}
+			encontra_aneis_coloridos(aux, atual_aux, destino, casamentos, juncoes_aux, cores_aux, numero_cores);
 		}
 	}
 
-	//Se raiz artificial foi criada, a exclui
-	if (raiz_artificial) {
-		for (Atributos_vertice* v: raizes) {
-			raiz -> filhos.remove(v);
-			v -> pais.remove(raiz);
-		}
-		g->numero_vertices--;
-		delete raiz;
-	}
+	if (!novaJuncao)
+		delete novaJuncao;
+
 }
 
-void encontra_subgrafos(Grafo* fonte, vector<Grafo*> &subgrafos)
+void verifica_anel_colorido(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, int numero_cores)
 {
-	list<Atributos_vertice*> raizes;
-	encontra_raizes(fonte, raizes);
-
-	for (Atributos_vertice* v: raizes) {
-		Grafo* novo = sub_grafo(fonte, v);
-		subgrafos.push_back(novo);
-		printf("Subgrafo com %d como raiz, com %d vertices criado\n", v -> numero, novo -> numero_vertices);
-	}
+	verifica_anel(caminhos, destino, casamentos, juncoesUtilizadas);
 }
-
-int encontra_profundidade_dominadores(vector<Atributos_vertice*> dominadores, Atributos_vertice* raiz)
-{
-	//Muito nao otimizado
-	vector<int> profundidade(dominadores.size(), 1);
-	list<int> verificar;
-	verificar.push_back(raiz -> id);
-
-	while(!verificar.empty()) {
-		int atual = verificar.front();
-		verificar.remove(atual);
-
-		int i = -1;
-		for (Atributos_vertice* v: dominadores) {
-			i++;
-			if (v) {
-				if (v -> id == atual) {
-					profundidade[i] = profundidade[atual] + 1;
-					verificar.push_back(i);
-				}
-			}
-		}
-	}
-
-	int retorno = 0;
-	for (int i: profundidade)
-		retorno = retorno > i ? retorno : i;
-
-	return retorno;
-}
-
-int encontra_profundidade_de(Atributos_vertice* v)
-{
-	int profundidade = 0;
-	for (Atributos_vertice* f: v -> filhos) {
-		int aux = encontra_profundidade_de(f);
-		profundidade = profundidade > aux ? profundidade : aux;
-	}
-
-	return profundidade + 1;
-}
-
-int encontra_profundidade_media_de(Atributos_vertice* v) {
-	if (v -> filhos.size() == 0)
-		return 1;
-	int sum = 0;
-	for (Atributos_vertice* f: v -> filhos) {
-		sum += encontra_profundidade_media_de(f);
-	}
-
-	return (sum / v -> filhos.size()) + 1;
-}
-
-
-
-

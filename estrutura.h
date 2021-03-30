@@ -2,16 +2,27 @@
 #define ESTRUTURA_H
 
 #include <list>
+#include <set>
+#include <vector>
+#include <stack>
+#include <array>
+#include <queue>
+
+#include <math.h>
 #include <iomanip>
 #include <sstream>
-#include <vector>
-#include <math.h>
-#include <set>
+#include <string.h>
 
 using namespace std;
+
+template<typename T>
+bool contem(T t, list<T> l);
+
+static list<string> cores;
+string primeira_cor();
+void reinicia_cores();
+
 class Nodo;
-class Particao;
-class D_arvore;
 
 struct Atributos_largura_lista {
 	int cor;
@@ -37,233 +48,193 @@ struct Atributos_componentes {
 	int tem_set;
 };
 
-class Vertice {
-	public:
-		list<Vertice*> adjs;
-		list<Vertice*> filhos;
-		list<Vertice*> pais;
-		int id;
-		void* atributo;
+struct set_cmp {
+	bool operator() (const set<int>& esquerda,const set<int>& direita) const {
+		set<int>::iterator it_esq = esquerda.begin();
+		set<int>::iterator it_dir = direita.begin();
 
-	Vertice();
-	Vertice(int id_);
+		for (; it_esq != esquerda.end() && it_dir != direita.end(); it_esq++, it_dir++) {
+			if (*it_esq == *it_dir)
+				continue;
+			else
+				return *it_esq < *it_dir;
+		}
 
-	void adicionar_aresta(Vertice* vertice);
-	void adicionar_filho(Vertice* vertice);
-	void adicionar_pai(Vertice* vertice);
+		return esquerda.size() < direita.size();
+	}
+};
+
+struct cor_cmp {
+	bool operator() (set<int> esquerda, set<int> direita)  {
+		set<int>::iterator it_esq = esquerda.begin();
+		set<int>::iterator it_dir = direita.begin();
+
+		for (; it_esq != esquerda.end() && it_dir != direita.end(); it_esq++, it_dir++) {
+			if (*it_esq == *it_dir)
+				continue;
+			else
+				return false;
+		}
+
+		return esquerda.size() == direita.size();
+	}
 };
 
 class Cor {
-public:
-	Cor();
-	Cor(int r, int g, int b);
-	Cor(string rgb);
-	Cor(Cor* cor);
-
 	string rgb;
 	int r;
 	int g;
 	int b;
+
+public:
+	Cor(int r, int g, int b);
+	Cor(string rgb);
+	Cor(Cor* cor);
+
 	void soma(Cor* c);
+	int to_int();
+	string g_rgb() { return rgb; }
 };
 
 class Hash {
-vector<int> numeros;
-vector<Cor*> cores;
+	vector<set<int>> numeros;
+	vector<Cor*> cores;
 
-public:
-	Hash();
-	~Hash();
-	Cor* encontrar_cor(int numero);
-	void adicionar_cor(int numero, Cor* cor);
-	void limpar();
+	public:
+		Hash() {}
+		~Hash();
+		Cor* encontrar_cor(int numero);
+		Cor* encontrar_cor(set<int> numero);
+		void adicionar_cor(int numero, Cor* cor);
+		void adicionar_cor(set<int> numero, Cor* cor);
+		void limpar();
+		int tam() { return cores.size(); }
 };
 
-class Atributos_vertice {
+class Vertice {
+	int id;
+	int numero;
+	char tipo;
+
 	public:
-		int id;
-		int numero;
-		int geracao;
-		char tipo;
-		set<int> cor;
-		list<Atributos_vertice*> pais;
-		list<Atributos_vertice*> filhos;
-		list<Atributos_vertice*> casados;
+		list<Vertice*> pais;
+		list<Vertice*> filhos;
+		list<Vertice*> casados;
 
-		int cores_ate_folha;
-		Atributos_vertice* folha_cores;
+		int cor_int = 0;	//obtido atraves do map em grafos utilizando set<int> cor
+		int cores_ate_folha = 1;	//Maximo de cores até alguma folha
+		set<int> cor;	//Representa a cor do vertice
+		set<set<int>, set_cmp> cores;	//Cores até as folhas
+		vector<int> min_cores;
+		vector<int> max_cores;
 
-		int particao;
-		bool valor_bool;
+		//Valores auxiliares utilizados por metodos
+		int geracao = -1;
+		int valor_int = -1;
+		bool valor_bool = false;
 		bool valor_bool_2 = false;
+		void* ponteiro = 0;
 
-		void* ponteiro;
-
-		Atributos_vertice(int id, int numero, char tipo);
+		Vertice(int id, int numero, char tipo);
 		void adicionar_cor(int cor_);
-		void adicionar_casamento(Atributos_vertice* casamento);
-		void adicionar_pais(Atributos_vertice* pai);
-		void adicionar_filho(Atributos_vertice* filho);
+		void adicionar_casamento(Vertice* casamento);
+		void adicionar_pais(Vertice* pai);
+		void adicionar_filho(Vertice* filho);
+		void resetar();
+
+		int g_id() { return id; }
+		int g_numero() { return numero; }
+		char g_tipo() { return tipo; }
 };
 
 class Grafo {
-	public:
-		int numero_vertices;
-		int** grafo;
-		Atributos_vertice* raiz = 0;
-		Hash* map = 0;
-		vector<Atributos_vertice*> atributos;
+	int numero_vertices;
+	Vertice* raiz = 0;
 
-		Grafo(int numero_vertices_, vector<Atributos_vertice*> atributos_, int** grafo_);
-		Grafo(int numero_vertices_, vector<Atributos_vertice*> atributos_, Atributos_vertice* raiz, int** grafo_);
-		void adicionar_aresta(int v1, int v2);
-		void adicionar_arco(int fonte, int destino);
-		Atributos_vertice* encontrar_atributo(int i);
+	public:
+		int** grafo;
+		Hash* map = 0;
+		vector<Vertice*> atributos;
+
+		Grafo(int numero_vertices_, vector<Vertice*> atributos_, int** grafo_);
+		Grafo(int numero_vertices_, vector<Vertice*> atributos_, Vertice* raiz, int** grafo_);
+		Vertice* encontrar_atributo(int i);
+		void adicionar_vertice(Vertice* v);
+		void remover_vertice(Vertice* v);
+		void resetar();
+		int g_numero_vertices() { return numero_vertices; }
+		Vertice* g_raiz() { return raiz; }
 };
 
 class Nodo {
-	public:
-		int id;
-		list<Nodo*> proximo;
-		Nodo* anterior;
+	Vertice* nodo;
+public:
+	list<Nodo*> sucessores;
+	list<Nodo*> antecessores;
 
-		Nodo(int id_);
-		Nodo(int id_, Nodo* anterior_);
-		void adicionar_filho(Nodo* filho);
-	void adicionar_anterior(Nodo* anterior_);
+	Nodo(Vertice* nodo_);
+	void adicionar_sucessor(Nodo * sucessor);
+	void adicionar_antecessor(Nodo * antecessor);
+	void print_filhos();
+	void pos_ordem(list<Nodo*> &destino);
+	Vertice* g_vertice() { return nodo; }
 };
 
 class Juncao {
-	public:
-		Atributos_vertice* primeiro;
-		Atributos_vertice* segundo;
-		Atributos_vertice* juncao;
+public:
+	Vertice* primeiro;
+	Vertice* segundo;
+	Vertice* juncao;
 
-		Juncao(Atributos_vertice* primeiro_, Atributos_vertice* segundo_, Atributos_vertice* juncao_);
+	Juncao(Vertice* primeiro_, Vertice* segundo_, Vertice* juncao_);
 };
 
 class JuncoesDe {
-	public:
-		Atributos_vertice* primeiro;
-		Atributos_vertice* segundo;
+public:
+	Vertice* primeiro;
+	Vertice* segundo;
 
-		list<Atributos_vertice*> juncoes;
+	list<Vertice*> juncoes;
 
-		void adicionar_juncao(Atributos_vertice* juncao);
-		JuncoesDe(Atributos_vertice* primeiro_, Atributos_vertice* segundo_);
+	void adicionar_juncao(Vertice* juncao);
+	JuncoesDe(Vertice* primeiro_, Vertice* segundo_);
 };
 
-class Anel {
-	public:
-		list<Atributos_vertice*> anel;
-		list<Atributos_vertice*> vertices;
-		list<list<Atributos_vertice*>> caminhos;
-		list<list<Atributos_vertice*>> casamentos;
-		list<Atributos_vertice*> juncoes;
+class Juncoes {
+public:
+	vector<vector<JuncoesDe*>> juncoes;
 
-		string linha_normal;
-		string linha_ordem;
-
-		void adicionar_elemento(list<Atributos_vertice*> caminho, bool caminho_inverso);
-		void adicionar_elemento(vector<list<Atributos_vertice*>> caminho, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, bool realizado= false);
+	Juncoes(int tamanho) { juncoes = vector<vector<JuncoesDe*>>(tamanho, vector<JuncoesDe*>(tamanho, 0)); }
+	void adicionarJuncoes(JuncoesDe* j) {	juncoes[j -> primeiro -> g_id()][j -> segundo -> g_id()] = j;
+											juncoes[j -> segundo -> g_id()][j -> primeiro -> g_id()] = j; }
 };
 
 class Anel_aux {
-	public:
-		Atributos_vertice* primeiro;
-		Atributos_vertice* segundo;
-
-		vector<Atributos_vertice*> juncoes;
-		vector<vector<list<Atributos_vertice*>>> caminhos_primeiro;
-		vector<vector<list<Atributos_vertice*>>> caminhos_segundo;
-		void mudar_tamanho(int tamanho);
-};
-
-class Nodo_dominadores {
 public:
-	list<Nodo_dominadores*> sucessores_a_arv;
-	list<Nodo_dominadores*> antecessores_a_arv;
+	Vertice* primeiro;
+	Vertice* segundo;
 
-	list<Nodo_dominadores*> sucessores_d_arv;
-	list<Nodo_dominadores*> antecessores_d_arv;
+	vector<Vertice*> juncoes;
+	vector<vector<list<Vertice*>>> caminhos_primeiro;
+	vector<vector<list<Vertice*>>> caminhos_segundo;
 
-	int id;
-	Atributos_vertice* atributo;
+	vector<vector<set<int>>> cores;
 
-	int count = 1;
-	int weigth = 0;
-
-	Nodo_dominadores(Atributos_vertice* v);
-	//Ops D_Arv
-	void adicionar_sucessor_d_arv(Nodo_dominadores* d);
-	void adicionar_antecessor_d_arv(Nodo_dominadores* d);
-	void remover_sucessor_d_arv(Nodo_dominadores* d);
-
-	void se_tornar_filho_de_d_arv(Nodo_dominadores* d);
-	bool contem_d_arv(Nodo_dominadores* d);
-	Nodo_dominadores* primeiro_antecessor_d_arv();
-	int tamanho_predecessores_d_arv();
-
-	//Ops A_Arv
-	void adicionar_sucessor_a_arv(Nodo_dominadores* a);
-	void adicionar_antecessor_a_arv(Nodo_dominadores* a);
-	void remover_sucessor_a_arv(Nodo_dominadores* a);
-	bool contem_a_arv(Nodo_dominadores* a);
-	int max_caminho_a_arv();
-	void print_filhos_a_arv();
-	void pos_ordem_a_arv(list<Nodo_dominadores*> &destino);
+	void mudar_tamanho(int tamanho);
 };
 
-class A_arvore {
+class Anel {
 public:
-	list<Nodo_dominadores*> raizes;
-	vector<vector<Nodo_dominadores*>> ancestrais;
+	list<Vertice*> anel;
+	list<Vertice*> vertices;
+	list<list<Vertice*>> caminhos;
+	list<list<Vertice*>> casamentos;
+	list<Vertice*> juncoes;
 
-	A_arvore(list<Nodo_dominadores*> raizes_);
-	void link(Nodo_dominadores* u, Nodo_dominadores* v);
-	Nodo_dominadores* get_ancestor(Nodo_dominadores* u, int i);
-	Nodo_dominadores* find(Nodo_dominadores* u, Nodo_dominadores* v, int i, int d);
-	Nodo_dominadores* lowest(Nodo_dominadores* u, Nodo_dominadores* v, D_arvore* arv);
-	Nodo_dominadores* raiz(Nodo_dominadores* u);
+	string linha_normal;
+	string linha_ordem;
+
+	void adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, bool realizado= false);
 };
-
-class D_arvore {
-public:
-	list<Nodo_dominadores*> raizes;
-
-	D_arvore(list<Nodo_dominadores*> raizes_);
-	Nodo_dominadores* raiz(Nodo_dominadores* u);
-	int depth(Nodo_dominadores* u);
-	void merge(Nodo_dominadores* u, Nodo_dominadores* v);
-	Nodo_dominadores* lowest(Nodo_dominadores* u, Nodo_dominadores* v, A_arvore* arv);
-
-};
-
-class Region {
-public:
-	Nodo_dominadores* header;
-	list<Nodo_dominadores*> membros;
-	list<Region*> sucessores;
-	list<Region*> antecessores;
-
-	Region(Nodo_dominadores* header_);
-
-	void juntar(Region* r);
-};
-
-class Nodo_grafo {
-public:
-	Atributos_vertice* nodo;
-	list<Nodo_grafo*> sucessores;
-	list<Nodo_grafo*> antecessores;
-
-	Nodo_grafo(Atributos_vertice* nodo_);
-	void adicionar_sucessor(Nodo_grafo * sucessor);
-	void adicionar_antecessor(Nodo_grafo * antecessor);
-	void print_filhos();
-	void pos_ordem(list<Nodo_grafo*> &destino);
-};
-
-
 
 #endif /* ESTRUTURA_H */

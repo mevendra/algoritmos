@@ -42,7 +42,41 @@ void reinicia_cores() {
 	cores.push_back("#FF8C00");
 	cores.push_back("#D8BFD8");
 	cores.push_back("#EEE8AA");
+
+	for (int i = 0; i < 1000; i++) {
+		string nova_cor = proxima_cor_aleatoria();
+		nova_cor = "#" + nova_cor;
+
+		cores.push_back(nova_cor);
+	}
 }
+
+string proxima_cor_aleatoria() {
+	stringstream stream;
+	string retorno = "";
+	int numero;
+
+	int um = rand() % 16;
+	int dois = rand() % 16;
+	int tres = rand() % 16;
+	int quatro = rand() % 16;
+	int cinco = rand() % 16;
+	int seis = rand() % 16;
+
+	numero = um;
+	numero = (numero << 4) + dois;
+	numero = (numero << 4) + tres;
+	numero = (numero << 4) + quatro;
+	numero = (numero << 4) + cinco;
+	numero = (numero << 4) + seis;
+
+	stream << hex << numero;
+	retorno = stream.str();
+
+	return retorno;
+}
+
+static int atual = 0;
 
 //Cor
 Cor::Cor(int r_, int g_, int b_) {
@@ -161,6 +195,15 @@ Cor* Hash::encontrar_cor(set<int> numero) {
 			return cores[i];
 	}
 	return 0;
+}
+int Hash::encontrar_indice_cor(set<int> numero) {
+	cor_cmp cmp;
+	for (int i = 0; i < numeros.size(); i++)
+	{
+		if (cmp.operator()(numeros[i], numero))
+			return i;
+	}
+	return -1;
 }
 
 //Vertice
@@ -432,7 +475,7 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 					continue;
 				}
 			} else {
-				bool aux = false;
+				bool aux_ = false;
 				for (list<Vertice*> l: casamentos) {
 					if (contem(v, l)) {
 						if (!segundo) {
@@ -448,14 +491,19 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 						}
 					}
 				}
-				if (aux)
+				if (aux_)
 					continue;
 			}
 			aux++;
 		}
 
+
+
 		//Se segundo ego tem geracao maior, inverte a ordem dos casamentos
 		if (n_segundo + n_terceiro > n_primeiro + aux) {
+		/*if ((( (n_segundo > n_terceiro ? n_segundo : n_terceiro) == (n_primeiro > aux ? n_primeiro : aux)) &&
+				((n_segundo < n_terceiro ? n_segundo : n_terceiro) > (n_primeiro < aux ? n_primeiro : aux))) ||
+				((n_segundo > n_terceiro ? n_segundo : n_terceiro) > (n_primeiro > aux ? n_primeiro : aux))) {*/
 			//Geracao do casamento interno tem menos descendentes
 			anel.clear();
 			vertices.clear();
@@ -468,46 +516,6 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 			this -> adicionar_elemento(caminho, casamentos_, juncoesUtilizadas, true);
 		}
 	}
-
-/*
-	//Verifica se escolheu o casamento com menor geração
-	if (casamentos.size() == 2 && !realizado) {
-		//Calcula o numero da geracao do primeiro e segundo ego
-		int num = 0;
-		bool segundo = false;
-		int num_2 = 0;
-		Vertice* ultimo = anel.front();
-		for (Vertice* v: anel) {
-			if (contem(v, ultimo -> filhos)) {
-				num--;
-			} else if (contem(v, ultimo -> pais)) {
-				num++;
-			} else if (contem(v, ultimo -> casados)) {
-				ultimo = v;
-				if (segundo)
-					break;
-				segundo = true;
-				num_2 = num;
-				num = 0;
-			}
-			ultimo = v;
-		}
-
-		//Se segundo ego tem geracao maior, inverte a ordem dos casamentos
-		bool res = num_2 < 0 ? num_2 < num : num_2 > num;
-		if (num_2 < num) {
-			//Geracao do casamento interno tem menos descendentes
-			anel.clear();
-			vertices.clear();
-			caminhos.clear();
-			casamentos.clear();
-			juncoes.clear();
-
-			casamentos_.push_back(casamentos_.front());
-			casamentos_.pop_front();
-			this -> adicionar_elemento(caminho, casamentos_, juncoesUtilizadas, true);
-		}
-	}*/
 
 	//Salva o anel nas strings
 	linha_normal = "";

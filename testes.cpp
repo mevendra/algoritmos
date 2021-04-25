@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]) {
 	//Primeiro argumento = nome arquivo, segundo = numero de casamentos para testar aneis
 	string entrada = "entrada/";
-	int k = 1;
+	int k = 2;
 	if (argc == 1) {
 		//entrada += "rede_pequena.txt";
 		entrada += "Arara4MaqPar.txt";
@@ -26,15 +26,48 @@ int main(int argc, char *argv[]) {
 	else
 		return 1;
 
+
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	printf("Inicio\n");
 
+	colorir_grafo_mat(g);
+	//m_escreve_aneis_completo(g, k, "aneis/teste_acertos.txt");
+	list<Anel*> aneis;
+	encontra_aneis(g, aneis, k);
+	escreve_aneis_coloridos_completo(g, aneis, "aneis/arara_a2c2_coloridos.txt");
+
+	/*
+	if (k == 1) {
+		colorir_grafo(g);
+		list<Anel*> aneis;
+		encontra_aneis(g, aneis, 2);
+		escreve_aneis_coloridos_completo(g, aneis, "aneis/aneis_2_coloridos.txt");
+		escreve_lista_cores(g, "aneis/lista_cores_aneis_2_coloridos.txt");
+	} else if (k == 2) {
+		colorir_grafo_mat(g);
+		list<Anel*> aneis;
+		encontra_aneis(g, aneis, 2);
+		escreve_aneis_coloridos_completo(g, aneis, "aneis/aneis_2_coloridos_mat.txt");
+		escreve_lista_cores(g, "aneis/lista_cores_aneis_2_coloridos_mat.txt");
+	} else {
+		colorir_grafo(g);
+		list<Anel*> aneis;
+		encontra_aneis(g, aneis, 2);
+		escreve_aneis_coloridos_completo(g, aneis, "aneis/aneis_2_coloridos_pat.txt");
+		escreve_lista_cores(g, "aneis/lista_cores_aneis_2_coloridos_pat.txt");
+	}*/
+
+	for (int i = 0; i < g -> g_numero_vertices(); i++) {
+		if (g -> atributos[i] -> pais.size() == 0 && g -> atributos[i] -> g_tipo() == 'e')
+			printf("aqui\n");
+	}
 
 
 	//testar_encontrar_aneis(g, 2);
 	//testar_encontrar_aneis_coloridos(g, 2);
 
 
+	printf("Terminou!\n");
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
 
@@ -53,7 +86,7 @@ int main(int argc, char *argv[]) {
 		testar_encontrar_aneis(g, k);
 		testar_encontrar_aneis_coloridos(g, k);*/
 
-
+/*
 		colorir_grafo(g);
 		m_escreve_grafo_graphviz(g, true);
 		m_escreve_arvore_graphviz(g);
@@ -397,10 +430,11 @@ void m_escreve_aneis_completo(Grafo* g, int numero_casamentos, string caminho)
 void m_escreve_aneis_coloridos_completo(Grafo* g, int numero_casamentos, string caminho)
 {
 	printf("Escreve aneis coloridos!\n");
+	colorir_grafo(g);
 	list<Anel*> aneis;
 	encontra_aneis_coloridos(g, aneis, numero_casamentos);
 
-	escreve_aneis_completo(aneis, caminho.c_str());
+	escreve_aneis_coloridos_completo(g, aneis, caminho.c_str());
 	printf("Terminou!\n");
 }
 

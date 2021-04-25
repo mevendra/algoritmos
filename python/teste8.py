@@ -4,6 +4,10 @@
 #Abre Arquivos e escreve o caminho deles
 
 def escreve(fonte_aneis, fonte_casamentos, destino_acerto, destino_erro):
+    ad = "5"
+    destino_erro = ad + destino_erro
+    destino_acerto = ad + destino_acerto
+    
     arq_da = open(destino_acerto, "w")
     arq_de = open(destino_erro, "w")
     arq_da.close()
@@ -70,22 +74,44 @@ def escreve(fonte_aneis, fonte_casamentos, destino_acerto, destino_erro):
             dia_1 = dia_2
             dia_2 = aux
 
-        if dia_1 == -1 or dia_2 == -1 or dia_2 == "None" or dia_1 == "None":
+        if dia_1 == -1 or dia_2 == -1 :#or dia_2 == "None" or dia_1 == "None":
+            indice = indice + 1
+            continue
+            
+        if dia_1 == "None" and dia_2 == "None":
+            indice = indice + 1
+            continue
+        if dia_1 == "None":
+            arq_de.write(aneis_txt[indice])
+            indice = indice + 1
+            continue
+        elif dia_2 == "None":
+            arq_da.write(aneis_txt[indice])
             indice = indice + 1
             continue
 
         aux_1 = dia_1.split("-")
         aux_2 = dia_2.split("-")
 
+        enc = True
         for i in range(len(aux_1)):
             if aux_1[i] > aux_2[i]:
                 arq_da.write(aneis_txt[indice])
+                enc = False
                 break
             elif aux_1[i] < aux_2[i]:
                 arq_de.write(aneis_txt[indice])
+                enc = False
                 break
+           
+        #Datas iguais é acerto     
+        if enc:
+        	arq_da.write(aneis_txt[indice])
         
         indice = indice + 1
         
 
-escreve("Fonte\\aneis_2_rede_grande.txt", "Fonte\\casamentos_rede_grande_c.txt", "Resultados\\teste8_acerto.txt", "Resultados\\teste8_erro.txt")
+#escreve("Fonte\\aneis_2_rede_grande.txt", "Fonte\\casamentos_rede_grande_c.txt", "Resultados\\teste8_acerto.txt", "Resultados\\teste8_erro.txt")
+
+
+escreve("rede_grande_soma.txt", "casamentos_rede_grande_c.txt", "a_acaso.txt", "e_acaso.txt")

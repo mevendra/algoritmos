@@ -727,6 +727,8 @@ void ordem_topologica(Vertice* fonte, T& destino)
 
 void define_min_max_cores(Grafo* g)
 {
+	init_map(g);
+
 	for (Vertice* v: g -> atributos) {
 		v -> min_cores = vector<int>(g -> g_numero_vertices(), INT_MAX);
 		v -> max_cores = vector<int>(g -> g_numero_vertices(), 0);
@@ -737,7 +739,7 @@ void define_min_max_cores(Grafo* g)
 		procedimento_min_max(v, v, colors);
 		for (int i = 0; i < g -> g_numero_vertices(); i++) {
 			if (v -> min_cores[i] == INT_MAX)
-				v -> min_cores[i] = 0;
+				v -> min_cores[i] = -1;
 		}
 	}
 
@@ -1095,6 +1097,9 @@ void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos)
 	vector<list<int>> casamentos;
 	encontra_casamentos(g, casamentos);
 	printf("Encontrou casamentos\n");
+
+
+	define_min_max_cores(g);
 
 	//3.3
 	//Define os conjuntos a serem trabalhados e operam encontrando os aneis sobre eles
@@ -1583,10 +1588,25 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 		list<Vertice*> caminho_atual;
 
 		clock_t inicio = clock();
+
+		thread threads[juncoes -> max_cores[destino -> primeiro -> g_id()] + juncoes -> max_cores[destino -> segundo -> g_id()]];
+		int zi = 0;
+		set<int>  cores;
+		for (int i = 1; i <= juncoes -> max_cores[destino -> primeiro -> g_id()]; i++)
+			//encontra_caminhos_cores_especificas(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice], cores, i);
+			threads[zi++] = thread(encontra_caminhos_cores_especificas, ref(juncoes), ref(destino -> primeiro), ref(caminho_atual), ref(caminhos_front[indice]), ref(cores), i);
+		for (int i = 1; i <= juncoes -> max_cores[destino -> segundo -> g_id()]; i++)
+			//encontra_caminhos_cores_especificas(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice], cores, i);
+			threads[zi++] = thread(encontra_caminhos_cores_especificas, ref(juncoes), ref(destino -> segundo), ref(caminho_atual), ref(caminhos_back[indice]), ref(cores), i);
+
+		for (int i = 0; i < zi; i++)
+			threads[i].join();
+/*
 		encontra_caminhos(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
 		encontra_caminhos(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
-		tempo_procura_caminhos += clock() - inicio;
+*/
 
+		tempo_procura_caminhos += clock() - inicio;
 		indice++;
 	}
 
@@ -1623,6 +1643,31 @@ void encontra_caminhos(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_a
 		list<Vertice*> caminho_aux(caminho_atual);
 		caminho_aux.push_back(filho);
 		encontra_caminhos(filho, destino, caminho_aux, caminhos);
+	}
+}
+
+void encontra_caminhos_cores_especificas(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<list<Vertice*>> &caminhos, set<int> cores, int cores_restantes)
+{
+	bool nova_cor = cores.insert(fonte -> cor_int).second;
+	if (nova_cor)
+		cores_restantes--;
+	if (cores_restantes < 0)
+		return;
+	if (fonte == destino && cores_restantes == 0) {
+		caminhos.push_back(caminho_atual);
+		return;
+	}
+
+	for (Vertice* filho: fonte -> filhos){
+		//MUDAR  colocar condicao
+		if (filho -> max_cores[destino-> g_id()] + cores.size() < cores_restantes)
+			continue;
+		else if (filho -> min_cores[destino -> g_id()] == -1)
+			continue;
+
+		list<Vertice*> caminho_aux(caminho_atual);
+		caminho_aux.push_back(filho);
+		encontra_caminhos_cores_especificas(filho, destino, caminho_aux, caminhos, cores, cores_restantes);
 	}
 }
 
@@ -1727,12 +1772,14 @@ void verifica_anel(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<l
 	destino.push_back(novo);
 
 	//Para escrever sempre que encontrar um anel
-	/*
+/*
 	FILE* arquivo;
-	arquivo = fopen("entrada/aneis_ordem_3.txt", "a");
-	fputs(novo -> linha_ordem.c_str(), arquivo);
+	arquivo = fopen("aneis/aneis_ordem_3.txt", "a");
+	fputs(novo -> linha_normal.c_str(), arquivo);
 	fclose(arquivo);
-	*/
+
+	delete novo;*/
+
 
 	tempo_verifica_anel += clock() - inicio;
 }

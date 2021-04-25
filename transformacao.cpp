@@ -298,7 +298,6 @@ Grafo* trabalha_arquivo(char const* caminho)
 	return retorno;
 }
 
-
 void coloca_transicoes(int** grafo, vector<Vertice*> atributos) {
 	int id;
 	for (Vertice* v: atributos)
@@ -914,6 +913,8 @@ void escreve_aneis_completo(list<Anel*> aneis, char const* caminho) {
 	fputs(linha.c_str(), arquivo);
 	int count = 0;
 	for (Anel* a: aneis) {
+		if (a -> anel.size() == 0)
+			continue;
 		count ++;
 		linha = to_string(count);	//Anel
 		linha += ", ";
@@ -1067,6 +1068,335 @@ void escreve_aneis_completo(list<Anel*> aneis, char const* caminho) {
 	fclose(arquivo);
 }
 
+list<Vertice*> encontra_caminho(Vertice* v, list<list<Vertice*>> l) {
+	for (list<Vertice*> li: l)
+		for (Vertice* vi: li)
+			if (vi == v)
+				return li;
+
+	return list<Vertice*>();
+}
+
+bool contem (Vertice* v, Vertice* u, list<list<Vertice*>> lista) {
+	for (list<Vertice*> l: lista) {
+		if (l.front() == v) {
+			if (l.back() == u)
+				return true;
+		} else if (l.front() == u)
+			if (l.back() == v)
+				return true;
+	}
+
+	return false;
+}
+
+void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* caminho)
+{
+	if (aneis.empty() || !g -> map)
+		return;
+
+	Hash* map = g -> map;
+	int tam = aneis.front() -> casamentos.size();
+
+	string linha = "Anel, ";
+	for (int i = 0; i < tam; i++) {
+		linha += "Ego";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+		linha += "SxEgo";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+		linha += "CorEgo";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+		linha += "Alter";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+		linha += "SxAlter";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+		linha += "CorAlter";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+	}
+	linha += "Percurso, BarryPercurso,PercursoColorido, Parente, ";
+	for (int i = 0; i < tam; i++) {
+		linha += "Casal";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+	}
+	for (int i = 0; i < tam; i++) {
+		linha += "Geração";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+
+		linha += "Lateral";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+	}
+	for (int i = 0; i < tam; i++) {
+		linha += "Cnx";
+		if (tam > 1)
+			linha += to_string(i);
+		if (i < tam - 1)
+			linha += ", ";
+	}
+	linha += ", Numero de Cores, Cores";
+
+	if (tam > 1) {
+		for (int i = 0; i < tam; i++) {
+			linha += ", Parente";
+			linha += to_string(i);
+		}
+
+	}
+	linha += "\n";
+
+
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	fputs(linha.c_str(), arquivo);
+	int count = 0;
+	for (Anel* a: aneis) {
+		count ++;
+		linha = to_string(count);	//Anel
+		linha += ", ";
+
+		for (list<Vertice*> casamentos: a -> casamentos) {
+			if (casamentos.front() -> g_tipo() == 't') {
+				linha += to_string(casamentos.front() -> g_numero());	//EgoX
+				linha += ", ";
+				linha += "m";		//SxEgoX
+				linha += ", ";
+				linha += to_string(map -> encontrar_indice_cor(casamentos.front() -> cor));	//EgoCor
+				linha += ", ";
+				linha += to_string(casamentos.back() -> g_numero());	//AlterX
+				linha+= ", ";
+				linha += "f";		//SxAlterX
+				linha += ", ";
+				linha += to_string(map -> encontrar_indice_cor(casamentos.back() -> cor));	//AlterCor
+				linha += ", ";
+			} else {
+				linha += to_string(casamentos.back() -> g_numero());	//EgoX
+				linha+= ", ";
+				linha += "m";		//SxEgoX
+				linha += ", ";
+				linha += to_string(map -> encontrar_indice_cor(casamentos.back() -> cor));	//EgoCor
+				linha += ", ";
+				linha += to_string(casamentos.front() -> g_numero());	//AlterX
+				linha+= ", ";
+				linha += "f";		//SxAlterX
+				linha += ", ";
+				linha += to_string(map -> encontrar_indice_cor(casamentos.front() -> cor));	//AlterCor
+				linha += ", ";
+			}
+		}
+
+		//Percurso
+		for (Vertice* v: a -> anel) {
+			linha += to_string(v -> g_numero());
+			linha += " ";
+		}
+		linha += ", ";
+
+		//BaryryPercurso
+		for (Vertice* v: a -> anel) {
+			if (contem (v, a -> juncoes)) {
+				linha += "(";
+				if (v -> g_tipo() == 't')
+					linha += "m";
+				else
+					linha += "f";
+				linha += to_string(v -> g_numero());
+				linha += ") ";
+			} else {
+				if (v -> g_tipo() == 't')
+					linha += "m";
+				else
+					linha += "f";
+				linha += to_string(v -> g_numero());
+				linha += " ";
+			}
+		}
+		linha += ", ";
+
+		//PercursoColorido
+		for (Vertice* v: a -> anel) {
+			bool jun = contem (v, a -> juncoes);
+			if (jun)
+				linha += "(";
+			linha += to_string(v -> g_numero());
+			linha+= "-";
+			linha += to_string(map -> encontrar_indice_cor(v -> cor));
+			if (jun)
+				linha += ") ";
+			else
+				linha += " ";
+		}
+		linha += ", ";
+
+		//Parente
+		Vertice* ultimo = a -> anel.front();
+		for (Vertice* v: a -> anel) {
+			if (contem(v, ultimo, a -> casamentos)) {
+				if (v -> g_tipo() == 'e') {
+					linha += "W";
+				} else {
+					linha += "H";
+				}
+			} else if (contem(v, ultimo -> filhos)) {
+				if (v -> g_tipo() == 'e') {
+					linha += "D";
+				} else {
+					linha += "S";
+				}
+			} else if (contem(v, ultimo -> pais)) {
+				if (v -> g_tipo() == 'e') {
+					linha += "M";
+				} else {
+					linha += "F";
+				}
+			}
+			ultimo = v;
+		}
+
+		//CasalX
+		for (list<Vertice*> casamentos: a -> casamentos) {
+			linha += ", ";
+			linha += to_string(casamentos.front() -> g_numero());
+			linha+= "-";
+			linha += to_string(map -> encontrar_indice_cor(casamentos.front() -> cor));
+			linha += " ";
+			linha += to_string(casamentos.back() -> g_numero());
+			linha+= "-";
+			linha += to_string(map -> encontrar_indice_cor(casamentos.back() -> cor));
+		}
+		//Calculos de geracao, lateral e cnx
+		list<Vertice*> atuais(a -> anel);
+		list<int> cnx;
+		list<int> geracao;
+		vector<int> lateral;
+		int lat_e = 0;
+		int lat_d = 0;
+		int num = 0;
+		int num_cnx = 0;
+
+		vector<Vertice*> vetor;
+		for (Vertice* v: a -> anel)
+			vetor.push_back(v);
+
+		bool primeiro = true;
+		int i = 0;
+		for (Vertice* att: a -> juncoes) {
+			list<Vertice*> caminho = encontra_caminho(att, a -> caminhos);
+			if (caminho.size() == 0)
+				throw runtime_error("Caminho nao encontrado");
+
+			bool primeiro = true;
+			for (Vertice* v: caminho) {
+				if (primeiro) {
+					if (contem(v, a -> juncoes)) {
+						primeiro = false;
+						continue;
+					}
+					num++;
+					num_cnx++;
+					lat_e++;
+				} else {
+					num--;
+					num_cnx++;
+					lat_d++;
+				}
+			}
+			if (lat_d > lat_e)
+				lateral.push_back(lat_e);
+			else
+				lateral.push_back(lat_d);
+			cnx.push_back(num_cnx);
+			geracao.push_back(num);
+			num = 0;
+			lat_e = 0;
+			lat_d = 0;
+			num_cnx = 0;
+		}
+
+		int i_ = 0;
+		//Geracao e Lateral
+		for (int i: geracao) {
+			linha += ", ";
+			linha += "G";
+			linha += to_string(i);
+			linha += ", ";
+			linha += to_string(lateral[i_]);
+
+			i_++;
+		}
+
+		//Cnx
+		for (int i: cnx) {
+			linha += ", ";
+			linha += to_string(i);
+
+		}
+
+		//Numero de Cores
+		set<int> cores;
+		for (Vertice* v: a -> anel) {
+			int i = map -> encontrar_indice_cor(v -> cor);
+			if (i == -1)
+				throw runtime_error("Cor invalida!");
+			cores.insert(i);
+		}
+		linha += ", ";
+		linha += to_string(cores.size());
+		linha += ", ";
+
+		//Cores
+		for (int i: cores) {
+			linha += to_string(i);
+			linha += " ";
+		}
+
+		if (tam > 1) {
+			linha += ", ";
+			//Parentes
+			Vertice* ultimo = a -> anel.front();
+			for (Vertice* v: a -> anel) {
+				if (contem(v, ultimo, a -> casamentos)) {
+					linha += ", ";
+				} else if (contem(v, ultimo -> filhos)) {
+					if (v -> g_tipo() == 'e') {
+						linha += "D";
+					} else {
+						linha += "S";
+					}
+				} else if (contem(v, ultimo -> pais)) {
+					if (v -> g_tipo() == 'e') {
+						linha += "M";
+					} else {
+						linha += "F";
+					}
+				}
+				ultimo = v;
+			}
+		}
+
+		linha += "\n";
+		fputs(linha.c_str(), arquivo);
+	}
+
+	fclose(arquivo);
+}
+
 void escreve_arvore_graphviz(Grafo* g, vector<Vertice*> dominadores, bool colorir, char const* caminho) {
 	//Atributos para leitura de arquivo
 	FILE* arquivo;
@@ -1106,6 +1436,7 @@ void escreve_arvore_graphviz(Grafo* g, vector<Vertice*> dominadores, bool colori
 	fputs("}\n", arquivo);
 	fclose(arquivo);
 }
+
 
 
 void escreve_comum_entre_grafos(vector<Grafo*> grafos, char const* caminho)
@@ -1212,4 +1543,21 @@ void escreve_informacao_grafos(Grafo* g, vector<Grafo*> grafos, char const* cami
 	fclose(arquivo);
 }
 
+void escreve_lista_cores(Grafo* g, char const* caminho)
+{
+	if (!g -> map)
+		return;
 
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string lin = "Numero, Cor\n";
+	fputs(lin.c_str(), arquivo);
+
+	for (Vertice* v: g -> atributos) {
+		lin = to_string(v -> g_numero());
+		lin += ", ";
+		lin += to_string(g -> map -> encontrar_indice_cor(v -> cor));
+		lin += "\n";
+		fputs(lin.c_str(), arquivo);
+	}
+}

@@ -4,6 +4,10 @@
 #Abre Arquivos e escreve o caminho deles
 
 def escreve(fonte_aneis, fonte_casamentos, destino_acerto, destino_erro, destino_inc):
+    ad = "4"
+    destino_acerto = ad + destino_acerto
+    destino_erro = ad + destino_erro
+
     arq_da = open(destino_acerto, "w")
     arq_de = open(destino_erro, "w")
     arq_di = open(destino_inc, "w")
@@ -58,31 +62,33 @@ def escreve(fonte_aneis, fonte_casamentos, destino_acerto, destino_erro, destino
                 dia_2 = aux_dia
                 continue
 
-        print(dia_1)
-        print(dia_2)
         if dia_1 == -1 or dia_2 == -1 or dia_2 == "None" or dia_1 == "None":
             arq_di.write(aneis_txt[indice])
             indice = indice + 1
             continue
 
         aux_1 = dia_1.split("-")
-        aux_2 = dia_2.split("-")
+        aux_2 = dia_2.split("-")        
 
-        enc = True
+        enc = False
         for i in range(len(aux_1)):
             if aux_1[i] > aux_2[i]:
-                enc = False
+                enc = True
                 arq_da.write(aneis_txt[indice])
                 break
             elif aux_1[i] < aux_2[i]:
-                enc = False
+                enc = True
                 arq_de.write(aneis_txt[indice])
                 break
         
-        if enc:
+        if not enc:
             arq_di.write(aneis_txt[indice])
         
         indice = indice + 1
         
 
-escreve("Fonte\\aneis_2_rede_grande.txt", "Fonte\\casamentos_rede_grande_c.txt", "Resultados\\teste7_acerto.txt", "Resultados\\teste7_erro.txt", "Resultados\\teste7_inc.txt")
+#escreve("Fonte\\aneis_2_rede_grande.txt", "Fonte\\casamentos_rede_grande_c.txt", "Resultados\\teste7_acerto.txt", "Resultados\\teste7_erro.txt", "Resultados\\teste7_inc.txt")
+
+escreve("teste_acertos.txt", "casamentos_rede_grande_c.txt", "a_soma.txt", "e_soma.txt", "inc.txt")
+#escreve("rede_grande_soma.txt", "casamentos_rede_grande_c.txt", "a_soma.txt", "e_soma.txt", "inc.txt")
+#escreve("rede_grande_maior.txt", "casamentos_rede_grande_c.txt", "a_maior.txt", "e_maior.txt", "inc.txt")

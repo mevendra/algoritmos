@@ -12,6 +12,8 @@
 #include <iomanip>
 #include <sstream>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
@@ -21,6 +23,7 @@ bool contem(T t, list<T> l);
 static list<string> cores;
 string primeira_cor();
 void reinicia_cores();
+string proxima_cor_aleatoria();
 
 class Nodo;
 
@@ -105,6 +108,7 @@ class Hash {
 		~Hash();
 		Cor* encontrar_cor(int numero);
 		Cor* encontrar_cor(set<int> numero);
+		int encontrar_indice_cor(set<int> numero);
 		void adicionar_cor(int numero, Cor* cor);
 		void adicionar_cor(set<int> numero, Cor* cor);
 		void limpar();
@@ -230,6 +234,7 @@ public:
 	list<list<Vertice*>> caminhos;
 	list<list<Vertice*>> casamentos;
 	list<Vertice*> juncoes;
+	list<Vertice*> egos_alters;
 
 	string linha_normal;
 	string linha_ordem;

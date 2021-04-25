@@ -26,8 +26,10 @@ void escreve_max_cores(Grafo* g, char const* caminho);
 void escreve_aneis(list<Anel*> aneis, Grafo* g, char const* caminho);
 void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char const* caminho);
 void escreve_aneis_completo(list<Anel*> aneis, char const* caminho);
+void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* caminho);
 void escreve_comum_entre_grafos(vector<Grafo*> grafos, char const* caminho);
 void escreve_informacao_grafos(Grafo* g, vector<Grafo*> grafos, char const* caminho);
+void escreve_lista_cores(Grafo* g, char const* caminho);
 
 void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenhar);
 void coloca_transicoes(int** grafo, vector<Vertice*> atributos);

@@ -14,7 +14,6 @@
 #include <time.h>
 
 static int tempo;
-static int ordem_topologica_vector;
 
 static clock_t tempo_encontra_anel_p = clock();
 static clock_t tempo_verifica_anel = tempo_encontra_anel_p;
@@ -54,6 +53,7 @@ void encontra_juncoes(Grafo* g, list<JuncoesDe*>& destino);
 void procedimento_dominadores(Grafo* g, vector<Vertice*> u, Vertice* s, vector<Vertice*> &dominadores_imediatos);
 void cobertura_dominadores(Grafo* g, vector<Vertice*> u, Vertice* s, vector<Vertice*>& fd);
 
+//6
 ;
 
 //7
@@ -61,6 +61,8 @@ void passar_geracao_filhos(Vertice* v);
 void passar_geracao_pais(Vertice* v);
 void encontra_folhas(Grafo* g, list<Vertice*>& destino);
 
+
+void encontra_caminhos_cores_especificas(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<list<Vertice*>> &caminhos, set<int> cores, int numero);
 //8
 void encontra_casamentos(Grafo* g, vector<list<int>>& casamentos);
 void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);

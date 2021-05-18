@@ -251,8 +251,16 @@ Grafo::Grafo(int numero_vertices_, vector<Vertice*> atributos_, Vertice* raiz_, 
 	grafo = grafo_;
 }
 
+Grafo::~Grafo() {
+	for (Vertice* v: atributos)
+		if (v)
+			delete v;
+
+	delete grafo;
+}
+
 Vertice* Grafo::encontrar_atributo(int i) {
-	if (i >= numero_vertices || i < 0)
+	if (i >= atributos.size() || i < 0)
 		return new Vertice(-1, -1, 'e');
 	else
 		return atributos[i];
@@ -260,20 +268,29 @@ Vertice* Grafo::encontrar_atributo(int i) {
 
 void Grafo::resetar() {
 	for (Vertice* v: atributos)
-		v -> resetar();
+		if (v)
+			v -> resetar();
 }
 
-void Grafo::adicionar_vertice(Vertice* v) {
+void Grafo::adicionar_vertice(Vertice* v, bool eh_raiz) {
 	//Matriz é ajustada no inicio, não pode ser aumentada
-	atributos[numero_vertices] = v;
-	numero_vertices++;
+	//atributos[numero_vertices] = v;	todo
+	if (v -> g_id() == numero_vertices) {
+		atributos.push_back(v);
+		numero_vertices++;
+		if (eh_raiz)
+			raiz = v;
+	} else
+		throw runtime_error("Em Grafo::adicionar_vertice, vértice com id invalido adicionado");
 }
 
 void Grafo::remover_vertice(Vertice* v) {
+	if (!v)
+		return;
 	Vertice* aux = encontrar_atributo(v -> g_id());
 	if (aux == v) {
 		numero_vertices--;
-		atributos[numero_vertices] = 0;
+		atributos[v -> g_id()] = 0;
 
 		for (Vertice* x: v -> pais)
 			x -> filhos.remove(v);

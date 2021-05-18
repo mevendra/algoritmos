@@ -31,10 +31,25 @@ int main(int argc, char *argv[]) {
 	printf("Inicio\n");
 
 	colorir_grafo_mat(g);
-	//m_escreve_aneis_completo(g, k, "aneis/teste_acertos.txt");
-	list<Anel*> aneis;
-	encontra_aneis(g, aneis, k);
-	escreve_aneis_coloridos_completo(g, aneis, "aneis/arara_a2c2_coloridos.txt");
+	define_super_sob(g);	//min e max
+	descolorir(g);
+	colorir_grafo_mat(g);
+	define_min_max_cores(g);	//min_ e max_
+
+	for (Vertice* v: g -> atributos) {
+		int x = v -> g_id();
+		for (Vertice* w: g -> atributos) {
+			int y = w -> g_id();
+
+			if (v -> min_cores[y] != v -> min_cores_[y])
+				printf("Em (%d -> %d), min = %d e %d\n", x, y, v -> min_cores[y], v -> min_cores_[y]);
+
+			if (v -> max_cores[y] != v -> max_cores_[y])
+				printf("Em (%d -> %d), max = %d e %d\n", x, y, v -> max_cores[y], v -> max_cores_[y]);
+		}
+	}
+
+	printf("It does't get an error!\n");
 
 	/*
 	if (k == 1) {
@@ -56,11 +71,6 @@ int main(int argc, char *argv[]) {
 		escreve_aneis_coloridos_completo(g, aneis, "aneis/aneis_2_coloridos_pat.txt");
 		escreve_lista_cores(g, "aneis/lista_cores_aneis_2_coloridos_pat.txt");
 	}*/
-
-	for (int i = 0; i < g -> g_numero_vertices(); i++) {
-		if (g -> atributos[i] -> pais.size() == 0 && g -> atributos[i] -> g_tipo() == 'e')
-			printf("aqui\n");
-	}
 
 
 	//testar_encontrar_aneis(g, 2);

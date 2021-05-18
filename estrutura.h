@@ -131,6 +131,8 @@ class Vertice {
 		set<set<int>, set_cmp> cores;	//Cores até as folhas
 		vector<int> min_cores;
 		vector<int> max_cores;
+		vector<int> min_cores_;
+		vector<int> max_cores_;
 
 		//Valores auxiliares utilizados por metodos
 		int geracao = -1;
@@ -152,18 +154,19 @@ class Vertice {
 };
 
 class Grafo {
-	int numero_vertices;
-	Vertice* raiz = 0;
 
 	public:
 		int** grafo;
 		Hash* map = 0;
+		int numero_vertices;
 		vector<Vertice*> atributos;
+		Vertice* raiz = 0;
 
 		Grafo(int numero_vertices_, vector<Vertice*> atributos_, int** grafo_);
 		Grafo(int numero_vertices_, vector<Vertice*> atributos_, Vertice* raiz, int** grafo_);
+		~Grafo();
 		Vertice* encontrar_atributo(int i);
-		void adicionar_vertice(Vertice* v);
+		void adicionar_vertice(Vertice* v, bool eh_raiz = false);
 		void remover_vertice(Vertice* v);
 		void resetar();
 		int g_numero_vertices() { return numero_vertices; }
@@ -234,7 +237,7 @@ public:
 	list<list<Vertice*>> caminhos;
 	list<list<Vertice*>> casamentos;
 	list<Vertice*> juncoes;
-	list<Vertice*> egos_alters;
+	list<Vertice*> ego;
 
 	string linha_normal;
 	string linha_ordem;

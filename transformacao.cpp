@@ -1171,34 +1171,26 @@ void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* c
 		linha = to_string(count);	//Anel
 		linha += ", ";
 
-		for (list<Vertice*> casamentos: a -> casamentos) {
-			if (casamentos.front() -> g_tipo() == 't') {
-				linha += to_string(casamentos.front() -> g_numero());	//EgoX
-				linha += ", ";
-				linha += "m";		//SxEgoX
-				linha += ", ";
-				linha += to_string(map -> encontrar_indice_cor(casamentos.front() -> cor));	//EgoCor
-				linha += ", ";
-				linha += to_string(casamentos.back() -> g_numero());	//AlterX
+		//Ego e Alter
+		Vertice* u = a -> anel.back();
+		int id = 0;
+		for (Vertice* v: a -> anel) {
+			if (contem(v, u, a -> casamentos)) {
+				linha += to_string(v -> g_numero());	//EgoX
 				linha+= ", ";
-				linha += "f";		//SxAlterX
+				linha += v -> g_tipo() == 't' ? "m" : "f";		//SxEgoX
 				linha += ", ";
-				linha += to_string(map -> encontrar_indice_cor(casamentos.back() -> cor));	//AlterCor
+				linha += to_string(map -> encontrar_indice_cor(v -> cor));	//EgoCor
 				linha += ", ";
-			} else {
-				linha += to_string(casamentos.back() -> g_numero());	//EgoX
+				linha += to_string(u -> g_numero());	//AlterX
 				linha+= ", ";
-				linha += "m";		//SxEgoX
+				linha += u -> g_tipo() == 't' ? "m" : "f";			//SxAlterX
 				linha += ", ";
-				linha += to_string(map -> encontrar_indice_cor(casamentos.back() -> cor));	//EgoCor
+				linha += to_string(map -> encontrar_indice_cor(u -> cor));	//AlterCor
 				linha += ", ";
-				linha += to_string(casamentos.front() -> g_numero());	//AlterX
-				linha+= ", ";
-				linha += "f";		//SxAlterX
-				linha += ", ";
-				linha += to_string(map -> encontrar_indice_cor(casamentos.front() -> cor));	//AlterCor
-				linha += ", ";
+				id++;
 			}
+			u = v;
 		}
 
 		//Percurso

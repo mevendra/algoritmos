@@ -551,6 +551,216 @@ void descolorir(Grafo* g)
 	}
 }
 
+//g é colorido
+void define_super_sob(Grafo* g)
+{
+	//Inicia cores em g
+	init_map(g);
+
+	//Cria um grafo que vai ser operado
+	Grafo* copia;
+	copiar(g, copia);
+
+	//Inicializa os atributos de g
+	for (Vertice* v: g -> atributos) {
+		v -> min_cores = vector<int>(g -> g_numero_vertices(), INT_MAX);
+		v -> max_cores = vector<int>(g -> g_numero_vertices(), 0);
+	}
+
+	//Cria raiz inicial para copia( se não houver)
+	Vertice* raiz = copia -> g_raiz();
+	if (!raiz) {
+		//Encontra raizes
+		list<Vertice*> raizes;
+		encontra_raizes(copia, raizes);
+
+		raiz = new Vertice(g -> g_numero_vertices(), -1, 'r');
+		for (Vertice* v: raizes) {
+			raiz -> adicionar_filho(v);
+			v -> adicionar_pais(raiz);
+		}
+		raiz -> adicionar_cor(raiz -> g_id());
+		copia -> adicionar_vertice(raiz, true);
+	}
+
+
+	//Inicializa os atributos de copia
+	for (Vertice* v: copia -> atributos) {
+		v -> min_cores = vector<int>(copia -> g_numero_vertices(), INT_MAX);
+		v -> max_cores = vector<int>(copia -> g_numero_vertices(), 0);
+	}
+
+	//Encontra super e sob para folhas e as retira do grafo
+	while (raiz -> filhos.size() > 0) {
+		//Encontra os valores
+		list<int> id_folhas;
+		define_super_sob_folhas(copia, id_folhas);
+
+		//Adiciona os valores para g
+		for (int i: id_folhas) {
+			for (Vertice* v: copia -> atributos)
+				if (v && v != raiz) {
+					int id = v -> g_id();
+					g -> atributos[id] -> max_cores[i] = v -> max_cores[i];
+					g -> atributos[id] -> min_cores[i] = v -> min_cores[i];
+				}
+		}
+
+		//Retira as folhas de copia
+		podar_folhas(copia);
+	}
+
+	for (Vertice* v: g -> atributos)
+		for (int i = 0; i < g -> g_numero_vertices(); i++) {
+			if (v -> min_cores[i] == INT_MAX)
+				v -> min_cores[i] = 0;
+		}
+
+	delete copia;
+}
+
+//g colorido, com raiz e com cores em g -> map (vertices de g podem ser vazios)
+void define_super_sob_folhas(Grafo* g, list<int> &id_folhas)
+{
+	//Adiciona cor para as folhas
+	Cor* cor;
+	Hash* map = g -> map;
+	for (Vertice* v: g -> atributos)
+		if (v) {
+			set<set<int>, set_cmp> novo;
+			v -> cores = novo;
+
+			if (v -> filhos.size() == 0) {
+				cor = map -> encontrar_cor(v -> cor);
+				if (!cor)
+					throw runtime_error("Em define_super_sob_folhas, cor não encontrada");
+
+				//Adiciona cor e id de v
+				set<int> cor_v;
+				cor_v.insert(cor -> to_int());
+				cor_v.insert(v -> g_id() * (-1));	//id * -1 p ser o primeiro elemento
+				id_folhas.push_back(v -> g_id());
+
+				v -> cores.insert(cor_v);
+			}
+		}
+
+	//Ordenação topologica
+	list<Vertice*> ordenacao_topologica;
+	ordem_topologica(g, g -> g_raiz(), ordenacao_topologica);
+
+	//Algoritmo
+	for (Vertice* v: ordenacao_topologica) {
+		//Calcula super e sob
+		for (set<int> s: v -> cores) {
+			//Pega id da folha
+			int id = (*s.begin()) * (-1);
+
+			//Atualiza vetores
+			if ((s.size() - 1) > v -> max_cores[id])
+				v -> max_cores[id] = s.size() - 1;
+			if ((s.size() - 1) < v -> min_cores[id])
+				v -> min_cores[id] = s.size() - 1;
+		}
+
+		//Passa cores para os pais
+		for (Vertice* w: v -> pais) {
+			for (set<int> conjunto: v -> cores) {
+				set<int> novo(conjunto);
+				cor = map -> encontrar_cor(w -> cor);
+				if (cor)	//Para quando raiz é artificial(não esta com cor em map)
+					novo.insert(cor -> to_int());
+				w -> cores.insert(novo);
+			}
+		}
+	}
+}
+
+//Retira as folhas de g, alguns atributos podem ser vazios
+void podar_folhas(Grafo* g)
+{
+	list<Vertice*> retirar;
+	for (Vertice* v: g -> atributos)
+		if (v)
+			if (v -> filhos.size() == 0) {
+				retirar.push_back(v);
+			}
+
+	for (Vertice* v: retirar) {
+		g -> remover_vertice(v);
+		delete v;
+	}
+}
+
+//Copia vertices, cores, ligacoes e map de g para destino
+void copiar(Grafo* g, Grafo* &destino)
+{
+	int numero_vertices = g -> g_numero_vertices();
+	Vertice* raiz = 0;
+	vector<Vertice*> atributos(numero_vertices);
+	int** grafo;
+
+	//Cria as estruturas do novo grafo
+	grafo = new int*[numero_vertices];
+	for (int i = 0; i < numero_vertices; i++)
+		grafo[i] = new int[numero_vertices];
+
+	//Cria os vertices
+	for (int i = 0; i < numero_vertices; i++) {
+		Vertice* v = g -> encontrar_atributo(i);
+		if (!v)
+			continue;
+		atributos[i] = new Vertice(v -> g_id(), v -> g_numero(), v -> g_tipo());
+
+		if (v == g -> g_raiz())
+			raiz = atributos[i];
+	}
+
+	//Adiciona ligacoes
+	for (Vertice* v: atributos) {
+		int id = v -> g_id();
+		for (Vertice* a: atributos)
+		{
+			int i = a -> g_id();
+
+			if (g -> grafo[id][i] == 0) {
+				grafo[id][i] = 0;
+			} else if (g -> grafo[id][i] == 1) {
+				grafo[id][i] = 1;
+				v -> adicionar_casamento(a);
+			} else if (g -> grafo[id][i] == 12) {
+				grafo[id][i] = 12;
+				v -> adicionar_casamento(a);
+				v -> adicionar_filho(a);
+			} else if (g -> grafo[id][i] == 13) {
+				grafo[id][i] = 13;
+				v -> adicionar_casamento(a);
+				v -> adicionar_pais(a);
+			} else if (g -> grafo[id][i] == 2) {
+				grafo[id][i] = 2;
+				v -> adicionar_filho(a);
+			} else {	//grafo[id][i] == 3
+				grafo[id][i] = 3;
+				v -> adicionar_pais(a);
+			}
+		}
+	}
+
+	//Adiciona cores
+	for (Vertice* v: atributos)
+		for (int cor: g -> atributos[v -> g_id()] -> cor)
+			v -> adicionar_cor(cor);
+
+	//Cria grafo
+	destino = new Grafo(numero_vertices, atributos, raiz, grafo);
+
+	//Copia cores
+	if (g -> map)
+		destino -> map = g -> map;
+}
+
+
+
 void define_max_cores(Grafo* g)
 {
 	init_map(g);	//Coloca cores em g -> map
@@ -656,11 +866,9 @@ void init_map(Grafo* g)
 				aux = map -> encontrar_cor(cor_n);	//Encontra cor
 				//Se cor nao tiver sido encontrada ainda
 				if (!aux) {
-					string cor = primeira_cor();
-					if (cor == "") //Se o numero de cores colocado na lista cores e muito pequeno
+					string rgb = primeira_cor();
+					if (rgb == "") //Se o numero de cores colocado na lista cores e muito pequeno
 					{ throw runtime_error("Erro em init_map(), Falta Cores!"); }
-						//Pega a primeira cor
-					rgb = cor;
 
 					//Inicia uma nova cor e a adiciona ao hash
 					aux = new Cor(rgb);
@@ -668,7 +876,10 @@ void init_map(Grafo* g)
 				}
 
 				if (!cor) {	//Se esta passando pela primeira vez copia a cor de aux
-					cor = new Cor(aux);
+					if (a -> cor.size() == 1)	//Passando pela primeira vez pega a cor que ja foi adicionada
+						cor = aux;
+					else	//Se tem mais cores inicia uma copia da cor adicionada
+						cor = new Cor(aux);
 				} else {	//Se ja tem cor definida realiza a soma da cor atual com a de aux
 					cor -> soma(aux);
 				}
@@ -680,9 +891,11 @@ void init_map(Grafo* g)
 					cor = new Cor("#BD9A9A");
 					map -> adicionar_cor(a -> cor, cor);
 				}
+				a -> cor_int = cor -> to_int();
 				continue;
 			}
-			map -> adicionar_cor(a -> cor, cor);
+			if (a -> cor.size() > 1)	//cor ainda nao foi adicionada
+				map -> adicionar_cor(a -> cor, cor);
 		}
 
 		a -> cor_int = cor -> to_int();
@@ -730,16 +943,16 @@ void define_min_max_cores(Grafo* g)
 	init_map(g);
 
 	for (Vertice* v: g -> atributos) {
-		v -> min_cores = vector<int>(g -> g_numero_vertices(), INT_MAX);
-		v -> max_cores = vector<int>(g -> g_numero_vertices(), 0);
+		v -> min_cores_ = vector<int>(g -> g_numero_vertices(), INT_MAX);
+		v -> max_cores_ = vector<int>(g -> g_numero_vertices(), 0);
 	}
 
 	for (Vertice* v: g -> atributos) {
 		set<int> colors;
 		procedimento_min_max(v, v, colors);
 		for (int i = 0; i < g -> g_numero_vertices(); i++) {
-			if (v -> min_cores[i] == INT_MAX)
-				v -> min_cores[i] = -1;
+			if (v -> min_cores_[i] == INT_MAX)
+				v -> min_cores_[i] = 0;
 		}
 	}
 
@@ -749,12 +962,11 @@ void procedimento_min_max(Vertice* f, Vertice* a, set<int> colors)
 {
 	colors.insert(a -> cor_int);
 
-	if (f -> min_cores[a -> g_id()] > colors.size())
-		f -> min_cores[a -> g_id()] = colors.size();
+	if (f -> min_cores_[a -> g_id()] > colors.size())
+		f -> min_cores_[a -> g_id()] = colors.size();
 
-	if (f -> max_cores[a -> g_id()] < colors.size())
-		f -> max_cores[a -> g_id()] = colors.size();
-
+	if (f -> max_cores_[a -> g_id()] < colors.size())
+		f -> max_cores_[a -> g_id()] = colors.size();
 
 	for (Vertice* v: a -> filhos)
 		procedimento_min_max(f, v, colors);
@@ -1589,16 +1801,16 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 
 		clock_t inicio = clock();
 
-		thread threads[juncoes -> max_cores[destino -> primeiro -> g_id()] + juncoes -> max_cores[destino -> segundo -> g_id()]];
+		//thread threads[juncoes -> max_cores[destino -> primeiro -> g_id()] + juncoes -> max_cores[destino -> segundo -> g_id()]];
 		int zi = 0;
 		set<int>  cores;
 		for (int i = 1; i <= juncoes -> max_cores[destino -> primeiro -> g_id()]; i++)
-			//encontra_caminhos_cores_especificas(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice], cores, i);
-			threads[zi++] = thread(encontra_caminhos_cores_especificas, ref(juncoes), ref(destino -> primeiro), ref(caminho_atual), ref(caminhos_front[indice]), ref(cores), i);
+			encontra_caminhos_cores_especificas(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice], cores, i);
+			//threads[zi++] = thread(encontra_caminhos_cores_especificas, ref(juncoes), ref(destino -> primeiro), ref(caminho_atual), ref(caminhos_front[indice]), ref(cores), i);
 		for (int i = 1; i <= juncoes -> max_cores[destino -> segundo -> g_id()]; i++)
-			//encontra_caminhos_cores_especificas(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice], cores, i);
-			threads[zi++] = thread(encontra_caminhos_cores_especificas, ref(juncoes), ref(destino -> segundo), ref(caminho_atual), ref(caminhos_back[indice]), ref(cores), i);
-
+			encontra_caminhos_cores_especificas(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice], cores, i);
+			//threads[zi++] = thread(encontra_caminhos_cores_especificas, ref(juncoes), ref(destino -> segundo), ref(caminho_atual), ref(caminhos_back[indice]), ref(cores), i);
+/*
 		for (int i = 0; i < zi; i++)
 			threads[i].join();
 /*

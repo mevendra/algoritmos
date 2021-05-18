@@ -38,6 +38,9 @@ void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino);
 void colorir_apartir_de_tipo (Grafo* g, int vertice, char tipo);
 
 //3
+void define_super_sob_folhas(Grafo* g, list<int> &id_folhas);
+void podar_folhas(Grafo* g);
+void copiar(Grafo* g, Grafo* &destino);
 void init_map(Grafo* g);
 void encontra_raizes(Grafo* g, list<Vertice*>& destino);
 template<typename T>
@@ -104,6 +107,7 @@ void colorir_grafo_pat(Grafo* g);
 void descolorir(Grafo* g);
 
 //3
+void define_super_sob(Grafo* g);
 void define_max_cores(Grafo* g);
 template<typename T>
 void ordem_topologica(Grafo* g, Vertice* fonte, T& destino);

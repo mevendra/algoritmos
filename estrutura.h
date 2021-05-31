@@ -154,13 +154,14 @@ class Vertice {
 };
 
 class Grafo {
+	int numero_vertices;
+	int max_super = 0;
+	Vertice* raiz = 0;
 
 	public:
 		int** grafo;
 		Hash* map = 0;
-		int numero_vertices;
 		vector<Vertice*> atributos;
-		Vertice* raiz = 0;
 
 		Grafo(int numero_vertices_, vector<Vertice*> atributos_, int** grafo_);
 		Grafo(int numero_vertices_, vector<Vertice*> atributos_, Vertice* raiz, int** grafo_);
@@ -243,6 +244,36 @@ public:
 	string linha_ordem;
 
 	void adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, bool realizado= false);
+};
+
+class Par {
+public:
+	Vertice* fonte;
+	Vertice* destino;
+
+	Par(Vertice* fonte_, Vertice* destino_) { fonte = fonte_; destino = destino_;}
+};
+
+class Caminho {
+public:
+	list<Vertice*> caminho;
+	set<int> cores;
+
+	Caminho(list<Vertice*> caminho_, set<int> cores_) { caminho = list<Vertice*>(caminho_); cores = set<int> (cores_); }
+};
+
+struct par_cmp {
+	bool operator() (Par* esquerda, Par* direita)  {	//Retorna esq < direita
+		Vertice* fonte_e = esquerda -> fonte;
+		Vertice* destino_e = esquerda -> destino;
+		Vertice* fonte_d = direita -> fonte;
+		Vertice* destino_d = direita -> destino;
+
+		if (fonte_e == fonte_d)		//Compara os endereços
+			return destino_e < destino_d;
+		else
+			return fonte_e < fonte_d;
+	}
 };
 
 #endif /* ESTRUTURA_H */

@@ -23,6 +23,9 @@ remover:
 
 compilar:
 	g++ -O3 -pthread -std=c++11 *.h *.cpp
+
+debug:
+	g++ -g -O3 -pthread -std=c++11 *.h *.cpp
 	
 dot: entrada/*.dot
 	dot -Tpdf -O desenhos/*.dot

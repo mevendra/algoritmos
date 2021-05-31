@@ -31,25 +31,23 @@ int main(int argc, char *argv[]) {
 	printf("Inicio\n");
 
 	colorir_grafo_mat(g);
+	define_super_sob(g);
+
+	chrono::steady_clock::time_point sup = chrono::steady_clock::now();
 	define_super_sob(g);	//min e max
-	descolorir(g);
-	colorir_grafo_mat(g);
+	std::chrono::steady_clock::time_point f_sup = std::chrono::steady_clock::now();
+	cout << "Super = " << chrono::duration_cast<std::chrono::milliseconds>(f_sup - sup).count() << "[ms]" << std::endl;
 	define_min_max_cores(g);	//min_ e max_
+	std::chrono::steady_clock::time_point f_max = std::chrono::steady_clock::now();
+	cout << "Max= " << chrono::duration_cast<std::chrono::milliseconds>(f_max - f_sup).count() << "[ms]" << std::endl;
 
-	for (Vertice* v: g -> atributos) {
-		int x = v -> g_id();
-		for (Vertice* w: g -> atributos) {
-			int y = w -> g_id();
 
-			if (v -> min_cores[y] != v -> min_cores_[y])
-				printf("Em (%d -> %d), min = %d e %d\n", x, y, v -> min_cores[y], v -> min_cores_[y]);
 
-			if (v -> max_cores[y] != v -> max_cores_[y])
-				printf("Em (%d -> %d), max = %d e %d\n", x, y, v -> max_cores[y], v -> max_cores_[y]);
-		}
-	}
 
-	printf("It does't get an error!\n");
+	list<Anel*> destino;
+	encontra_aneis_coloridos(g, destino, 2);
+	//encontra_aneis(g, destino, 2);
+	cout << "Encontrou, tamanho: " << destino.size() << endl;
 
 	/*
 	if (k == 1) {

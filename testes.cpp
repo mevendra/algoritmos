@@ -6,8 +6,8 @@ int main(int argc, char *argv[]) {
 	int k = 2;
 	if (argc == 1) {
 		//entrada += "rede_pequena.txt";
-		entrada += "Arara4MaqPar.txt";
-		//entrada += "rede_grande.txt";
+		//entrada += "Arara4MaqPar.txt";
+		entrada += "rede_grande.txt";
 		//entrada += "EN4MaqPar.txt";
 	} else if (argc == 2) {
 		nome_rede = string(argv[1]);

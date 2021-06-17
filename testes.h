@@ -10,6 +10,10 @@
 
 string nome_rede = "auto";
 
+void testar_encontra_aneis_paralelos(Grafo* g, int k);
+void testar_encontra_aneis_semi_paralelos(Grafo* g, int k);
+void testar_encontra_aneis_linear(Grafo* g, int k);
+
 //0
 void testar_busca_em_largura(Grafo* g);
 void testar_busca_em_profundidade(Grafo* g);

@@ -144,6 +144,8 @@ int Cor::to_int() {
 	ret = (ret << 8) + g;
 	ret = (ret << 8) + b;
 
+	if (ret < 0)	//MUDAR
+		ret = ret * -1;
 	return ret;
 }
 

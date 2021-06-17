@@ -4,6 +4,7 @@
 #include "estrutura.h"
 #include "transformacao.h"
 
+#include <semaphore.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <thread>
@@ -19,7 +20,6 @@ static clock_t tempo_encontra_anel_p = clock();
 static clock_t tempo_verifica_anel = tempo_encontra_anel_p;
 static clock_t tempo_encontra_anel = tempo_encontra_anel_p;
 static clock_t tempo_copia_caminhos = tempo_encontra_anel_p;
-
 static clock_t tempo_procura_caminhos = tempo_encontra_anel;
 static clock_t tempo_sao_disjuntos = tempo_encontra_anel;
 
@@ -83,7 +83,7 @@ void encontra_aneis(list<Anel_aux*> aux, vector<list<Vertice*>> atual, list<Anel
 void verifica_anel(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas);
 
 //9
-void encontra_aneis_coloridos(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino);
+void encontra_aneis_coloridos(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino);
 void encontra_combinacoes(vector<list<int>> casamentos,	list<list<list<int>>> &conjuntos, int numero_casamentos);
 void encontra_pares_vertices(Juncoes* juncoes, list<list<list<int>>> conjuntos, set<Par*, par_cmp> &destino);
 void encontra_caminhos_coloridos(set<Par*, par_cmp> pares, short numero_threads, vector<vector<list<Caminho*>>> &destino);
@@ -92,7 +92,7 @@ void encontra_caminhos_cores_especificas(Vertice* fonte, Vertice* destino,list<V
 void define_anel_aux_coloridos(JuncoesDe* juncao, Anel_aux* destino, vector<vector<list<Caminho*>>> &caminhos);
 set<int> soma(set<int> a, set<int> b);
 
-void encontra_aneis_coloridos(list<Anel_aux*> aux, vector<list<Vertice*>> atual, list<Anel*> & destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas, int numero_cores, set<int> cores);
+void encontra_aneis_coloridos(list<Anel_aux*> aux, vector<list<Vertice*>> &atual, list<Anel*> & destino, list<list<int>> &casamentos, list<Juncao*> &juncoesUtilizadas, int numero_cores, set<int> &cores, int maior_caminho, int menor_caminho);
 void encontra_aneis_coloridos_t(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int numero_cores);
 
 //Metodos "Finais"
@@ -139,6 +139,9 @@ void geracao_grafo_inferior(Grafo* g);
 void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos);
 
 //9
-void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamentos);
+void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamentos, bool paralelo = true);
+
+//teste
+void colorir_grafo_esp(Grafo* g, int n);
 
 #endif /* ALGORITMO_H*/

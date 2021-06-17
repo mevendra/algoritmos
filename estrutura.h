@@ -221,6 +221,8 @@ class Anel_aux {
 public:
 	Vertice* primeiro;
 	Vertice* segundo;
+	int maior_numero_cores;
+	int menor_numero_cores;
 
 	vector<Vertice*> juncoes;
 	vector<vector<list<Vertice*>>> caminhos_primeiro;

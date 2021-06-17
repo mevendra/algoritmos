@@ -4,20 +4,38 @@ int main(int argc, char *argv[]) {
 	//Primeiro argumento = nome arquivo, segundo = numero de casamentos para testar aneis
 	string entrada = "entrada/";
 	int k = 2;
-	if (argc == 1) {
+	int num = 6;
+	int execucao = 0;	//0 = todas, 1 = paralelo, 2 = s_paralelo, 3 = linear
+	bool p = false;		//p = true para colorir grafo com max num cores e executar paralelo
+	if (argc == 1) {	//		./programa.out
 		//entrada += "rede_pequena.txt";
-		//entrada += "Arara4MaqPar.txt";
-		entrada += "rede_grande.txt";
+		entrada += "Arara4MaqPar.txt";
+		//entrada += "rede_grande.txt";
 		//entrada += "EN4MaqPar.txt";
-	} else if (argc == 2) {
+	} else if (argc == 2) {	//	./programa.out Nome_Rede.txt
 		nome_rede = string(argv[1]);
 		entrada += argv[1];
-	} else if (argc == 3) {
+	} else if (argc == 3) { //	./programa.out Nome_Rede.txt numero_casamentos
 		nome_rede = string(argv[1]);
 		entrada += argv[1];
 		k = atoi(argv[2]);
-	} else if (argc > 3)
+	} else if (argc == 4) { //	./programa.out Nome_Rede.txt numero_casamentos tipo_execução
+		nome_rede = string(argv[1]);
+		entrada += argv[1];
+		k = atoi(argv[2]);
+		execucao = atoi(argv[3]);
+	} else if (argc == 5) { //	./programa.out Nome_Rede.txt numero_casamentos tipo_execução max_cores
+		nome_rede = string(argv[1]);
+		entrada += argv[1];
+		k = atoi(argv[2]);
+		execucao = atoi(argv[3]);
+		num = atoi(argv[4]);
+		p = true;
+	} else
 		return -1;
+
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+	printf("Inicio\n");
 
 	Grafo *g = trabalha_arquivo(entrada.c_str());
 	int **grafo;
@@ -26,54 +44,27 @@ int main(int argc, char *argv[]) {
 	else
 		return 1;
 
-
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	printf("Inicio\n");
-
-	colorir_grafo_mat(g);
-	define_super_sob(g);
-
-	chrono::steady_clock::time_point sup = chrono::steady_clock::now();
-	define_super_sob(g);	//min e max
-	std::chrono::steady_clock::time_point f_sup = std::chrono::steady_clock::now();
-	cout << "Super = " << chrono::duration_cast<std::chrono::milliseconds>(f_sup - sup).count() << "[ms]" << std::endl;
-	define_min_max_cores(g);	//min_ e max_
-	std::chrono::steady_clock::time_point f_max = std::chrono::steady_clock::now();
-	cout << "Max= " << chrono::duration_cast<std::chrono::milliseconds>(f_max - f_sup).count() << "[ms]" << std::endl;
-
-
-
-
-	list<Anel*> destino;
-	encontra_aneis_coloridos(g, destino, 2);
-	//encontra_aneis(g, destino, 2);
-	cout << "Encontrou, tamanho: " << destino.size() << endl;
-
-	/*
-	if (k == 1) {
-		colorir_grafo(g);
-		list<Anel*> aneis;
-		encontra_aneis(g, aneis, 2);
-		escreve_aneis_coloridos_completo(g, aneis, "aneis/aneis_2_coloridos.txt");
-		escreve_lista_cores(g, "aneis/lista_cores_aneis_2_coloridos.txt");
-	} else if (k == 2) {
-		colorir_grafo_mat(g);
-		list<Anel*> aneis;
-		encontra_aneis(g, aneis, 2);
-		escreve_aneis_coloridos_completo(g, aneis, "aneis/aneis_2_coloridos_mat.txt");
-		escreve_lista_cores(g, "aneis/lista_cores_aneis_2_coloridos_mat.txt");
+	if (p) {
+		colorir_grafo_esp(g, num);
 	} else {
-		colorir_grafo(g);
-		list<Anel*> aneis;
-		encontra_aneis(g, aneis, 2);
-		escreve_aneis_coloridos_completo(g, aneis, "aneis/aneis_2_coloridos_pat.txt");
-		escreve_lista_cores(g, "aneis/lista_cores_aneis_2_coloridos_pat.txt");
-	}*/
+		colorir_grafo_mat(g);
+	}
 
-
-	//testar_encontrar_aneis(g, 2);
-	//testar_encontrar_aneis_coloridos(g, 2);
-
+	switch(execucao) {
+		case(1):
+			testar_encontra_aneis_paralelos(g, k);
+			break;
+		case(2):
+			testar_encontra_aneis_semi_paralelos(g, k);
+			break;
+		case(3):
+			testar_encontra_aneis_linear(g, k);
+			break;
+		default:
+			testar_encontra_aneis_semi_paralelos(g, k);
+			testar_encontra_aneis_linear(g, k);
+			testar_encontra_aneis_paralelos(g, k);
+	}
 
 	printf("Terminou!\n");
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
@@ -92,7 +83,8 @@ int main(int argc, char *argv[]) {
 		testar_profundidades(g);
 		testar_geracoes(g);
 		testar_encontrar_aneis(g, k);
-		testar_encontrar_aneis_coloridos(g, k);*/
+		testar_encontrar_aneis_coloridos(g, k);
+		/**/
 
 /*
 		colorir_grafo(g);
@@ -109,6 +101,33 @@ int main(int argc, char *argv[]) {
 		m_escreve_comum_entre_grafos(g);
 		m_escreve_informacao_grafos(g);
 	 /**/
+}
+
+void testar_encontra_aneis_paralelos(Grafo* g, int k)
+{
+	list<Anel*> destino;
+	chrono::steady_clock::time_point init = chrono::steady_clock::now();
+	encontra_aneis_coloridos(g, destino, k, true);
+	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
+	cout << "Encontrou paralelos, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() << "ms" << endl << endl;
+}
+
+void testar_encontra_aneis_semi_paralelos(Grafo* g, int k)
+{
+	list<Anel*> destino;
+	chrono::steady_clock::time_point init = chrono::steady_clock::now();
+	encontra_aneis_coloridos(g, destino, k, false);
+	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
+	cout << "Encontrou semi_paralelos, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() << "ms" << endl << endl;
+}
+
+void testar_encontra_aneis_linear(Grafo* g, int k)
+{
+	list<Anel*> destino;
+	chrono::steady_clock::time_point init = chrono::steady_clock::now();
+	encontra_aneis(g, destino, k);
+	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
+	cout << "Encontrou linear, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() << "ms" << endl << endl;
 }
 
 void testar_busca_em_largura(Grafo* g)

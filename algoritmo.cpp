@@ -2324,7 +2324,6 @@ void encontra_caminhos_coloridos_t(set<Par*, par_cmp> pares, int numero_cores, v
 		encontra_caminhos_cores_especificas(fonte, destino, caminho_atual, caminhos[fonte -> g_id()][destino -> g_id()], cores, numero_cores);
 	}
 
-	//Utilizar mutex e ficar adicionando as listas ao destino
 	for (int i = 0; i < caminhos.size(); i++) {
 		for (int y = 0; y < caminhos[i].size(); y++) {
 			m_listas.lock();
@@ -2397,7 +2396,7 @@ void define_anel_aux_coloridos(JuncoesDe* juncao, Anel_aux* destino, vector<vect
 		for (Caminho* caminho_a: caminhos_front[indice]) {
 			for (Caminho* caminho_b: caminhos_back[indice]) {
 				if (sao_disjuntos(caminho_a -> caminho, caminho_b -> caminho)) {
-					set<int> cores = soma(caminho_a -> cores, caminho_b -> cores);	//info ainda nao utilizada
+					set<int> cores = soma(caminho_a -> cores, caminho_b -> cores);
 					destino -> caminhos_primeiro[indice][i] = caminho_a -> caminho;
 					destino -> caminhos_segundo[indice][i] = caminho_b -> caminho;
 					destino -> cores[indice][i] = set<int>(cores);

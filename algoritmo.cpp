@@ -1,5 +1,6 @@
 #include "algoritmo.h"
 mutex m_listas;
+mutex m_numero_aneis;
 sem_t s_thread;
 int numero_aneis = 0;
 
@@ -1990,7 +1991,9 @@ void verifica_anel(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<l
 	destino.pop_back();
 	delete novo;
 
+	//m_numero_aneis.lock();
 	numero_aneis++;
+	//m_numero_aneis.unlock();
 
 	//Para escrever sempre que encontrar um anel
 /*
@@ -2060,7 +2063,7 @@ void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamen
 	//Encontra os aneis
 	if (!paralelo) {
 		//encontra os aneis linearmente
-		cout<<"Encontrando os aneis com 1 thread" << endl;
+		cout<<"Encontrando os aneis com 1 thread(" << numero_threads << ")"<< endl;
 		encontra_aneis_coloridos(g, juncoes, conjuntos, caminhos, destino);
 	} else {
 		//encontra os anéis pelas threads
@@ -2129,7 +2132,7 @@ void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamen
 		cout << " tempo_sao_disjuntos " << (double) tempo_sao_disjuntos /CLOCKS_PER_SEC << endl;
 	}
 
-	cout << "Numero de aneis encontrados: " << destino.size() << endl;
+	cout << "Numero de aneis encontrados: " << numero_aneis << endl;
 }
 
 void encontra_aneis_coloridos(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino)
@@ -2528,10 +2531,12 @@ void encontra_aneis_coloridos_t(Grafo* g, Juncoes* juncoes, list<list<list<int>>
 			} else
 				continue;
 
-			list<Juncao*> juncoesUtilizadas;
-			vector<list<Vertice*>> atual;
-			set<int> cores;
-			encontra_aneis_coloridos(aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas, numero_cores, cores, maior_caminho, menor_caminho);
+			if (menor_caminho <= numero_cores) {
+				list<Juncao*> juncoesUtilizadas;
+				vector<list<Vertice*>> atual;
+				set<int> cores;
+				encontra_aneis_coloridos(aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas, numero_cores, cores, maior_caminho, menor_caminho);
+			}
 
 			for (Anel_aux* a: aneis_aux)
 				delete a;

@@ -43,7 +43,8 @@ all_nome: a.out
 ifdef NOME
 	./a.out $(NOME) 1
 	./a.out $(NOME) 2
-	./a.out $(NOME) 3
+	./a.out $(NOME) 3 1
+	./a.out $(NOME) 3 2
 endif
 
 all_1_2: a.out

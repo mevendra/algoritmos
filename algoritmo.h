@@ -15,6 +15,7 @@
 #include <time.h>
 
 static int tempo;
+extern bool com_cores;
 
 static clock_t tempo_encontra_anel_p = clock();
 static clock_t tempo_verifica_anel = tempo_encontra_anel_p;
@@ -69,9 +70,9 @@ void encontra_folhas(Grafo* g, list<Vertice*>& destino);
 void encontra_caminhos_cores_especificas(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<list<Vertice*>> &caminhos, set<int> cores, int numero);
 //8
 void encontra_casamentos(Grafo* g, vector<list<int>>& casamentos);
-void encontra_aneis_a1(list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
-void encontra_aneis_a2(Grafo* g, Juncoes* juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
-void encontra_aneis_a3(Grafo* g, list<JuncoesDe*> juncoes, vector<list<int>> casamentos, list<Anel*>& destino);
+void encontra_aneis_a1(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, list<Anel*>& destino);
+void encontra_aneis_a2(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, list<Anel*>& destino);
+void encontra_aneis_a3(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, list<Anel*>& destino);
 void encontra_duplas_casamentos(vector<list<int>> casamentos, list<list<list<int>>>& destino);
 void encontra_combinacoes_dupla(list<list<int>> dupla_casamentos, list<list<list<int>>>& destino);
 void encontra_trios_casamentos(vector<list<int>> casamentos, list<list<list<int>>>& destino);
@@ -94,6 +95,13 @@ set<int> soma(set<int> a, set<int> b);
 
 void encontra_aneis_coloridos(list<Anel_aux*> aux, vector<list<Vertice*>> &atual, list<Anel*> & destino, list<list<int>> &casamentos, list<Juncao*> &juncoesUtilizadas, int numero_cores, set<int> &cores, int maior_caminho, int menor_caminho);
 void encontra_aneis_coloridos_t(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int numero_cores);
+
+void thread_encontra_aneis(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int grao);
+void encontra_aneis_paralelos (Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
+
+
+void thread_encontra_aneis_1(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, list<Anel*> &destino, int grao);
+void encontra_aneis_paralelos_1(Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
 
 //Metodos "Finais"
 //0

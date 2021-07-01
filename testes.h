@@ -13,6 +13,9 @@ string nome_rede = "auto";
 void testar_encontra_aneis_paralelos(Grafo* g, int k);
 void testar_encontra_aneis_semi_paralelos(Grafo* g, int k);
 void testar_encontra_aneis_linear(Grafo* g, int k);
+void testar_encontra_aneis_paralelos(Grafo* g, int k, int numero_threads, int grao);
+void testar_encontra_aneis_paralelos_1(Grafo* g, int k, int numero_threads, int grao);
+void testar_encontra_aneis_linear_sem_cores(Grafo* g, int k);
 
 //0
 void testar_busca_em_largura(Grafo* g);

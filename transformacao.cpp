@@ -276,7 +276,7 @@ Grafo* trabalha_arquivo(char const* caminho)
 			aux_1 = atoi(primeira_coluna);
 			aux_2 = atoi(segunda_coluna);
 			if (grafo[aux_1 - 1][aux_2 - 1] == 1) {
-				printf("Casamento entre pais e filhos: %d e %d\n", aux_1 - 1, aux_2 - 1);
+				//printf("Casamento entre pais e filhos: %d e %d\n", aux_1 - 1, aux_2 - 1);
 				grafo[aux_1 - 1][aux_2 - 1] = 12;
 				grafo[aux_2 - 1][aux_1 - 1] = 13;
 			} else {

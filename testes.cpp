@@ -4,7 +4,8 @@ int main(int argc, char *argv[]) {
 	//Primeiro argumento = nome arquivo, segundo = numero de casamentos para testar aneis
 	string entrada = "entrada/";
 	int k = 2;
-	int num = 6;
+	int num = 8;
+	int grao = 40;
 	int execucao = 0;	//0 = todas, 1 = paralelo, 2 = s_paralelo, 3 = linear
 	bool p = false;		//p = true para colorir grafo com max num cores e executar paralelo
 	if (argc == 1) {	//		./programa.out
@@ -31,6 +32,13 @@ int main(int argc, char *argv[]) {
 		execucao = atoi(argv[3]);
 		num = atoi(argv[4]);
 		p = true;
+	} else if (argc == 6) {//	./programa.out Nome_Rede.txt numero_casamentos 4/5 num_threads grao
+		nome_rede = string(argv[1]);
+		entrada += argv[1];
+		k = atoi(argv[2]);
+		execucao = atoi(argv[3]) == 5 ? 5 : 4;
+		num = atoi(argv[4]);
+		grao = atoi(argv[5]);
 	} else
 		return -1;
 
@@ -60,10 +68,22 @@ int main(int argc, char *argv[]) {
 		case(3):
 			testar_encontra_aneis_linear(g, k);
 			break;
+		case(4):
+			testar_encontra_aneis_paralelos(g, k, num, grao);
+			break;
+		case(5):
+			testar_encontra_aneis_paralelos_1(g, k, num, grao);
+			break;
+		case(6):
+			testar_encontra_aneis_linear_sem_cores(g, k);
+			break;
 		default:
 			testar_encontra_aneis_semi_paralelos(g, k);
 			testar_encontra_aneis_linear(g, k);
+			testar_encontra_aneis_linear_sem_cores(g, k);
 			testar_encontra_aneis_paralelos(g, k);
+			testar_encontra_aneis_paralelos(g, k, num, grao);
+			testar_encontra_aneis_paralelos_1(g, k, num, grao);
 	}
 
 	printf("Terminou!\n");
@@ -109,7 +129,7 @@ void testar_encontra_aneis_paralelos(Grafo* g, int k)
 	chrono::steady_clock::time_point init = chrono::steady_clock::now();
 	encontra_aneis_coloridos(g, destino, k, true);
 	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
-	cout << "Encontrou paralelos, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() << "ms" << endl << endl;
+	cout << "Algoritmo 3 Paralelo, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() * 0.001 << "s" << endl << endl;
 }
 
 void testar_encontra_aneis_semi_paralelos(Grafo* g, int k)
@@ -118,7 +138,7 @@ void testar_encontra_aneis_semi_paralelos(Grafo* g, int k)
 	chrono::steady_clock::time_point init = chrono::steady_clock::now();
 	encontra_aneis_coloridos(g, destino, k, false);
 	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
-	cout << "Encontrou semi_paralelos, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() << "ms" << endl << endl;
+	cout << "Algoritmo 2 Linear, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() * 0.001 << "s" << endl << endl;
 }
 
 void testar_encontra_aneis_linear(Grafo* g, int k)
@@ -127,7 +147,36 @@ void testar_encontra_aneis_linear(Grafo* g, int k)
 	chrono::steady_clock::time_point init = chrono::steady_clock::now();
 	encontra_aneis(g, destino, k);
 	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
-	cout << "Encontrou linear, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() << "ms" << endl << endl;
+	cout << "Algoritmo 1 Linear Com cores, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() * 0.001 << "s" << endl << endl;
+}
+
+void testar_encontra_aneis_linear_sem_cores(Grafo* g, int k)
+{
+	list<Anel*> destino;
+	chrono::steady_clock::time_point init = chrono::steady_clock::now();
+	com_cores = false;
+	encontra_aneis(g, destino, k);
+	com_cores = true;
+	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
+	cout << "Algoritmo 1 Linear Sem Cores, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() * 0.001 << "s" << endl << endl;
+}
+
+void testar_encontra_aneis_paralelos(Grafo* g, int k, int numero_threads, int grao)
+{
+	list<Anel*> destino;
+	chrono::steady_clock::time_point init = chrono::steady_clock::now();
+	encontra_aneis_paralelos(g, destino, k, numero_threads, grao);
+	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
+	cout << "Algoritmo 2 Paralelo, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() * 0.001 << "s" << endl << endl;
+}
+
+void testar_encontra_aneis_paralelos_1(Grafo* g, int k, int numero_threads, int grao)
+{
+	list<Anel*> destino;
+	chrono::steady_clock::time_point init = chrono::steady_clock::now();
+	encontra_aneis_paralelos_1(g, destino, k, numero_threads, grao);
+	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
+	cout << "Algoritmo 1 Paralelo, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() * 0.001 << "s" << endl << endl;
 }
 
 void testar_busca_em_largura(Grafo* g)

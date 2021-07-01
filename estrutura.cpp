@@ -43,7 +43,7 @@ void reinicia_cores() {
 	cores.push_back("#D8BFD8");
 	cores.push_back("#EEE8AA");
 
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 5000; i++) {
 		string nova_cor = proxima_cor_aleatoria();
 		nova_cor = "#" + nova_cor;
 

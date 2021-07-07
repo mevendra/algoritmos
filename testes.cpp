@@ -77,6 +77,11 @@ int main(int argc, char *argv[]) {
 		case(6):
 			testar_encontra_aneis_linear_sem_cores(g, k);
 			break;
+		case(7):
+			testar_encontra_aneis_semi_paralelos(g, k);
+			testar_encontra_aneis_paralelos(g, k);
+			testar_encontra_aneis_paralelos(g, k, num, grao);
+			break;
 		default:
 			testar_encontra_aneis_semi_paralelos(g, k);
 			testar_encontra_aneis_linear(g, k);
@@ -165,7 +170,7 @@ void testar_encontra_aneis_paralelos(Grafo* g, int k, int numero_threads, int gr
 {
 	list<Anel*> destino;
 	chrono::steady_clock::time_point init = chrono::steady_clock::now();
-	encontra_aneis_paralelos(g, destino, k, numero_threads, grao);
+	encontra_aneis_paralelos_vetor(g, destino, k, numero_threads, grao);
 	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
 	cout << "Algoritmo 2 Paralelo, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() * 0.001 << "s" << endl << endl;
 }
@@ -174,7 +179,7 @@ void testar_encontra_aneis_paralelos_1(Grafo* g, int k, int numero_threads, int 
 {
 	list<Anel*> destino;
 	chrono::steady_clock::time_point init = chrono::steady_clock::now();
-	encontra_aneis_paralelos_1(g, destino, k, numero_threads, grao);
+	encontra_aneis_paralelos_procurando(g, destino, k, numero_threads, grao);
 	chrono::steady_clock::time_point beg = chrono::steady_clock::now();
 	cout << "Algoritmo 1 Paralelo, Tempo: " << chrono::duration_cast<chrono::milliseconds>(beg - init).count() * 0.001 << "s" << endl << endl;
 }

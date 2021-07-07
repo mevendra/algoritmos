@@ -64,3 +64,28 @@ all_1_2: a.out
 	-./a.out xv.txt 2
 	-./a.out zo.txt 1
 	-./a.out zo.txt 2
+
+
+all_novo: a.out
+	-./a.out ap.txt 1 7
+	-./a.out ap.txt 2 7
+	-./a.out Arara4MaqPar.txt 1 7
+	-./a.out Arara4MaqPar.txt 2 7
+	-./a.out chacobo_fem.txt 1 7
+	-./a.out chacobo_mas.txt 1 7
+	-./a.out deni.txt 1 7
+	-./a.out deni.txt 2 7
+	-./a.out EN4MaqPar.txt 1 7
+	-./a.out EN4MaqPar.txt 2 7
+	-./a.out im.txt 1 7
+	-./a.out im.txt 2 7
+	-./a.out kraho.txt 1 7
+	-./a.out kraho.txt 2 7
+	-./a.out marcapata.txt 1 7
+	-./a.out marcapata.txt 2 7
+	-./a.out mbya.txt 1 7
+	-./a.out mbya.txt 2 7
+	-./a.out xv.txt 1 7
+	-./a.out xv.txt 2 7
+	-./a.out zo.txt 1 7
+	-./a.out zo.txt 2 7

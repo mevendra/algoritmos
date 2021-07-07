@@ -87,21 +87,18 @@ void verifica_anel(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<l
 void encontra_aneis_coloridos(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino);
 void encontra_combinacoes(vector<list<int>> casamentos,	list<list<list<int>>> &conjuntos, int numero_casamentos);
 void encontra_pares_vertices(Juncoes* juncoes, list<list<list<int>>> conjuntos, set<Par*, par_cmp> &destino);
-void encontra_caminhos_coloridos(set<Par*, par_cmp> pares, short numero_threads, vector<vector<list<Caminho*>>> &destino);
+void encontra_caminhos_coloridos(set<Par*, par_cmp> &pares, short numero_threads, vector<vector<list<Caminho*>>> &destino);
 void encontra_caminhos_coloridos_t(set<Par*, par_cmp> pares, int numero_cores, vector<vector<list<Caminho*>>> &destino);
+void encontra_caminhos_coloridos_task(set<Par*, par_cmp> &pares, set<Par*, par_cmp>::iterator &iterator, vector<vector<list<Caminho*>>> &destino, int grao);
 void encontra_caminhos_cores_especificas(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<Caminho*> &caminhos, set<int> cores, int cores_restantes);
 void define_anel_aux_coloridos(JuncoesDe* juncao, Anel_aux* destino, vector<vector<list<Caminho*>>> &caminhos);
 set<int> soma(set<int> a, set<int> b);
-
 void encontra_aneis_coloridos(list<Anel_aux*> aux, vector<list<Vertice*>> &atual, list<Anel*> & destino, list<list<int>> &casamentos, list<Juncao*> &juncoesUtilizadas, int numero_cores, set<int> &cores, int maior_caminho, int menor_caminho);
 void encontra_aneis_coloridos_t(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int numero_cores);
 
-void thread_encontra_aneis(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int grao);
-void encontra_aneis_paralelos (Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
-
-
-void thread_encontra_aneis_1(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, list<Anel*> &destino, int grao);
-void encontra_aneis_paralelos_1(Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
+//10
+void thread_encontra_aneis_vetor(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int grao);
+void thread_encontra_aneis_procurando(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, list<Anel*> &destino, int grao);
 
 //Metodos "Finais"
 //0
@@ -148,6 +145,10 @@ void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos);
 
 //9
 void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamentos, bool paralelo = true);
+
+//10
+void encontra_aneis_paralelos_procurando(Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
+void encontra_aneis_paralelos_vetor (Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
 
 //teste
 void colorir_grafo_esp(Grafo* g, int n);

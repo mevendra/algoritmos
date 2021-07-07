@@ -92,6 +92,7 @@ void encontra_caminhos_coloridos_t(set<Par*, par_cmp> pares, int numero_cores, v
 void encontra_caminhos_coloridos_task(set<Par*, par_cmp> &pares, set<Par*, par_cmp>::iterator &iterator, vector<vector<list<Caminho*>>> &destino, int grao);
 void encontra_caminhos_cores_especificas(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<Caminho*> &caminhos, set<int> cores, int cores_restantes);
 void define_anel_aux_coloridos(JuncoesDe* juncao, Anel_aux* destino, vector<vector<list<Caminho*>>> &caminhos);
+void define_anel_aux_coloridos_t(JuncoesDe* juncao, Anel_aux* destino, vector<vector<list<Caminho*>>> &caminhos);
 set<int> soma(set<int> a, set<int> b);
 void encontra_aneis_coloridos(list<Anel_aux*> aux, vector<list<Vertice*>> &atual, list<Anel*> & destino, list<list<int>> &casamentos, list<Juncao*> &juncoesUtilizadas, int numero_cores, set<int> &cores, int maior_caminho, int menor_caminho);
 void encontra_aneis_coloridos_t(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int numero_cores);

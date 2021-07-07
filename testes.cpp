@@ -79,8 +79,8 @@ int main(int argc, char *argv[]) {
 			break;
 		case(7):
 			testar_encontra_aneis_semi_paralelos(g, k);
-			testar_encontra_aneis_paralelos(g, k);
 			testar_encontra_aneis_paralelos(g, k, num, grao);
+			testar_encontra_aneis_paralelos(g, k);
 			break;
 		default:
 			testar_encontra_aneis_semi_paralelos(g, k);

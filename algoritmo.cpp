@@ -2389,6 +2389,48 @@ void define_anel_aux_coloridos(JuncoesDe* juncao, Anel_aux* destino, vector<vect
 {
 	destino -> primeiro = juncao -> primeiro;
 	destino -> segundo = juncao -> segundo;
+
+	//Encontra os caminhos da juncao até os mebros do par que tenham no maximo numero_cores cores
+	list<Caminho*> caminhos_front[juncao -> juncoes.size()];
+	list<Caminho*> caminhos_back[juncao -> juncoes.size()];
+
+	clock_t inicio = clock();
+	int indice = 0;
+	for (Vertice* juncoes: juncao->juncoes) {
+		caminhos_front[indice] = list<Caminho*> (caminhos[juncoes -> g_id()][juncao -> primeiro -> g_id()]);
+		caminhos_back[indice] = list<Caminho*> (caminhos[juncoes -> g_id()][juncao -> segundo -> g_id()]);
+		indice++;
+	}
+	tempo_copia_caminhos += clock() - inicio;
+
+	inicio = clock();
+	//Encontra os caminhos disjuntos da juncao até os membros do par
+	destino -> mudar_tamanho(juncao -> juncoes.size());
+	indice = 0;
+	for (Vertice* juncoes: juncao -> juncoes) {
+		int i = 0;
+		int tam_max = (caminhos_front[indice].size() + 1) * (caminhos_back[indice].size() + 1);
+		destino -> juncoes[indice] = juncoes;
+		destino -> caminhos_primeiro[indice].resize(tam_max);
+		destino -> caminhos_segundo[indice].resize(tam_max);
+		for (Caminho* caminho_a: caminhos_front[indice]) {
+			for (Caminho* caminho_b: caminhos_back[indice]) {
+				if (sao_disjuntos(caminho_a -> caminho, caminho_b -> caminho)) {
+					destino -> caminhos_primeiro[indice][i] = caminho_a -> caminho;
+					destino -> caminhos_segundo[indice][i] = caminho_b -> caminho;
+					i++;
+				}
+			}
+		}
+		indice++;
+	}
+	tempo_sao_disjuntos += clock() - inicio;
+}
+
+void define_anel_aux_coloridos_t(JuncoesDe* juncao, Anel_aux* destino, vector<vector<list<Caminho*>>> &caminhos)
+{
+	destino -> primeiro = juncao -> primeiro;
+	destino -> segundo = juncao -> segundo;
 	destino -> maior_numero_cores = 1;
 	destino -> menor_numero_cores = INT_MAX;
 
@@ -2546,7 +2588,7 @@ void encontra_aneis_coloridos_t(Grafo* g, Juncoes* juncoes, list<list<list<int>>
 				for (JuncoesDe* j: juncoes_c) {
 					Anel_aux* aux = new Anel_aux();
 					aneis_aux.push_back(aux);
-					define_anel_aux_coloridos(j, aux, caminhos);
+					define_anel_aux_coloridos_t(j, aux, caminhos);
 					maior_caminho = maior_caminho > aux -> maior_numero_cores ? maior_caminho : aux -> maior_numero_cores;
 					menor_caminho = menor_caminho < aux -> menor_numero_cores ? menor_caminho : aux -> menor_numero_cores;
 				}

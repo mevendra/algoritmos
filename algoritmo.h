@@ -5,14 +5,10 @@
 #include "transformacao.h"
 
 #include <semaphore.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <thread>
 #include <mutex>
 #include <fstream>
 #include <climits>
-#include <iostream>
-#include <time.h>
 
 static int tempo;
 extern bool com_cores;

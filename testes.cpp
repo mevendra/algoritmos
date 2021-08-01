@@ -52,6 +52,79 @@ int main(int argc, char *argv[]) {
 	else
 		return 1;
 
+	Grafo* p_g = p_grafo(g);
+	definir_p_grafo(p_g);
+	geracao_grafo_superior(p_g);
+
+	colorir_grafo_mat(g);
+	list<Anel*> destino;
+	encontra_aneis(g, destino, 2);
+	escreve_aneis_completo(destino, "python/Fonte/teste_geracional.txt");
+
+	cout << "Encontrou aneis: " << destino.size() << endl;
+	return 0;
+
+	string diretorio = "desenhos/p_grafos/";
+	diretorio += nome_rede;
+
+	string lin = diretorio;
+	lin += "/p_grafo_";
+	lin += nome_rede;
+	lin += ".dot";
+	escreve_p_grafo_graphviz(p_g, lin.c_str());
+
+
+	lin = diretorio;
+	lin += "/dominadores_";
+	lin += nome_rede;
+	lin += ".dot";
+	vector<Vertice*> dominadores(p_g -> g_numero_vertices() + 1, 0);
+	encontra_arvore_dominadores(p_g, dominadores);
+
+	escreve_arvore_p_grafo_graphviz(p_g, dominadores, lin.c_str());
+
+
+	cout << "encontrou p grafo e escreveu dominadores" << endl;
+
+	vector<Grafo*> subgrafos(p_g -> g_numero_vertices(), 0);
+	encontra_subgrafos(p_g, subgrafos);
+
+	cout << "Encontrou subgrafos: " << subgrafos.size() << endl;
+
+	int i = 0;
+	for (Grafo* g1: subgrafos) {
+		if (g1) {
+			lin = diretorio;
+			lin += "/";
+			lin += nome_rede;
+			lin += "_";
+			if (g1 -> g_raiz()) {
+				Par* p = (Par*) g1 -> g_raiz() -> ponteiro;
+				lin += to_string(p -> destino -> g_numero());
+				lin += "_&_";
+				lin += to_string(p -> fonte -> g_numero());
+			} else {
+				lin += to_string(i);
+			}
+			string a = lin;
+			a += "_desenho.dot";
+			lin += "_sub_dominadores.dot";
+
+			escreve_p_grafo_graphviz(g1, a.c_str());
+
+			vector<Vertice*> dominadores(g1 -> g_numero_vertices() + 1, 0);
+			encontra_arvore_dominadores(g1, dominadores);
+			escreve_arvore_p_grafo_graphviz(g1, dominadores, lin.c_str());
+
+			i++;
+		}
+	}
+
+
+
+	printf("Terminou\n");
+	return 0;
+
 	if (p) {
 		colorir_grafo_esp(g, num);
 	} else {
@@ -459,7 +532,7 @@ void m_escreve_arvore_graphviz(Grafo* g, string caminho)
 void m_escreve_dominadores(Grafo* g, bool colorir, string caminho)
 {
 	printf("Escreve dominadores!\n");
-	vector<Vertice*> dominadores;
+	vector<Vertice*> dominadores(g -> g_numero_vertices() + 1, 0);
 	encontra_arvore_dominadores(g, dominadores);
 	escreve_arvore_graphviz(g, dominadores, colorir, caminho.c_str());
 	printf("Terminou!\n");

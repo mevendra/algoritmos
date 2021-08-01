@@ -42,11 +42,104 @@ int** cria_matriz(int tamanho)
 	return a;
 }
 
-void adicionar_alcancaveis (Vertice* fonte, vector<Vertice*> & destino)
+void adicionar_casamentos (Vertice* casamento, vector<Vertice*>& destino)
 {
+	casamento -> valor_bool = true;
+	for (Vertice* c: casamento -> casados) {
+		if (c -> valor_bool)
+			continue;
+
+		Vertice* p = casamento;
+		Vertice* s = c;
+		Par* par = new Par(p, s);
+
+		int indice = destino.size();
+		Vertice* novo = new Vertice(indice, indice, 'c');
+		novo -> ponteiro = par;
+		destino.push_back(novo);
+
+		p -> adicionar_cor(indice);
+		s -> adicionar_cor(indice);
+	}
+
+	for (Vertice* c: casamento -> casados)
+		if (!c -> valor_bool)
+			adicionar_casamentos(c, destino);
+}
+
+//Vertice::ponteiro = par;
+Grafo* p_grafo(Grafo* g)
+{
+	g -> resetar();
+
+	//Cria os vértices,Vertice:ponteiro = ponteiro para vértices de g casados
+	vector<Vertice*> atributos;
+	Vertice* casamento_fic = new Vertice(-1, -1, 'f');
+	for (Vertice* v: g -> atributos) {
+		if (!v -> valor_bool) {
+			if (v -> casados.size() > 0) {
+				adicionar_casamentos(v, atributos);
+			} else if (v -> filhos.size() > 0) {
+				v -> adicionar_casamento(casamento_fic);
+				adicionar_casamentos(v, atributos);
+				v -> casados.pop_front();
+			}
+		}
+	}
+
+	//Atributos do p_grafo
+	int numero_vertices = atributos.size();
+	int** grafo = new int*[numero_vertices];
+	for (int i = 0; i < numero_vertices; i++) {
+		grafo[i] = new int[numero_vertices];
+		for (int j = 0; j < numero_vertices; j++)
+			grafo[i][j] = 0;
+	}
+
+	//Adiciona arcos
+	for (Vertice* atual: atributos) {
+		Vertice* p = ((Par *) atual -> ponteiro) -> fonte;
+		Vertice* s = ((Par *) atual -> ponteiro) -> destino;
+
+		if (p == casamento_fic || s == casamento_fic) {
+			for (Vertice* filho: p -> filhos) {
+				for (int i: filho -> cor) {
+					atual -> adicionar_filho(atributos[i]);
+					atributos[i] -> adicionar_pais(atual);
+
+					grafo[atual -> g_id()][i] = 2;
+					grafo[i][atual -> g_id()] = 3;
+				}
+			}
+
+			continue;
+		}
+
+		for (Vertice* filho: p -> filhos) {
+			if (contem(filho, s -> filhos)) {
+				for (int i: filho -> cor) {
+					atual -> adicionar_filho(atributos[i]);
+					atributos[i] -> adicionar_pais(atual);
+
+					grafo[atual -> g_id()][i] = 2;
+					grafo[i][atual -> g_id()] = 3;
+				}
+			}
+		}
+	}
+
+	Grafo *novo = new Grafo(numero_vertices, atributos, grafo);
+	return novo;
+}
+
+void adicionar_alcancaveis (Vertice* fonte, vector<Vertice*>& destino)
+{
+	if (destino[fonte -> g_id()])
+		return;
 	destino[fonte -> g_id()] = fonte;
-	for (Vertice* filho: fonte -> filhos)
+	for (Vertice* filho: fonte -> filhos) {
 		adicionar_alcancaveis(filho, destino);
+	}
 }
 
 Grafo* sub_grafo(Grafo* g, Vertice* fonte)
@@ -113,11 +206,12 @@ Grafo* sub_grafo(Grafo* g, Vertice* fonte)
 		}
 	}
 
-	//Cola as cores
+	//Cola as cores e ponteiros
 	for (Vertice* v: atributos)
 	{
 		for (int cor: g -> atributos[v -> valor_int] -> cor)
 			v -> adicionar_cor(cor);
+		v -> ponteiro = g -> atributos[v -> valor_int] -> ponteiro;
 	}
 
 	Grafo *novo = new Grafo(numero_vertices, atributos, fonte_nova, grafo);
@@ -220,10 +314,10 @@ Grafo* trabalha_arquivo(char const* caminho)
 
 				//Reseta variaveis
 				esta_em_segunda_coluna = false;
-				for (int i = 0; i < indice_primeira_coluna; i++)
+				for (int i = 0; i < MAX_COLUNA_ARQUIVO; i++)
 					primeira_coluna[i] = ' ';
 				indice_primeira_coluna = 0;
-				for (int i = 0; i < indice_segunda_coluna; i++)
+				for (int i = 0; i < MAX_COLUNA_ARQUIVO; i++)
 					segunda_coluna[i] = ' ';
 				indice_segunda_coluna = 0;
 
@@ -334,6 +428,8 @@ void instancia_vertices_graphviz(Grafo* g, FILE* arquivo, list<int>& nao_desenha
 	//Percorre atributos do grafo e para cada um escreve no arquivo os atributos relacioados
 	for (Vertice* atributos: g -> atributos)
 	{
+		if(!atributos)
+			continue;
 		continuar = true;
 		if (!nao_desenhar.empty()) {
 			int id = atributos -> g_id();
@@ -609,6 +705,127 @@ void escreve_grafo_graphviz(Grafo* g, bool colorir, char const* caminho) {
 	fclose(arquivo);
 }
 
+void escreve_p_grafo_graphviz(Grafo* g, char const* caminho) {
+	//Atributos para leitura de arquivo
+	FILE* arquivo;
+	string lin;
+	arquivo = fopen(caminho, "w");
+
+	//Atributos p ler grafo
+	int** grafo = g -> grafo;
+	Vertice* atributos;
+
+	//Inicio do grafo e instanciacao de vertices
+	fputs("digraph {\n", arquivo);
+	//Percorre atributos do grafo e para cada um escreve no arquivo os atributos relacioados
+	for (Vertice* atributos: g -> atributos)
+	{
+		Vertice* p = ((Par*) atributos -> ponteiro) -> fonte;
+		Vertice* s = ((Par*) atributos -> ponteiro) -> destino;
+		lin = "";
+
+		//Definicao do vertice
+		lin += to_string(atributos -> g_id());	//Identificador do vertice
+
+		//Comeco dos atributos do DOT e definicao do label do vertice
+		lin += " [label = \"";
+		lin += to_string(p -> g_numero());
+		lin += " & ";
+		lin += to_string(s -> g_numero());
+		lin += "\"";
+
+		//Continuacao dos atributos e definicao da forma do vertice
+		lin += ", shape = diamond];\n";
+		fputs(lin.c_str(), arquivo);
+
+		//Forma esperada: ID [label = NUMERO, forma = FORMA];\n
+	}
+
+	//Definicao de arcos e arestas
+	for (int i = 0; i < g -> g_numero_vertices(); i++)
+	{
+		for (int y = 0; y < g -> g_numero_vertices(); y++)
+		{
+			if(grafo[i][y] == 2) {	//Representa um arco de i para y
+				lin = "";
+				lin += to_string(i);
+				lin += "->";
+				lin += to_string(y);
+				lin += ";\n";
+				fputs(lin.c_str(), arquivo);
+				//Forma esperada: ID -> g_id();\n
+			}
+		}
+	}
+
+	//Termina grafo e fecha arquivo
+	fputs("}\n",arquivo);
+	fclose(arquivo);
+}
+
+void escreve_arvore_p_grafo_graphviz(Grafo* g, vector<Vertice*> dominadores, char const* caminho) {
+	//Atributos para leitura de arquivo
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string lin;
+
+	//Inicio do grafo e Instanciacao de vertices
+	fputs("digraph {\n", arquivo);
+	//Percorre atributos do grafo e para cada um escreve no arquivo os atributos relacioados
+	for (Vertice* atributos: g -> atributos)
+	{
+		if (!atributos)
+			continue;
+		Vertice* p = ((Par*) atributos -> ponteiro) -> fonte;
+		Vertice* s = ((Par*) atributos -> ponteiro) -> destino;
+		lin = "";
+
+		//Definicao do vertice
+		lin += to_string(atributos -> g_id());	//Identificador do vertice
+
+		//Comeco dos atributos do DOT e definicao do label do vertice
+		lin += " [label = \"";
+		lin += to_string(p -> g_numero());
+		lin += " & ";
+		lin += to_string(s -> g_numero());
+		lin += "\"";
+
+		//Continuacao dos atributos e definicao da forma do vertice
+		lin += ", shape = diamond];\n";
+		fputs(lin.c_str(), arquivo);
+
+		//Forma esperada: ID [label = NUMERO, forma = FORMA];\n
+	}
+
+	/*
+	lin = "";
+	lin += to_string(raiz -> nodo -> g_id());	//Identificador do vertice
+	lin += " [label = ";
+	lin += to_string(raiz -> nodo -> g_numero());
+	lin += ", shape = square];\n";
+	fputs(lin.c_str(), arquivo);*/
+	//Forma esperada: ID [label = NUMERO, forma = FORMA];\n
+
+	int i = 0;
+	for (Vertice* v: dominadores) {
+		if (!v) {
+			continue;
+		}
+		lin = "";
+		lin += to_string(v -> g_id());
+		lin += " -> ";
+		lin += to_string(i);
+		lin += ";\n";
+		fputs(lin.c_str(), arquivo);
+		i++;
+		//Forma esperada: ID -> g_id();\n
+	}
+
+	//Termina grafo e fecha arquivo
+	fputs("}\n", arquivo);
+	fclose(arquivo);
+}
+
 void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> componentes, char const* caminho) {
 	//Atributos para leitura de arquivo
 	FILE* arquivo;
@@ -692,7 +909,7 @@ void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> component
 
 void escreve_cores_graphviz(Grafo* g, FILE* arquivo) {
 	//Colore os vertices
-	Hash* map;
+	Map* map;
 	if (g -> map)
 		map = g -> map;
 	else {
@@ -700,7 +917,7 @@ void escreve_cores_graphviz(Grafo* g, FILE* arquivo) {
 			printf("Criando novo mapa para %d\n",g -> g_raiz() -> g_numero());
 		else
 			printf("Criando novo mapa para Grafo inicial\n");
-		map = new Hash();	//Hash que ira guardar as cores relacionadas com cada numero
+		map = new Map();	//Map que ira guardar as cores relacionadas com cada numero
 		g -> map = map;
 		reinicia_cores();	//Reinicia as cores em list<Cor*> cores
 	}
@@ -736,7 +953,7 @@ void escreve_cores_graphviz(Grafo* g, FILE* arquivo) {
 					rgb = cores.front();
 					cores.pop_front();
 
-					//Inicia uma nova cor e a adiciona ao hash
+					//Inicia uma nova cor e a adiciona ao map
 					aux = new Cor(rgb);
 					map -> adicionar_cor(cor_n, aux);
 				}
@@ -846,14 +1063,6 @@ void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char const* caminho){
 		fputs(linha.c_str(), arquivo);
 	}
 	fclose(arquivo);
-}
-
-bool contem(Vertice* x, list<Vertice*> lista) {
-	for (Vertice* v: lista)
-		if (v == x)
-			return true;
-
-	return false;
 }
 
 void escreve_aneis_completo(list<Anel*> aneis, char const* caminho) {
@@ -1095,7 +1304,7 @@ void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* c
 	if (aneis.empty() || !g -> map)
 		return;
 
-	Hash* map = g -> map;
+	Map* map = g -> map;
 	int tam = aneis.front() -> casamentos.size();
 
 	string linha = "Anel, ";
@@ -1411,6 +1620,10 @@ void escreve_arvore_graphviz(Grafo* g, vector<Vertice*> dominadores, bool colori
 
 	int i = 0;
 	for (Vertice* v: dominadores) {
+		if (!v) {
+			printf("here\n");
+			continue;
+		}
 		lin = "";
 		lin += to_string(v -> g_id());
 		lin += " -> ";
@@ -1418,6 +1631,7 @@ void escreve_arvore_graphviz(Grafo* g, vector<Vertice*> dominadores, bool colori
 		lin += ";\n";
 		fputs(lin.c_str(), arquivo);
 		i++;
+		printf("lin: %s\n", lin.c_str());
 		//Forma esperada: ID -> g_id();\n
 	}
 

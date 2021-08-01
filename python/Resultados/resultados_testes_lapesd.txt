@@ -1,0 +1,83 @@
+Nome, Numero_Casamentos, Algoritmo_1_Linear_Sem_Cores, Algoritmo_1_Linear_Com_Cores, Algoritmo_1_Paralelo, Algoritmo_2_Linear, Algoritmo_2_Paralelo, Algoritmo_3, Melhor
+
+ap.txt, 1, 0.488s, 0.612s, 0.672s, 0.507s, 0.734s, 0.577s, A1L_Sem_Cores
+ap.txt, 2, 2.368s, 1.27s, 0.906s, 1.676s, 1.406s, 14.964s, A1P
+Arara4MaqPar.txt, 1, 0.182s, 0.103s, 0.14s, 0.093s, 0.144s, 0.116s, A2L
+Arara4MaqPar.txt, 2, 16.989s, 4.031s, 1.036s, 3.668s, 1.05s, 3.613s, A1P
+chacobo_fem.txt, 1, 7.118s, 6.227s, 5.675s, 3.82s, 5.93s, 5.639s, A2L
+chacobo_fem.txt, 2, 624.183s, 82.459s, 22.429s, 69.732s, 22.343s, 58.926s, A2P
+chacobo_mas.txt, 1, 6.314s, 5.51s, 5.642s, 3.824s, 6.208s, 5.638s, A2L
+chacobo_mas.txt, 2, 625.173s, 82.007s, 22.159s, 69.466s, 21.341s, 60.163s, A2P
+deni.txt, 1, 0.744s, 0.447s, 0.433s, 0.476s, 0.531s, 0.559s, A1P
+deni.txt, 2, 139.114s, 16.064s, 4.838s, 14.266s, 4.501s, 22.669s, A1L_Sem_Cores
+EN4MaqPar.txt, 1, 0.214s, 0.265s, 0.339s, 0.251s, 0.332s, 0.251s, A1L_Sem_Cores
+EN4MaqPar.txt, 2, 1.757s, 0.617s, 0.453s, 0.856s, 0.527s, 5.288s, A1P
+im.txt, 1, 0.176s, 0.187s, 0.247s, 0.186s, 0.302s, 0.194s, A1L_Sem_Cores
+im.txt, 2, 3.973s, 0.738s, 0.476s, 0.823s, 0.581s, 5.412s, A1P
+kraho.txt, 1, 1.869s, 1.251s, 1.323s, 0.941s, 1.69s, 1.426s, A2L
+kraho.txt, 2, 185.462s, 23.576s, 6.468s, 21.032s, 6.584s, 35.058s, A1L_Sem_Cores
+marcapata.txt, 1, 3.257s, 3.455s, 3.162s, 3.053s, 3.398s, 3.458s, A2L
+marcapata.txt, 2, 22.439s, 21.054s, 21.347s, 28.937s, 34.168s, 343.335s, A1L_Com_Cores
+mbya.txt, 1, 0.988s, 1.087s, 1.133s, 0.895s, 1.198s, 1.056s, A2L
+mbya.txt, 2, 4.725s, 3.158s, 2.788s, 4.336s, 4.404s, 41.508s, A1P
+xv.txt, 1, 0.067s, 0.064s, 0.092s, 0.073s, 0.075s, 0.076s, A1L_Com_Cores
+xv.txt, 2, 2.663s, 1.157s, 0.582s, 1.221s, 0.8s, 6.765s, A1P
+zo.txt, 1, 0.322s, 0.309s, 0.348s, 0.256s, 0.372s, 0.295s, A2L
+zo.txt, 2, 3.651s, 0.741s, 0.645s, 1.021s, 0.689s, 7.043s, A1P
+
+
+
+ap.txt, 1, 0.501s, 0.581s, 0.582s, 0.522s, 0.653s, 0.561s, A1L_Sem_Cores
+ap.txt, 2, 2.368s, 1.266s, 1.147s, 1.706s, 1.423s, 14.252s, A1P
+Arara4MaqPar.txt, 1, 0.164s, 0.13s, 0.187s, 0.128s, 0.112s, 0.114s, A2P
+Arara4MaqPar.txt, 2, 16.708s, 3.777s, 1.152s, 3.739s, 1.131s, 3.619s, A2P
+chacobo_fem.txt, 1, 6.299s, 5.492s, 5.909s, 3.681s, 5.952s, 5.675s, A2L
+chacobo_fem.txt, 2, 663.005s, 82.675s, 21.978s, 69.561s, 20.345s, 58.445s, A2P
+chacobo_mas.txt, 1, 6.284s, 5.465s, 5.74s, 3.683s, 6.25s, 5.637s, A2L
+chacobo_mas.txt, 2, 623.413s, 81.983s, 22.503s, 69.591s, 21.699s, 59.333s, A2P
+deni.txt, 1, 0.716s, 0.391s, 0.565s, 0.43s, 0.539s, 0.535s, A1L_Com_Cores
+deni.txt, 2, 140.056s, 16.137s, 4.564s, 14.004s, 4.563s, 22.759s, A2L
+EN4MaqPar.txt, 1, 0.243s, 0.276s, 0.368s, 0.261s, 0.353s, 0.288s, A1L_Sem_Cores
+EN4MaqPar.txt, 2, 1.788s, 0.641s, 0.524s, 0.744s, 0.506s, 5.467s, A2P
+im.txt, 1, 0.265s, 0.241s, 0.263s, 0.2s, 0.289s, 0.259s, A1L_Com_Cores
+im.txt, 2, 3.968s, 0.729s, 0.509s, 0.995s, 0.571s, 5.506s, A1P
+kraho.txt, 1, 1.726s, 1.319s, 1.392s, 0.934s, 1.449s, 1.381s, A2L
+kraho.txt, 2, 189.011s, 23.191s, 6.565s, 21.315s, 6.925s, 35.508s, A1L_Sem_Cores
+marcapata.txt, 1, 3.09s, 3.419s, 3.467s, 2.951s, 3.68s, 3.513s, A2L
+marcapata.txt, 2, 22.715s, 21.319s, 21.034s, 29.294s, 35.133s, 346.346s, A1P
+mbya.txt, 1, 0.976s, 1.076s, 0.908s, 0.985s, 1.171s, 1.032s, A1P
+mbya.txt, 2, 4.726s, 3.184s, 2.792s, 4.388s, 4.428s, 42.45s, A1P
+xv.txt, 1, 0.066s, 0.093s, 0.103s, 0.089s, 0.106s, 0.066s, A1L_Sem_Cores
+xv.txt, 2, 2.261s, 0.961s, 0.505s, 1.139s, 0.764s, 6.902s, A1P
+zo.txt, 1, 0.22s, 0.195s, 0.306s, 0.226s, 0.317s, 0.246s, A1L_Com_Cores
+zo.txt, 2, 3.36s, 0.728s, 0.464s, 0.769s, 0.782s, 7.16s, A1P
+
+
+
+ap.txt, 1, 0.461s, 0.576s, 0.696s, 0.518s, 0.697s, 0.528s, A1L_Sem_Cores
+ap.txt, 2, 2.407s, 1.27s, 1.057s, 1.633s, 1.408s, 14.874s, A1P
+Arara4MaqPar.txt, 1, 0.22s, 0.102s, 0.165s, 0.11s, 0.17s, 0.143s, A1L_Com_Cores
+Arara4MaqPar.txt, 2, 16.773s, 3.837s, 1.084s, 3.695s, 1.108s, 3.423s, A1P
+chacobo_fem.txt, 1, 6.307s, 5.272s, 5.537s, 3.759s, 6.112s, 5.787s, A2L
+chacobo_fem.txt, 2, 641.751s, 82.737s, 23.317s, 69.72s, 21.849s, 58.159s, A2P
+chacobo_mas.txt, 1, 6.301s, 5.4s, 5.943s, 3.688s, 6.088s, 5.958s, A2L
+chacobo_mas.txt, 2, 652.589s, 88.065s, 22.704s, 69.918s, 21.236s, 60.111s, A2P
+deni.txt, 1, 0.685s, 0.521s, 0.586s, 0.457s, 0.534s, 0.475s, A2L
+deni.txt, 2, 139.072s, 16.012s, 4.437s, 14.324s, 4.384s, 23.098s, A1L_Sem_Cores
+EN4MaqPar.txt, 1, 0.215s, 0.257s, 0.319s, 0.218s, 0.351s, 0.249s, A1L_Sem_Cores
+EN4MaqPar.txt, 2, 1.785s, 0.632s, 0.464s, 0.805s, 0.652s, 5.25s, A1P
+im.txt, 1, 0.186s, 0.224s, 0.291s, 0.191s, 0.304s, 0.189s, A1L_Sem_Cores
+im.txt, 2, 3.964s, 0.727s, 0.485s, 0.886s, 0.602s, 5.333s, A1P
+kraho.txt, 1, 1.742s, 1.258s, 1.342s, 1.112s, 2.02s, 1.325s, A2L
+kraho.txt, 2, 185.03s, 23.128s, 6.776s, 20.292s, 7.292s, 34.849s, A1L_Sem_Cores
+marcapata.txt, 1, 3.119s, 3.402s, 2.861s, 3.26s, 3.514s, 3.467s, A1P
+marcapata.txt, 2, 22.626s, 21.289s, 21.105s, 29.143s, 34.638s, 365.585s, A1P
+mbya.txt, 1, 0.976s, 1.007s, 0.883s, 0.851s, 0.928s, 1.029s, A2L
+mbya.txt, 2, 4.74s, 3.179s, 3s, 4.37s, 4.305s, 40.705s, A1L_Com_Cores
+xv.txt, 1, 0.066s, 0.09s, 0.102s, 0.076s, 0.104s, 0.062s, A3
+xv.txt, 2, 2.306s, 0.958s, 0.551s, 1.01s, 0.856s, 6.862s, A1P
+zo.txt, 1, 0.218s, 0.261s, 0.335s, 0.227s, 0.388s, 0.249s, A1L_Sem_Cores
+zo.txt, 2, 3.398s, 0.738s, 0.569s, 1.044s, 0.793s, 7.125s, A1P
+
+
+

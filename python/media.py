@@ -101,8 +101,10 @@ def media(fonte1, destino, nome_rede, numero_aneis):
 
 
     
-fonte = "Resultados/resultados_testes.txt"
-destino = "Resultados/medias.txt"
+fonte = "Resultados/resultados_testes_brasilplural_e.txt"
+destino = "Resultados/medias_brasilplural_e.txt" 
+#fonte = "Resultados/resultados_testes_lapesd.txt"
+#destino = "Resultados/medias_lapesd.txt"
 arq = open(destino, "w")
 a = "Nome, Numero_Casamentos, Algoritmo_1_Linear_Sem_Cores, Algoritmo_1_Linear_Com_Cores, Algoritmo_1_Paralelo, Algoritmo_2_Linear, Algoritmo_2_Paralelo, Algoritmo_3, Melhor\n\n"
 arq.write(a)

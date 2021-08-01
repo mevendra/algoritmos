@@ -121,9 +121,9 @@ def ler_resultados(fonte1, destino):
 
 
     
-
-ler_resultados("Fonte/nohup.out", "Resultados/resultados_testes.txt")
-
+ler_resultados("Fonte/nohup_brasilplural_e.out", "Resultados/resultados_testes_brasilplural_e.txt")
+#ler_resultados("Fonte/nohup_brasilplural.out", "Resultados/resultados_testes_brasilplural.txt")
+#ler_resultados("Fonte/nohup_lapesd.out", "Resultados/resultados_testes_lapesd.txt")
 
 
 

@@ -4,8 +4,9 @@
 #include <list>
 #include <set>
 #include <vector>
-#include <stack>
 #include <array>
+#include <string>
+#include <stack>
 #include <queue>
 
 #include <math.h>
@@ -13,19 +14,35 @@
 #include <sstream>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
+#include <iostream>
+
 
 using namespace std;
+class Nodo;
+class Grafo;
+class Vertice;
 
 template<typename T>
-bool contem(T t, list<T> l);
+bool contem(T t, list<T> l) {
+	for (T x: l)
+		if (x == t)
+			return true;
 
+	return false;
+}
+
+static Grafo* pgrafo;
 static list<string> cores;
+
 string primeira_cor();
 void reinicia_cores();
 string proxima_cor_aleatoria();
 
-class Nodo;
+//Vértice de p_g tem ponteiro == par e geracao calculada em valor int
+int geracao_casamento(Grafo* p_g, Vertice* c1, Vertice* c2);
+void definir_p_grafo(Grafo* g);
 
 struct Atributos_largura_lista {
 	int cor;
@@ -99,13 +116,13 @@ public:
 	string g_rgb() { return rgb; }
 };
 
-class Hash {
+class Map {
 	vector<set<int>> numeros;
 	vector<Cor*> cores;
 
 	public:
-		Hash() {}
-		~Hash();
+		Map() {}
+		~Map();
 		Cor* encontrar_cor(int numero);
 		Cor* encontrar_cor(set<int> numero);
 		int encontrar_indice_cor(set<int> numero);
@@ -131,12 +148,11 @@ class Vertice {
 		set<set<int>, set_cmp> cores;	//Cores até as folhas
 		vector<int> min_cores;
 		vector<int> max_cores;
-		vector<int> min_cores_;
-		vector<int> max_cores_;
 
 		//Valores auxiliares utilizados por metodos
 		int geracao = -1;
 		int valor_int = -1;
+		int valor_int_2 = -1;
 		bool valor_bool = false;
 		bool valor_bool_2 = false;
 		void* ponteiro = 0;
@@ -144,6 +160,7 @@ class Vertice {
 		Vertice(int id, int numero, char tipo);
 		void adicionar_cor(int cor_);
 		void adicionar_casamento(Vertice* casamento);
+		void remover_casamento(Vertice* casamento);
 		void adicionar_pais(Vertice* pai);
 		void adicionar_filho(Vertice* filho);
 		void resetar();
@@ -160,7 +177,7 @@ class Grafo {
 
 	public:
 		int** grafo;
-		Hash* map = 0;
+		Map* map = 0;
 		vector<Vertice*> atributos;
 
 		Grafo(int numero_vertices_, vector<Vertice*> atributos_, int** grafo_);

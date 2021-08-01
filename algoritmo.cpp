@@ -557,6 +557,8 @@ void descolorir(Grafo* g)
 	}
 }
 
+void nothing(){}
+
 //g é colorido
 void define_super_sob(Grafo* g)
 {
@@ -630,7 +632,8 @@ void define_super_sob_folhas(Grafo* g, list<int> &id_folhas)
 {
 	//Adiciona cor para as folhas
 	Cor* cor;
-	Hash* map = g -> map;
+	Map* map = g -> map;
+
 	for (Vertice* v: g -> atributos)
 		if (v) {
 			set<set<int>, set_cmp> novo;
@@ -638,8 +641,9 @@ void define_super_sob_folhas(Grafo* g, list<int> &id_folhas)
 
 			if (v -> filhos.size() == 0) {
 				cor = map -> encontrar_cor(v -> cor);
-				if (!cor)
+				if (!cor) {
 					throw runtime_error("Em define_super_sob_folhas, cor não encontrada");
+				}
 
 				//Adiciona cor e id de v
 				set<int> cor_v;
@@ -790,7 +794,7 @@ void define_max_cores(Grafo* g)
 		return;
 
 	Cor* cor;
-	Hash* map = g -> map;
+	Map* map = g -> map;
 	//Adiciona cores para os folhas
 	for (Vertice* v: g -> atributos) {
 		if (v -> filhos.size() == 0) {
@@ -849,10 +853,10 @@ void define_max_cores(Grafo* g)
 void init_map(Grafo* g)
 {
 	if (!g -> map) {
-		g -> map = new Hash();
+		g -> map = new Map();
 		reinicia_cores();
 	}
-	Hash* map = g -> map;
+	Map* map = g -> map;
 
 	//Atributos para coloracao
 	Cor* cor;
@@ -876,7 +880,7 @@ void init_map(Grafo* g)
 					if (rgb == "") //Se o numero de cores colocado na lista cores e muito pequeno
 					{ throw runtime_error("Erro em init_map(), Falta Cores!"); }
 
-					//Inicia uma nova cor e a adiciona ao hash
+					//Inicia uma nova cor e a adiciona ao map
 					aux = new Cor(rgb);
 					map -> adicionar_cor(cor_n, aux);
 				}
@@ -911,8 +915,9 @@ void init_map(Grafo* g)
 void encontra_raizes(Grafo* g, list<Vertice*>& destino)
 {
 	for (Vertice* v: g -> atributos)
-		if (v -> pais.size() == 0)
-			destino.push_back(v);
+		if (v)
+			if (v -> pais.size() == 0)
+				destino.push_back(v);
 }
 
 void ordem_topologica(Vertice* fonte, stack<Vertice*>& destino)
@@ -949,16 +954,16 @@ void define_min_max_cores(Grafo* g)
 	init_map(g);
 
 	for (Vertice* v: g -> atributos) {
-		v -> min_cores_ = vector<int>(g -> g_numero_vertices(), INT_MAX);
-		v -> max_cores_ = vector<int>(g -> g_numero_vertices(), 0);
+		v -> min_cores = vector<int>(g -> g_numero_vertices(), INT_MAX);
+		v -> max_cores = vector<int>(g -> g_numero_vertices(), 0);
 	}
 
 	for (Vertice* v: g -> atributos) {
 		set<int> colors;
 		procedimento_min_max(v, v, colors);
 		for (int i = 0; i < g -> g_numero_vertices(); i++) {
-			if (v -> min_cores_[i] == INT_MAX)
-				v -> min_cores_[i] = 0;
+			if (v -> min_cores[i] == INT_MAX)
+				v -> min_cores[i] = 0;
 		}
 	}
 
@@ -968,11 +973,11 @@ void procedimento_min_max(Vertice* f, Vertice* a, set<int> colors)
 {
 	colors.insert(a -> cor_int);
 
-	if (f -> min_cores_[a -> g_id()] > colors.size())
-		f -> min_cores_[a -> g_id()] = colors.size();
+	if (f -> min_cores[a -> g_id()] > colors.size())
+		f -> min_cores[a -> g_id()] = colors.size();
 
-	if (f -> max_cores_[a -> g_id()] < colors.size())
-		f -> max_cores_[a -> g_id()] = colors.size();
+	if (f -> max_cores[a -> g_id()] < colors.size())
+		f -> max_cores[a -> g_id()] = colors.size();
 
 	for (Vertice* v: a -> filhos)
 		procedimento_min_max(f, v, colors);
@@ -981,7 +986,11 @@ void procedimento_min_max(Vertice* f, Vertice* a, set<int> colors)
 template<typename T>
 void ordem_topologica(Grafo* g, Vertice* fonte, T& destino)
 {
-	g -> resetar();
+	for (Vertice* v: g -> atributos) {
+		if (v) {
+			v -> valor_bool = false;
+		}
+	}
 
 	ordem_topologica(fonte, destino);
 }
@@ -993,7 +1002,9 @@ void encontra_juncoes(Grafo* g, list<Juncao*>& destino)
 	for(Vertice* s: g -> atributos)
 	{
 		ordem_topologica(g, s, vs);
-		g -> resetar();
+
+		//g -> resetar();		//TODO Mudar p
+		for (Vertice* v: g -> atributos) v -> valor_int = -1;
 
 		s -> valor_int = s -> g_id();
 		vs.pop();
@@ -1097,8 +1108,10 @@ void encontra_arvore_dominadores(Grafo* g, vector<Vertice*> &dominadores_imediat
 	g -> adicionar_vertice(root);
 
 	//Algoritmo que chama recursivamente
-	for (Vertice* v: g -> atributos)
+	for (Vertice* v: g -> atributos) {
 		v -> valor_bool = true;
+		v -> valor_bool_2 = true;	//EQM Nao tenho certeza
+	}
 
 	procedimento_dominadores(g, g -> atributos, root, dominadores_imediatos);
 
@@ -1176,18 +1189,60 @@ void cobertura_dominadores(Grafo* g, vector<Vertice*> u, Vertice* s, vector<Vert
 				fd[v -> g_id()] = v;
 			else
 				fd[v -> g_id()] = fd[v -> pais.front() -> g_id()];
-		} else {
+		} else if (v -> pais.size() == 0){
 			throw runtime_error("Erro em cobertura_dominadores(), Vertice fonte no meio da ordenação");
+		} else {
+			throw runtime_error("Erro em cobertura_dominadores(), Verificar arvore");	//Verificar esta implementacao
+			//Verifica se algum pai é s
+			for (Vertice* a: v -> pais) {
+				if (a -> g_id() == s -> g_id()) {
+					fd[v -> g_id()] = v;
+				}
+			}
+			if (fd[v -> g_id()] == v)
+				continue;
+
+			//Verifica se os pais estao na mesma particao(copia)
+			//Verifica se os pais estao em particoes diferentes(novo)
+			Vertice* b;
+			bool encontrou = false;
+			for (Vertice* a: v -> pais) {
+				if (encontrou)
+					break;
+				if (fd[a -> g_id()] && !b) {	//Primeiro pai com particao
+					b = fd[a -> g_id()];
+					continue;
+				}
+
+				if (fd[a -> g_id()]) {
+					if (fd[a -> g_id()] != b) {	//Pelo menos dois dos pais estao em particoes diferentes, cria nova
+						fd[v -> g_id()] = v;
+						encontrou = true;
+						continue;
+					}
+				}
+			}
+
+			//Todos os pais na mesma particao, copia
+			if (!encontrou)
+				if (b) {
+					fd[v -> g_id()] = b;
+				} else
+					throw runtime_error("Erro em cobertura_dominadores(), Caso faltando");
 		}
 	}
 }
 
 void encontra_subgrafos(Grafo* fonte, vector<Grafo*> &subgrafos)
 {
+	cout << "Encontrando subgrafos" << endl;
 	list<Vertice*> raizes;
 	encontra_raizes(fonte, raizes);
 
+	cout << "Encontrou " << raizes.size() << " raizes\n";
+
 	for (Vertice* v: raizes) {
+		cout << "Criando subgrafo com " << v -> g_numero() << endl;
 		Grafo* novo = sub_grafo(fonte, v);
 		subgrafos.push_back(novo);
 		printf("Subgrafo com %d como raiz, com %d vertices criado\n", v -> g_numero(), novo -> g_numero_vertices());
@@ -1249,7 +1304,8 @@ int encontra_profundidade_media_de(Vertice* v)
 
 void geracao_grafo_superior(Grafo* g)
 {
-	g -> resetar();
+	for (Vertice* v: g -> atributos)
+		v -> valor_int = -1;
 
 	list<Vertice*> raizes;
 	encontra_raizes(g, raizes);
@@ -1263,7 +1319,8 @@ void geracao_grafo_superior(Grafo* g)
 void passar_geracao_filhos(Vertice* v)
 {
 	for (Vertice* x: v-> filhos) {
-		x -> valor_int = v -> valor_int + 1;
+		if (x -> valor_int <= v -> valor_int)
+			x -> valor_int = v -> valor_int + 1;
 		passar_geracao_filhos(x);
 	}
 }
@@ -1271,13 +1328,13 @@ void passar_geracao_filhos(Vertice* v)
 void geracao_grafo_inferior(Grafo* g)
 {
 	for (Vertice* v: g -> atributos)
-		v -> valor_int = -1;
+		v -> valor_int_2 = -1;
 
 	list<Vertice*> folhas;
 	encontra_folhas(g, folhas);
 
 	for (Vertice* v: folhas) {
-		v -> valor_int = 0;
+		v -> valor_int_2 = 0;
 		passar_geracao_pais(v);
 	}
 }
@@ -1285,7 +1342,7 @@ void geracao_grafo_inferior(Grafo* g)
 void passar_geracao_pais(Vertice* v)
 {
 	for (Vertice* x: v-> pais) {
-		x -> valor_int = v -> valor_int + 1;
+		x -> valor_int_2 = v -> valor_int_2 >= x -> valor_int_2 ? v -> valor_int_2 + 1 : x -> valor_int_2;
 		passar_geracao_pais(x);
 	}
 }
@@ -1323,6 +1380,10 @@ void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos)
 
 	//define_min_max_cores(g);
 	define_super_sob(g);
+
+	//Geracap inferior em Vertice -> valor int 2 e superior em valor int
+	geracao_grafo_inferior(g);
+	geracao_grafo_superior(g);
 
 	//3.3
 	//Define os conjuntos a serem trabalhados e operam encontrando os aneis sobre eles
@@ -1958,6 +2019,12 @@ void verifica_anel(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<l
 
 	Anel* novo = new Anel();
 	novo -> adicionar_elemento(caminhos, casamentos, juncoesUtilizadas);
+
+
+	if (novo -> anel.size() == 0) {
+		delete novo;
+		return;
+	}
 
 	destino.push_back(novo);
 	//destino.pop_back();

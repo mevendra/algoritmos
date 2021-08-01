@@ -4,16 +4,16 @@
 #include "estrutura.h"
 #include "algoritmo.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-
 const int MAX_COLUNA_ARQUIVO = 40;
 
 int** cria_matriz(int tamanho);
-Grafo* trabalha_arquivo(char const* caminho);
+Grafo* p_grafo(Grafo* g);
 Grafo* sub_grafo(Grafo* g, Vertice* fonte);
+Grafo* trabalha_arquivo(char const* caminho);
 
 void escreve_grafo_graphviz(Grafo* g, bool colorir, char const* caminho);
+void escreve_p_grafo_graphviz(Grafo* g, char const* caminho);
+void escreve_arvore_p_grafo_graphviz(Grafo* g, vector<Vertice*> dominadores, char const* caminho);
 void escreve_arvore_graphviz(Grafo* g, int* arvore, char const* caminho);
 void escreve_arvore_graphviz(Grafo* g, vector<Vertice*> dominadores, bool colorir, char const* caminho);
 void escreve_componentes_graphviz(Grafo* g, list<list<int>> componentes, char const* caminho);

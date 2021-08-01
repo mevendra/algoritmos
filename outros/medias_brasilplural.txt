@@ -1,0 +1,28 @@
+Nome, Numero_Casamentos, Algoritmo_1_Linear_Sem_Cores, Algoritmo_1_Linear_Com_Cores, Algoritmo_1_Paralelo, Algoritmo_2_Linear, Algoritmo_2_Paralelo, Algoritmo_3, Melhor
+
+ap.txt, 1, 0.863, 0.82, 0.818, 3.186, 2.741, 2.786, A1P
+Arara4MaqPar.txt, 1, 0.363, 0.218, 0.272, 0.293, 0.316, 0.329, A1L_Com_Cores
+chacobo_fem.txt, 1, 10.373, 8.595, 9.284, 10.542, 12.003, 11.688, A1L_Com_Cores
+chacobo_mas.txt, 1, 9.916, 8.41, 8.887, 10.314, 10.7, 11.341, A1L_Com_Cores
+deni.txt, 1, 1.319, 0.846, 1.046, 1.931, 1.761, 1.879, A1L_Com_Cores
+EN4MaqPar.txt, 1, 0.52, 0.472, 0.533, 1.102, 1.022, 1.071, A1L_Com_Cores
+im.txt, 1, 0.385, 0.328, 0.398, 0.752, 0.649, 0.732, A1L_Com_Cores
+kraho.txt, 1, 3.065, 2.129, 2.526, 4.707, 4.492, 5.105, A1L_Com_Cores
+marcapata.txt, 1, 4.986, 5.055, 5.289, 15.792, 14.749, 14.649, A1L_Sem_Cores
+mbya.txt, 1, 1.578, 1.494, 1.793, 4.723, 4.259, 4.22, A1L_Com_Cores
+xv.txt, 1, 0.108, 0.098, 0.121, 0.211, 0.193, 0.195, A1L_Com_Cores
+zo.txt, 1, 0.512, 0.447, 0.538, 1.415, 1.198, 1.212, A1L_Com_Cores
+
+
+ap.txt, 2, 4.328, 2.816, 1.317, 5.377, 3.913, 8.394, A1P
+Arara4MaqPar.txt, 2, 24.19, 7.035, 2.081, 6.721, 2.224, 5.868, A1P
+chacobo_fem.txt, 2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, A1L_Sem_Cores
+chacobo_mas.txt, 2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, A1L_Sem_Cores
+deni.txt, 2, 185.615, 29.211, 6.654, 26.412, 7.621, 22.489, A1P
+EN4MaqPar.txt, 2, 2.745, 1.291, 0.668, 2.028, 1.439, 2.74, A1P
+im.txt, 2, 5.752, 1.635, 0.536, 1.969, 0.992, 2.68, A1P
+kraho.txt, 2, 239.317, 39.259, 10.419, 36.624, 12.806, 30.545, A1P
+marcapata.txt, 2, 52.354, 50.553, 14.662, 77.242, 35.719, 176.86, A1P
+mbya.txt, 2, 9.318, 7.217, 2.8, 12.462, 7.087, 21.558, A1P
+xv.txt, 2, 3.659, 2.189, 0.509, 2.315, 0.819, 3.114, A1P
+zo.txt, 2, 5.037, 1.644, 0.682, 2.635, 1.735, 4.032, A1P

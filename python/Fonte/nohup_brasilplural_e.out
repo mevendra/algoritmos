@@ -1,0 +1,2748 @@
+./a.out ap.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004735
+ tempo_encontra_anel 0.00469
+ tempo_verifica_anel 0.00371
+ tempo_procura_caminhos 0.038108
+ tempo_copia_caminhos 0.002907
+ tempo_sao_disjuntos 0.00313
+Numero de aneis encontrados: 78
+Algoritmo 2 Linear, Tempo: 0.949s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 78
+Algoritmo 2 Paralelo, Tempo: 0.878s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 78
+Algoritmo 3 Paralelo, Tempo: 0.93s
+
+Terminou!
+Time difference = 2[s]
+./a.out ap.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 1.16917
+ tempo_encontra_anel 0.336122
+ tempo_verifica_anel 0.072547
+ tempo_procura_caminhos 0.05823
+ tempo_copia_caminhos 0.242465
+ tempo_sao_disjuntos 0.272326
+Numero de aneis encontrados: 1885
+Algoritmo 2 Linear, Tempo: 3.007s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1885
+Algoritmo 2 Paralelo, Tempo: 1.52s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 1885
+Algoritmo 3 Paralelo, Tempo: 8.847s
+
+Terminou!
+Time difference = 13[s]
+./a.out Arara4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(6)
+ tempo_encontra_anel_aux 0.005035
+ tempo_encontra_anel 0.014347
+ tempo_verifica_anel 0.011422
+ tempo_procura_caminhos 0.011234
+ tempo_copia_caminhos 0.003618
+ tempo_sao_disjuntos 0.005135
+Numero de aneis encontrados: 520
+Algoritmo 2 Linear, Tempo: 0.212s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 520
+Algoritmo 2 Paralelo, Tempo: 0.225s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (6threads)
+Numero de aneis encontrados: 520
+Algoritmo 3 Paralelo, Tempo: 0.267s
+
+Terminou!
+Time difference = 0[s]
+./a.out Arara4MaqPar.txt 2 7
+makefile:70: recipe for target 'all_novo' failed
+make: [all_novo] Segmentation fault (core dumped) (ignored)
+./a.out chacobo_fem.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.009369
+ tempo_encontra_anel 0.040814
+ tempo_verifica_anel 0.030797
+ tempo_procura_caminhos 0.063328
+ tempo_copia_caminhos 0.003827
+ tempo_sao_disjuntos 0.009336
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 7.424s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 8.643s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 9.055s
+
+Terminou!
+Time difference = 25[s]
+./a.out chacobo_mas.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.010445
+ tempo_encontra_anel 0.040424
+ tempo_verifica_anel 0.030802
+ tempo_procura_caminhos 0.06167
+ tempo_copia_caminhos 0.004963
+ tempo_sao_disjuntos 0.010338
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 7.727s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 8.733s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 8.958s
+
+Terminou!
+Time difference = 25[s]
+./a.out deni.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.00766
+ tempo_encontra_anel 0.026963
+ tempo_verifica_anel 0.020539
+ tempo_procura_caminhos 0.033055
+ tempo_copia_caminhos 0.003717
+ tempo_sao_disjuntos 0.006948
+Numero de aneis encontrados: 918
+Algoritmo 2 Linear, Tempo: 0.893s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 918
+Algoritmo 2 Paralelo, Tempo: 0.913s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 918
+Algoritmo 3 Paralelo, Tempo: 1.114s
+
+Terminou!
+Time difference = 2[s]
+./a.out deni.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 2.38598
+ tempo_encontra_anel 19.7264
+ tempo_verifica_anel 13.3935
+ tempo_procura_caminhos 0.080569
+ tempo_copia_caminhos 0.521232
+ tempo_sao_disjuntos 2.83807
+Numero de aneis encontrados: 320155
+Algoritmo 2 Linear, Tempo: 24.48s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 320155
+Algoritmo 2 Paralelo, Tempo: 7.812s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 320155
+Algoritmo 3 Paralelo, Tempo: 24.103s
+
+Terminou!
+Time difference = 56[s]
+./a.out EN4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.003809
+ tempo_encontra_anel 0.00335
+ tempo_verifica_anel 0.002946
+ tempo_procura_caminhos 0.01622
+ tempo_copia_caminhos 0.0028
+ tempo_sao_disjuntos 0.002859
+Numero de aneis encontrados: 16
+Algoritmo 2 Linear, Tempo: 0.509s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 16
+Algoritmo 2 Paralelo, Tempo: 0.507s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 16
+Algoritmo 3 Paralelo, Tempo: 0.593s
+
+Terminou!
+Time difference = 1[s]
+./a.out EN4MaqPar.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.451547
+ tempo_encontra_anel 0.215315
+ tempo_verifica_anel 0.097092
+ tempo_procura_caminhos 0.035942
+ tempo_copia_caminhos 0.098636
+ tempo_sao_disjuntos 0.123543
+Numero de aneis encontrados: 2539
+Algoritmo 2 Linear, Tempo: 1.474s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2539
+Algoritmo 2 Paralelo, Tempo: 0.795s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2539
+Algoritmo 3 Paralelo, Tempo: 3.371s
+
+Terminou!
+Time difference = 5[s]
+./a.out im.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004266
+ tempo_encontra_anel 0.006494
+ tempo_verifica_anel 0.005194
+ tempo_procura_caminhos 0.013675
+ tempo_copia_caminhos 0.002771
+ tempo_sao_disjuntos 0.003259
+Numero de aneis encontrados: 120
+Algoritmo 2 Linear, Tempo: 0.417s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 120
+Algoritmo 2 Paralelo, Tempo: 0.408s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 120
+Algoritmo 3 Paralelo, Tempo: 0.473s
+
+Terminou!
+Time difference = 1[s]
+./a.out im.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.513697
+ tempo_encontra_anel 0.458002
+ tempo_verifica_anel 0.261086
+ tempo_procura_caminhos 0.028486
+ tempo_copia_caminhos 0.112634
+ tempo_sao_disjuntos 0.168003
+Numero de aneis encontrados: 6390
+Algoritmo 2 Linear, Tempo: 1.725s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 6390
+Algoritmo 2 Paralelo, Tempo: 0.727s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 6390
+Algoritmo 3 Paralelo, Tempo: 3.669s
+
+Terminou!
+Time difference = 6[s]
+./a.out kraho.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.008792
+ tempo_encontra_anel 0.030063
+ tempo_verifica_anel 0.023143
+ tempo_procura_caminhos 0.057924
+ tempo_copia_caminhos 0.003448
+ tempo_sao_disjuntos 0.007559
+Numero de aneis encontrados: 812
+Algoritmo 2 Linear, Tempo: 2.225s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 812
+Algoritmo 2 Paralelo, Tempo: 2.293s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 812
+Algoritmo 3 Paralelo, Tempo: 2.704s
+
+Terminou!
+Time difference = 7[s]
+./a.out kraho.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 3.16071
+ tempo_encontra_anel 27.8633
+ tempo_verifica_anel 20.5017
+ tempo_procura_caminhos 0.154258
+ tempo_copia_caminhos 0.673732
+ tempo_sao_disjuntos 3.76055
+Numero de aneis encontrados: 353542
+Algoritmo 2 Linear, Tempo: 35.381s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 353542
+Algoritmo 2 Paralelo, Tempo: 11.747s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 353542
+Algoritmo 3 Paralelo, Tempo: 35.131s
+
+Terminou!
+Time difference = 82[s]
+./a.out marcapata.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.017074
+ tempo_encontra_anel 0.007956
+ tempo_verifica_anel 0.003839
+ tempo_procura_caminhos 0.246943
+ tempo_copia_caminhos 0.005601
+ tempo_sao_disjuntos 0.005816
+Numero de aneis encontrados: 30
+Algoritmo 2 Linear, Tempo: 6.089s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 30
+Algoritmo 2 Paralelo, Tempo: 5.909s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 30
+Algoritmo 3 Paralelo, Tempo: 6.027s
+
+Terminou!
+Time difference = 18[s]
+./a.out marcapata.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 34.2424
+ tempo_encontra_anel 6.97125
+ tempo_verifica_anel 0.079033
+ tempo_procura_caminhos 0.594199
+ tempo_copia_caminhos 6.93695
+ tempo_sao_disjuntos 7.19613
+Numero de aneis encontrados: 2118
+Algoritmo 2 Linear, Tempo: 70.65s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2118
+Algoritmo 2 Paralelo, Tempo: 24.132s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 2118
+Algoritmo 3 Paralelo, Tempo: 189.884s
+
+Terminou!
+Time difference = 284[s]
+./a.out mbya.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.00801
+ tempo_encontra_anel 0.00518
+ tempo_verifica_anel 0.003705
+ tempo_procura_caminhos 0.068536
+ tempo_copia_caminhos 0.004116
+ tempo_sao_disjuntos 0.004193
+Numero de aneis encontrados: 19
+Algoritmo 2 Linear, Tempo: 1.755s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 19
+Algoritmo 2 Paralelo, Tempo: 1.641s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 19
+Algoritmo 3 Paralelo, Tempo: 1.768s
+
+Terminou!
+Time difference = 5[s]
+./a.out mbya.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 4.1696
+ tempo_encontra_anel 0.884973
+ tempo_verifica_anel 0.027868
+ tempo_procura_caminhos 0.145456
+ tempo_copia_caminhos 0.846647
+ tempo_sao_disjuntos 0.88417
+Numero de aneis encontrados: 620
+Algoritmo 2 Linear, Tempo: 9.522s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 620
+Algoritmo 2 Paralelo, Tempo: 3.675s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 620
+Algoritmo 3 Paralelo, Tempo: 24.635s
+
+Terminou!
+Time difference = 37[s]
+./a.out xv.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.00489
+ tempo_encontra_anel 0.004947
+ tempo_verifica_anel 0.003791
+ tempo_procura_caminhos 0.009121
+ tempo_copia_caminhos 0.00286
+ tempo_sao_disjuntos 0.003135
+Numero de aneis encontrados: 56
+Algoritmo 2 Linear, Tempo: 0.136s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 56
+Algoritmo 2 Paralelo, Tempo: 0.127s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 56
+Algoritmo 3 Paralelo, Tempo: 0.121s
+
+Terminou!
+Time difference = 0[s]
+./a.out xv.txt 2 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(16)
+ tempo_encontra_anel_aux 0.972426
+ tempo_encontra_anel 0.524613
+ tempo_verifica_anel 0.255187
+ tempo_procura_caminhos 0.025925
+ tempo_copia_caminhos 0.208237
+ tempo_sao_disjuntos 0.27321
+Numero de aneis encontrados: 7455
+Algoritmo 2 Linear, Tempo: 2.268s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 7455
+Algoritmo 2 Paralelo, Tempo: 0.699s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (16threads)
+Numero de aneis encontrados: 7455
+Algoritmo 3 Paralelo, Tempo: 4.323s
+
+Terminou!
+Time difference = 7[s]
+./a.out zo.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004304
+ tempo_encontra_anel 0.004545
+ tempo_verifica_anel 0.003538
+ tempo_procura_caminhos 0.014033
+ tempo_copia_caminhos 0.002602
+ tempo_sao_disjuntos 0.002821
+Numero de aneis encontrados: 57
+Algoritmo 2 Linear, Tempo: 0.404s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 57
+Algoritmo 2 Paralelo, Tempo: 0.459s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 57
+Algoritmo 3 Paralelo, Tempo: 0.485s
+
+Terminou!
+Time difference = 1[s]
+./a.out zo.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.594993
+ tempo_encontra_anel 0.266943
+ tempo_verifica_anel 0.10998
+ tempo_procura_caminhos 0.070979
+ tempo_copia_caminhos 0.127554
+ tempo_sao_disjuntos 0.15922
+Numero de aneis encontrados: 2976
+Algoritmo 2 Linear, Tempo: 1.698s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2976
+Algoritmo 2 Paralelo, Tempo: 0.742s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2976
+Algoritmo 3 Paralelo, Tempo: 4.096s
+
+Terminou!
+Time difference = 6[s]
+
+
+********************
+
+
+./a.out ap.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004688
+ tempo_encontra_anel 0.004857
+ tempo_verifica_anel 0.003797
+ tempo_procura_caminhos 0.03001
+ tempo_copia_caminhos 0.002691
+ tempo_sao_disjuntos 0.002998
+Numero de aneis encontrados: 78
+Algoritmo 2 Linear, Tempo: 0.862s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 78
+Algoritmo 2 Paralelo, Tempo: 0.799s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 78
+Algoritmo 3 Paralelo, Tempo: 0.855s
+
+Terminou!
+Time difference = 2[s]
+./a.out ap.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 1.17158
+ tempo_encontra_anel 0.338434
+ tempo_verifica_anel 0.074162
+ tempo_procura_caminhos 0.064689
+ tempo_copia_caminhos 0.242579
+ tempo_sao_disjuntos 0.27094
+Numero de aneis encontrados: 1885
+Algoritmo 2 Linear, Tempo: 3.13s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1885
+Algoritmo 2 Paralelo, Tempo: 1.459s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 1885
+Algoritmo 3 Paralelo, Tempo: 8.17s
+
+Terminou!
+Time difference = 12[s]
+./a.out Arara4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(6)
+ tempo_encontra_anel_aux 0.003593
+ tempo_encontra_anel 0.012146
+ tempo_verifica_anel 0.009419
+ tempo_procura_caminhos 0.007711
+ tempo_copia_caminhos 0.002416
+ tempo_sao_disjuntos 0.003731
+Numero de aneis encontrados: 520
+Algoritmo 2 Linear, Tempo: 0.181s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 520
+Algoritmo 2 Paralelo, Tempo: 0.191s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (6threads)
+Numero de aneis encontrados: 520
+Algoritmo 3 Paralelo, Tempo: 0.229s
+
+Terminou!
+Time difference = 0[s]
+./a.out Arara4MaqPar.txt 2 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(6)
+ tempo_encontra_anel_aux 0.307037
+ tempo_encontra_anel 5.87317
+ tempo_verifica_anel 4.13472
+ tempo_procura_caminhos 0.011675
+ tempo_copia_caminhos 0.071341
+ tempo_sao_disjuntos 0.642517
+Numero de aneis encontrados: 110590
+Algoritmo 2 Linear, Tempo: 6.494s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 110590
+Algoritmo 2 Paralelo, Tempo: 2.103s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (6threads)
+Numero de aneis encontrados: 110590
+Algoritmo 3 Paralelo, Tempo: 5.597s
+
+Terminou!
+Time difference = 14[s]
+./a.out chacobo_fem.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.009563
+ tempo_encontra_anel 0.042595
+ tempo_verifica_anel 0.032214
+ tempo_procura_caminhos 0.067726
+ tempo_copia_caminhos 0.003958
+ tempo_sao_disjuntos 0.009718
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 7.192s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 8.128s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 8.617s
+
+Terminou!
+Time difference = 24[s]
+./a.out chacobo_mas.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.011413
+ tempo_encontra_anel 0.056192
+ tempo_verifica_anel 0.042594
+ tempo_procura_caminhos 0.058454
+ tempo_copia_caminhos 0.004381
+ tempo_sao_disjuntos 0.011728
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 7.24s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 8.158s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 8.873s
+
+Terminou!
+Time difference = 24[s]
+./a.out deni.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.007698
+ tempo_encontra_anel 0.027957
+ tempo_verifica_anel 0.020939
+ tempo_procura_caminhos 0.02743
+ tempo_copia_caminhos 0.003305
+ tempo_sao_disjuntos 0.006943
+Numero de aneis encontrados: 918
+Algoritmo 2 Linear, Tempo: 0.736s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 918
+Algoritmo 2 Paralelo, Tempo: 0.815s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 918
+Algoritmo 3 Paralelo, Tempo: 0.935s
+
+Terminou!
+Time difference = 2[s]
+./a.out deni.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 2.54727
+ tempo_encontra_anel 21.5529
+ tempo_verifica_anel 14.527
+ tempo_procura_caminhos 0.063134
+ tempo_copia_caminhos 0.548109
+ tempo_sao_disjuntos 3.07741
+Numero de aneis encontrados: 320155
+Algoritmo 2 Linear, Tempo: 26.331s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 320155
+Algoritmo 2 Paralelo, Tempo: 7.138s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 320155
+Algoritmo 3 Paralelo, Tempo: 23.778s
+
+Terminou!
+Time difference = 57[s]
+./a.out EN4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.004144
+ tempo_encontra_anel 0.003433
+ tempo_verifica_anel 0.002768
+ tempo_procura_caminhos 0.010939
+ tempo_copia_caminhos 0.002642
+ tempo_sao_disjuntos 0.002725
+Numero de aneis encontrados: 16
+Algoritmo 2 Linear, Tempo: 0.354s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 16
+Algoritmo 2 Paralelo, Tempo: 0.465s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 16
+Algoritmo 3 Paralelo, Tempo: 0.519s
+
+Terminou!
+Time difference = 1[s]
+./a.out EN4MaqPar.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.474612
+ tempo_encontra_anel 0.21633
+ tempo_verifica_anel 0.095423
+ tempo_procura_caminhos 0.034269
+ tempo_copia_caminhos 0.103298
+ tempo_sao_disjuntos 0.127983
+Numero de aneis encontrados: 2539
+Algoritmo 2 Linear, Tempo: 1.521s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2539
+Algoritmo 2 Paralelo, Tempo: 0.729s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2539
+Algoritmo 3 Paralelo, Tempo: 3.392s
+
+Terminou!
+Time difference = 5[s]
+./a.out im.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004375
+ tempo_encontra_anel 0.006701
+ tempo_verifica_anel 0.00516
+ tempo_procura_caminhos 0.010395
+ tempo_copia_caminhos 0.002576
+ tempo_sao_disjuntos 0.003079
+Numero de aneis encontrados: 120
+Algoritmo 2 Linear, Tempo: 0.249s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 120
+Algoritmo 2 Paralelo, Tempo: 0.355s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 120
+Algoritmo 3 Paralelo, Tempo: 0.386s
+
+Terminou!
+Time difference = 0[s]
+./a.out im.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.517952
+ tempo_encontra_anel 0.417707
+ tempo_verifica_anel 0.231996
+ tempo_procura_caminhos 0.029307
+ tempo_copia_caminhos 0.113447
+ tempo_sao_disjuntos 0.165694
+Numero de aneis encontrados: 6390
+Algoritmo 2 Linear, Tempo: 1.64s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 6390
+Algoritmo 2 Paralelo, Tempo: 0.683s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 6390
+Algoritmo 3 Paralelo, Tempo: 3.874s
+
+Terminou!
+Time difference = 6[s]
+./a.out kraho.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.008348
+ tempo_encontra_anel 0.026823
+ tempo_verifica_anel 0.020375
+ tempo_procura_caminhos 0.061506
+ tempo_copia_caminhos 0.003486
+ tempo_sao_disjuntos 0.007164
+Numero de aneis encontrados: 812
+Algoritmo 2 Linear, Tempo: 2.295s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 812
+Algoritmo 2 Paralelo, Tempo: 2.34s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 812
+Algoritmo 3 Paralelo, Tempo: 2.556s
+
+Terminou!
+Time difference = 7[s]
+./a.out kraho.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 3.40806
+ tempo_encontra_anel 28.7676
+ tempo_verifica_anel 20.9475
+ tempo_procura_caminhos 0.166535
+ tempo_copia_caminhos 0.731092
+ tempo_sao_disjuntos 3.96295
+Numero de aneis encontrados: 353542
+Algoritmo 2 Linear, Tempo: 36.646s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 353542
+Algoritmo 2 Paralelo, Tempo: 10.852s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 353542
+Algoritmo 3 Paralelo, Tempo: 34.382s
+
+Terminou!
+Time difference = 82[s]
+./a.out marcapata.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.017676
+ tempo_encontra_anel 0.007748
+ tempo_verifica_anel 0.003492
+ tempo_procura_caminhos 0.221066
+ tempo_copia_caminhos 0.005598
+ tempo_sao_disjuntos 0.005799
+Numero de aneis encontrados: 30
+Algoritmo 2 Linear, Tempo: 5.57s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 30
+Algoritmo 2 Paralelo, Tempo: 5.511s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 30
+Algoritmo 3 Paralelo, Tempo: 5.781s
+
+Terminou!
+Time difference = 17[s]
+./a.out marcapata.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 35.3602
+ tempo_encontra_anel 7.05317
+ tempo_verifica_anel 0.081565
+ tempo_procura_caminhos 0.540021
+ tempo_copia_caminhos 7.21137
+ tempo_sao_disjuntos 7.46581
+Numero de aneis encontrados: 2118
+Algoritmo 2 Linear, Tempo: 71.605s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2118
+Algoritmo 2 Paralelo, Tempo: 24.486s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 2118
+Algoritmo 3 Paralelo, Tempo: 199.726s
+
+Terminou!
+Time difference = 296[s]
+./a.out mbya.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.008236
+ tempo_encontra_anel 0.005275
+ tempo_verifica_anel 0.003797
+ tempo_procura_caminhos 0.063228
+ tempo_copia_caminhos 0.004264
+ tempo_sao_disjuntos 0.004312
+Numero de aneis encontrados: 19
+Algoritmo 2 Linear, Tempo: 1.81s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 19
+Algoritmo 2 Paralelo, Tempo: 1.907s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 19
+Algoritmo 3 Paralelo, Tempo: 2.02s
+
+Terminou!
+Time difference = 5[s]
+./a.out mbya.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 3.90145
+ tempo_encontra_anel 0.81452
+ tempo_verifica_anel 0.026999
+ tempo_procura_caminhos 0.154869
+ tempo_copia_caminhos 0.804443
+ tempo_sao_disjuntos 0.841238
+Numero de aneis encontrados: 620
+Algoritmo 2 Linear, Tempo: 9.283s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 620
+Algoritmo 2 Paralelo, Tempo: 4.08s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 620
+Algoritmo 3 Paralelo, Tempo: 24.484s
+
+Terminou!
+Time difference = 37[s]
+./a.out xv.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.004973
+ tempo_encontra_anel 0.004716
+ tempo_verifica_anel 0.003934
+ tempo_procura_caminhos 0.010879
+ tempo_copia_caminhos 0.003397
+ tempo_sao_disjuntos 0.003564
+Numero de aneis encontrados: 56
+Algoritmo 2 Linear, Tempo: 0.138s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 56
+Algoritmo 2 Paralelo, Tempo: 0.127s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 56
+Algoritmo 3 Paralelo, Tempo: 0.154s
+
+Terminou!
+Time difference = 0[s]
+./a.out xv.txt 2 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(16)
+ tempo_encontra_anel_aux 0.995836
+ tempo_encontra_anel 0.521749
+ tempo_verifica_anel 0.25136
+ tempo_procura_caminhos 0.025578
+ tempo_copia_caminhos 0.213888
+ tempo_sao_disjuntos 0.280734
+Numero de aneis encontrados: 7455
+Algoritmo 2 Linear, Tempo: 2.321s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 7455
+Algoritmo 2 Paralelo, Tempo: 0.677s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (16threads)
+Numero de aneis encontrados: 7455
+Algoritmo 3 Paralelo, Tempo: 4.46s
+
+Terminou!
+Time difference = 7[s]
+./a.out zo.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.00442
+ tempo_encontra_anel 0.004571
+ tempo_verifica_anel 0.00372
+ tempo_procura_caminhos 0.017234
+ tempo_copia_caminhos 0.002876
+ tempo_sao_disjuntos 0.003091
+Numero de aneis encontrados: 57
+Algoritmo 2 Linear, Tempo: 0.446s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 57
+Algoritmo 2 Paralelo, Tempo: 0.488s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 57
+Algoritmo 3 Paralelo, Tempo: 0.562s
+
+Terminou!
+Time difference = 1[s]
+./a.out zo.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.607322
+ tempo_encontra_anel 0.273743
+ tempo_verifica_anel 0.115657
+ tempo_procura_caminhos 0.040015
+ tempo_copia_caminhos 0.130575
+ tempo_sao_disjuntos 0.161739
+Numero de aneis encontrados: 2976
+Algoritmo 2 Linear, Tempo: 1.793s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2976
+Algoritmo 2 Paralelo, Tempo: 0.931s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2976
+Algoritmo 3 Paralelo, Tempo: 4.472s
+
+Terminou!
+Time difference = 7[s]
+
+
+********************
+
+
+./a.out ap.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004926
+ tempo_encontra_anel 0.004773
+ tempo_verifica_anel 0.00384
+ tempo_procura_caminhos 0.037672
+ tempo_copia_caminhos 0.003104
+ tempo_sao_disjuntos 0.00331
+Numero de aneis encontrados: 78
+Algoritmo 2 Linear, Tempo: 0.948s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 78
+Algoritmo 2 Paralelo, Tempo: 1.103s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 78
+Algoritmo 3 Paralelo, Tempo: 1.014s
+
+Terminou!
+Time difference = 3[s]
+./a.out ap.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 1.2617
+ tempo_encontra_anel 0.3681
+ tempo_verifica_anel 0.078683
+ tempo_procura_caminhos 0.080287
+ tempo_copia_caminhos 0.261938
+ tempo_sao_disjuntos 0.288628
+Numero de aneis encontrados: 1885
+Algoritmo 2 Linear, Tempo: 3.512s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1885
+Algoritmo 2 Paralelo, Tempo: 1.709s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 1885
+Algoritmo 3 Paralelo, Tempo: 8.837s
+
+Terminou!
+Time difference = 14[s]
+./a.out Arara4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(6)
+ tempo_encontra_anel_aux 0.004928
+ tempo_encontra_anel 0.01417
+ tempo_verifica_anel 0.011164
+ tempo_procura_caminhos 0.01065
+ tempo_copia_caminhos 0.003359
+ tempo_sao_disjuntos 0.004984
+Numero de aneis encontrados: 520
+Algoritmo 2 Linear, Tempo: 0.219s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 520
+Algoritmo 2 Paralelo, Tempo: 0.251s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (6threads)
+Numero de aneis encontrados: 520
+Algoritmo 3 Paralelo, Tempo: 0.291s
+
+Terminou!
+Time difference = 0[s]
+./a.out Arara4MaqPar.txt 2 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(6)
+ tempo_encontra_anel_aux 0.339396
+ tempo_encontra_anel 6.0512
+ tempo_verifica_anel 4.27192
+ tempo_procura_caminhos 0.015037
+ tempo_copia_caminhos 0.082902
+ tempo_sao_disjuntos 0.681366
+Numero de aneis encontrados: 110590
+Algoritmo 2 Linear, Tempo: 6.799s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 110590
+Algoritmo 2 Paralelo, Tempo: 2.088s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (6threads)
+Numero de aneis encontrados: 110590
+Algoritmo 3 Paralelo, Tempo: 5.649s
+
+Terminou!
+Time difference = 14[s]
+./a.out chacobo_fem.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.012006
+ tempo_encontra_anel 0.055574
+ tempo_verifica_anel 0.042068
+ tempo_procura_caminhos 0.068038
+ tempo_copia_caminhos 0.004619
+ tempo_sao_disjuntos 0.01195
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 7.713s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 9.364s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 9.985s
+
+Terminou!
+Time difference = 27[s]
+./a.out chacobo_mas.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.012674
+ tempo_encontra_anel 0.054581
+ tempo_verifica_anel 0.041558
+ tempo_procura_caminhos 0.069039
+ tempo_copia_caminhos 0.00517
+ tempo_sao_disjuntos 0.012728
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 8.1s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 9.283s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 9.952s
+
+Terminou!
+Time difference = 27[s]
+./a.out deni.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.008395
+ tempo_encontra_anel 0.029029
+ tempo_verifica_anel 0.022235
+ tempo_procura_caminhos 0.032282
+ tempo_copia_caminhos 0.00392
+ tempo_sao_disjuntos 0.007617
+Numero de aneis encontrados: 918
+Algoritmo 2 Linear, Tempo: 0.989s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 918
+Algoritmo 2 Paralelo, Tempo: 1.055s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 918
+Algoritmo 3 Paralelo, Tempo: 1.254s
+
+Terminou!
+Time difference = 3[s]
+./a.out deni.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 2.85929
+ tempo_encontra_anel 23.6455
+ tempo_verifica_anel 16.0343
+ tempo_procura_caminhos 0.088387
+ tempo_copia_caminhos 0.642259
+ tempo_sao_disjuntos 3.3208
+Numero de aneis encontrados: 320155
+Algoritmo 2 Linear, Tempo: 29.199s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 320155
+Algoritmo 2 Paralelo, Tempo: 8.961s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 320155
+Algoritmo 3 Paralelo, Tempo: 25.733s
+
+Terminou!
+Time difference = 64[s]
+./a.out EN4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.003917
+ tempo_encontra_anel 0.003399
+ tempo_verifica_anel 0.002992
+ tempo_procura_caminhos 0.016004
+ tempo_copia_caminhos 0.002902
+ tempo_sao_disjuntos 0.002967
+Numero de aneis encontrados: 16
+Algoritmo 2 Linear, Tempo: 0.487s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 16
+Algoritmo 2 Paralelo, Tempo: 0.452s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 16
+Algoritmo 3 Paralelo, Tempo: 0.529s
+
+Terminou!
+Time difference = 1[s]
+./a.out EN4MaqPar.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.429925
+ tempo_encontra_anel 0.195706
+ tempo_verifica_anel 0.087272
+ tempo_procura_caminhos 0.030023
+ tempo_copia_caminhos 0.092448
+ tempo_sao_disjuntos 0.116953
+Numero de aneis encontrados: 2539
+Algoritmo 2 Linear, Tempo: 1.355s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2539
+Algoritmo 2 Paralelo, Tempo: 0.695s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2539
+Algoritmo 3 Paralelo, Tempo: 3.21s
+
+Terminou!
+Time difference = 5[s]
+./a.out im.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004006
+ tempo_encontra_anel 0.005533
+ tempo_verifica_anel 0.004398
+ tempo_procura_caminhos 0.013281
+ tempo_copia_caminhos 0.002564
+ tempo_sao_disjuntos 0.00297
+Numero de aneis encontrados: 120
+Algoritmo 2 Linear, Tempo: 0.37s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 120
+Algoritmo 2 Paralelo, Tempo: 0.347s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 120
+Algoritmo 3 Paralelo, Tempo: 0.375s
+
+Terminou!
+Time difference = 1[s]
+./a.out im.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.519576
+ tempo_encontra_anel 0.442325
+ tempo_verifica_anel 0.248554
+ tempo_procura_caminhos 0.036015
+ tempo_copia_caminhos 0.112901
+ tempo_sao_disjuntos 0.167704
+Numero de aneis encontrados: 6390
+Algoritmo 2 Linear, Tempo: 1.646s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 6390
+Algoritmo 2 Paralelo, Tempo: 0.611s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 6390
+Algoritmo 3 Paralelo, Tempo: 3.691s
+
+Terminou!
+Time difference = 5[s]
+./a.out kraho.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.00901
+ tempo_encontra_anel 0.026296
+ tempo_verifica_anel 0.020205
+ tempo_procura_caminhos 0.071999
+ tempo_copia_caminhos 0.004385
+ tempo_sao_disjuntos 0.007914
+Numero de aneis encontrados: 812
+Algoritmo 2 Linear, Tempo: 2.427s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 812
+Algoritmo 2 Paralelo, Tempo: 2.475s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 812
+Algoritmo 3 Paralelo, Tempo: 2.759s
+
+Terminou!
+Time difference = 7[s]
+./a.out kraho.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 3.37164
+ tempo_encontra_anel 29.3371
+ tempo_verifica_anel 21.523
+ tempo_procura_caminhos 0.168386
+ tempo_copia_caminhos 0.727716
+ tempo_sao_disjuntos 3.96714
+Numero de aneis encontrados: 353542
+Algoritmo 2 Linear, Tempo: 37.046s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 353542
+Algoritmo 2 Paralelo, Tempo: 12.323s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 353542
+Algoritmo 3 Paralelo, Tempo: 36.023s
+
+Terminou!
+Time difference = 85[s]
+./a.out marcapata.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.01647
+ tempo_encontra_anel 0.007692
+ tempo_verifica_anel 0.004043
+ tempo_procura_caminhos 0.252869
+ tempo_copia_caminhos 0.005718
+ tempo_sao_disjuntos 0.006004
+Numero de aneis encontrados: 30
+Algoritmo 2 Linear, Tempo: 6.682s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 30
+Algoritmo 2 Paralelo, Tempo: 6.48s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 30
+Algoritmo 3 Paralelo, Tempo: 6.157s
+
+Terminou!
+Time difference = 19[s]
+./a.out marcapata.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 36.0669
+ tempo_encontra_anel 7.31814
+ tempo_verifica_anel 0.07991
+ tempo_procura_caminhos 0.57904
+ tempo_copia_caminhos 7.34296
+ tempo_sao_disjuntos 7.56008
+Numero de aneis encontrados: 2118
+Algoritmo 2 Linear, Tempo: 74.365s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2118
+Algoritmo 2 Paralelo, Tempo: 25.487s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 2118
+Algoritmo 3 Paralelo, Tempo: 231.885s
+
+Terminou!
+Time difference = 331[s]
+./a.out mbya.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.007808
+ tempo_encontra_anel 0.00508
+ tempo_verifica_anel 0.003633
+ tempo_procura_caminhos 0.079592
+ tempo_copia_caminhos 0.003968
+ tempo_sao_disjuntos 0.004056
+Numero de aneis encontrados: 19
+Algoritmo 2 Linear, Tempo: 1.996s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 19
+Algoritmo 2 Paralelo, Tempo: 2.076s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 19
+Algoritmo 3 Paralelo, Tempo: 2.11s
+
+Terminou!
+Time difference = 6[s]
+./a.out mbya.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 4.17402
+ tempo_encontra_anel 0.880014
+ tempo_verifica_anel 0.028656
+ tempo_procura_caminhos 0.154388
+ tempo_copia_caminhos 0.860098
+ tempo_sao_disjuntos 0.900014
+Numero de aneis encontrados: 620
+Algoritmo 2 Linear, Tempo: 9.88s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 620
+Algoritmo 2 Paralelo, Tempo: 4.707s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 620
+Algoritmo 3 Paralelo, Tempo: 24.232s
+
+Terminou!
+Time difference = 38[s]
+./a.out xv.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.005519
+ tempo_encontra_anel 0.004761
+ tempo_verifica_anel 0.003871
+ tempo_procura_caminhos 0.008817
+ tempo_copia_caminhos 0.003101
+ tempo_sao_disjuntos 0.00397
+Numero de aneis encontrados: 56
+Algoritmo 2 Linear, Tempo: 0.137s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 56
+Algoritmo 2 Paralelo, Tempo: 0.131s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 56
+Algoritmo 3 Paralelo, Tempo: 0.164s
+
+Terminou!
+Time difference = 0[s]
+./a.out xv.txt 2 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(16)
+ tempo_encontra_anel_aux 1.06263
+ tempo_encontra_anel 0.559336
+ tempo_verifica_anel 0.266249
+ tempo_procura_caminhos 0.026941
+ tempo_copia_caminhos 0.229149
+ tempo_sao_disjuntos 0.294567
+Numero de aneis encontrados: 7455
+Algoritmo 2 Linear, Tempo: 2.543s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 7455
+Algoritmo 2 Paralelo, Tempo: 0.657s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (16threads)
+Numero de aneis encontrados: 7455
+Algoritmo 3 Paralelo, Tempo: 4.933s
+
+Terminou!
+Time difference = 8[s]
+./a.out zo.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004916
+ tempo_encontra_anel 0.00526
+ tempo_verifica_anel 0.004457
+ tempo_procura_caminhos 0.020163
+ tempo_copia_caminhos 0.003514
+ tempo_sao_disjuntos 0.003709
+Numero de aneis encontrados: 57
+Algoritmo 2 Linear, Tempo: 0.493s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 57
+Algoritmo 2 Paralelo, Tempo: 0.59s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 57
+Algoritmo 3 Paralelo, Tempo: 0.581s
+
+Terminou!
+Time difference = 1[s]
+./a.out zo.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.674261
+ tempo_encontra_anel 0.300829
+ tempo_verifica_anel 0.126782
+ tempo_procura_caminhos 0.046682
+ tempo_copia_caminhos 0.140225
+ tempo_sao_disjuntos 0.197456
+Numero de aneis encontrados: 2976
+Algoritmo 2 Linear, Tempo: 1.98s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2976
+Algoritmo 2 Paralelo, Tempo: 0.932s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2976
+Algoritmo 3 Paralelo, Tempo: 4.429s
+
+Terminou!
+Time difference = 7[s]
+
+
+********************
+
+
+./a.out ap.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.00499
+ tempo_encontra_anel 0.005067
+ tempo_verifica_anel 0.003969
+ tempo_procura_caminhos 0.033423
+ tempo_copia_caminhos 0.002968
+ tempo_sao_disjuntos 0.003238
+Numero de aneis encontrados: 78
+Algoritmo 2 Linear, Tempo: 0.82s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 78
+Algoritmo 2 Paralelo, Tempo: 0.826s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 78
+Algoritmo 3 Paralelo, Tempo: 0.868s
+
+Terminou!
+Time difference = 2[s]
+./a.out ap.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 1.27191
+ tempo_encontra_anel 0.372594
+ tempo_verifica_anel 0.079404
+ tempo_procura_caminhos 0.065068
+ tempo_copia_caminhos 0.261659
+ tempo_sao_disjuntos 0.292294
+Numero de aneis encontrados: 1885
+Algoritmo 2 Linear, Tempo: 3.407s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1885
+Algoritmo 2 Paralelo, Tempo: 1.458s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 1885
+Algoritmo 3 Paralelo, Tempo: 8.577s
+
+Terminou!
+Time difference = 13[s]
+./a.out Arara4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(6)
+ tempo_encontra_anel_aux 0.005352
+ tempo_encontra_anel 0.01802
+ tempo_verifica_anel 0.014133
+ tempo_procura_caminhos 0.013517
+ tempo_copia_caminhos 0.003612
+ tempo_sao_disjuntos 0.005448
+Numero de aneis encontrados: 520
+Algoritmo 2 Linear, Tempo: 0.221s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 520
+Algoritmo 2 Paralelo, Tempo: 0.236s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (6threads)
+Numero de aneis encontrados: 520
+Algoritmo 3 Paralelo, Tempo: 0.275s
+
+Terminou!
+Time difference = 0[s]
+./a.out Arara4MaqPar.txt 2 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(6)
+ tempo_encontra_anel_aux 0.336093
+ tempo_encontra_anel 6.38394
+ tempo_verifica_anel 4.52126
+ tempo_procura_caminhos 0.016765
+ tempo_copia_caminhos 0.07787
+ tempo_sao_disjuntos 0.691993
+Numero de aneis encontrados: 110590
+Algoritmo 2 Linear, Tempo: 7.091s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 110590
+Algoritmo 2 Paralelo, Tempo: 2.27s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (6threads)
+Numero de aneis encontrados: 110590
+Algoritmo 3 Paralelo, Tempo: 6.012s
+
+Terminou!
+Time difference = 15[s]
+./a.out chacobo_fem.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.012704
+ tempo_encontra_anel 0.06118
+ tempo_verifica_anel 0.046193
+ tempo_procura_caminhos 0.06859
+ tempo_copia_caminhos 0.004491
+ tempo_sao_disjuntos 0.012632
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 7.757s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 9.007s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 9.551s
+
+Terminou!
+Time difference = 26[s]
+./a.out chacobo_mas.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.008796
+ tempo_encontra_anel 0.039462
+ tempo_verifica_anel 0.029823
+ tempo_procura_caminhos 0.07463
+ tempo_copia_caminhos 0.004032
+ tempo_sao_disjuntos 0.009432
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 7.703s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 8.717s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 9.069s
+
+Terminou!
+Time difference = 25[s]
+./a.out deni.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.007163
+ tempo_encontra_anel 0.024748
+ tempo_verifica_anel 0.018525
+ tempo_procura_caminhos 0.029736
+ tempo_copia_caminhos 0.003363
+ tempo_sao_disjuntos 0.006569
+Numero de aneis encontrados: 918
+Algoritmo 2 Linear, Tempo: 0.96s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 918
+Algoritmo 2 Paralelo, Tempo: 0.878s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 918
+Algoritmo 3 Paralelo, Tempo: 1.077s
+
+Terminou!
+Time difference = 2[s]
+./a.out deni.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 2.71746
+ tempo_encontra_anel 22.2029
+ tempo_verifica_anel 15.0608
+ tempo_procura_caminhos 0.066498
+ tempo_copia_caminhos 0.608329
+ tempo_sao_disjuntos 3.15839
+Numero de aneis encontrados: 320155
+Algoritmo 2 Linear, Tempo: 27.089s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 320155
+Algoritmo 2 Paralelo, Tempo: 7.828s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 320155
+Algoritmo 3 Paralelo, Tempo: 26.969s
+
+Terminou!
+Time difference = 62[s]
+./a.out EN4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.004383
+ tempo_encontra_anel 0.003745
+ tempo_verifica_anel 0.003189
+ tempo_procura_caminhos 0.01955
+ tempo_copia_caminhos 0.003047
+ tempo_sao_disjuntos 0.003135
+Numero de aneis encontrados: 16
+Algoritmo 2 Linear, Tempo: 0.523s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 16
+Algoritmo 2 Paralelo, Tempo: 0.551s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 16
+Algoritmo 3 Paralelo, Tempo: 0.637s
+
+Terminou!
+Time difference = 1[s]
+./a.out EN4MaqPar.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.466214
+ tempo_encontra_anel 0.221453
+ tempo_verifica_anel 0.100376
+ tempo_procura_caminhos 0.045028
+ tempo_copia_caminhos 0.101516
+ tempo_sao_disjuntos 0.125645
+Numero de aneis encontrados: 2539
+Algoritmo 2 Linear, Tempo: 1.56s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2539
+Algoritmo 2 Paralelo, Tempo: 0.845s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2539
+Algoritmo 3 Paralelo, Tempo: 3.434s
+
+Terminou!
+Time difference = 5[s]
+./a.out im.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004277
+ tempo_encontra_anel 0.005799
+ tempo_verifica_anel 0.004753
+ tempo_procura_caminhos 0.02444
+ tempo_copia_caminhos 0.002969
+ tempo_sao_disjuntos 0.003341
+Numero de aneis encontrados: 120
+Algoritmo 2 Linear, Tempo: 0.403s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 120
+Algoritmo 2 Paralelo, Tempo: 0.404s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 120
+Algoritmo 3 Paralelo, Tempo: 0.47s
+
+Terminou!
+Time difference = 1[s]
+./a.out im.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.516092
+ tempo_encontra_anel 0.450358
+ tempo_verifica_anel 0.256609
+ tempo_procura_caminhos 0.033489
+ tempo_copia_caminhos 0.114126
+ tempo_sao_disjuntos 0.168901
+Numero de aneis encontrados: 6390
+Algoritmo 2 Linear, Tempo: 1.681s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 6390
+Algoritmo 2 Paralelo, Tempo: 0.737s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 6390
+Algoritmo 3 Paralelo, Tempo: 3.619s
+
+Terminou!
+Time difference = 6[s]
+./a.out kraho.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.010008
+ tempo_encontra_anel 0.034078
+ tempo_verifica_anel 0.025958
+ tempo_procura_caminhos 0.062388
+ tempo_copia_caminhos 0.004479
+ tempo_sao_disjuntos 0.00867
+Numero de aneis encontrados: 812
+Algoritmo 2 Linear, Tempo: 2.407s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 812
+Algoritmo 2 Paralelo, Tempo: 2.396s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 812
+Algoritmo 3 Paralelo, Tempo: 2.842s
+
+Terminou!
+Time difference = 7[s]
+./a.out kraho.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 3.40341
+ tempo_encontra_anel 28.9403
+ tempo_verifica_anel 21.147
+ tempo_procura_caminhos 0.1843
+ tempo_copia_caminhos 0.739056
+ tempo_sao_disjuntos 3.9806
+Numero de aneis encontrados: 353542
+Algoritmo 2 Linear, Tempo: 36.867s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 353542
+Algoritmo 2 Paralelo, Tempo: 11.599s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 353542
+Algoritmo 3 Paralelo, Tempo: 34.733s
+
+Terminou!
+Time difference = 83[s]
+./a.out marcapata.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.015091
+ tempo_encontra_anel 0.006876
+ tempo_verifica_anel 0.003244
+ tempo_procura_caminhos 0.255368
+ tempo_copia_caminhos 0.004941
+ tempo_sao_disjuntos 0.00507
+Numero de aneis encontrados: 30
+Algoritmo 2 Linear, Tempo: 6.207s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 30
+Algoritmo 2 Paralelo, Tempo: 6.077s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 30
+Algoritmo 3 Paralelo, Tempo: 6.345s
+
+Terminou!
+Time difference = 18[s]
+./a.out marcapata.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 34.9254
+ tempo_encontra_anel 7.22317
+ tempo_verifica_anel 0.081481
+ tempo_procura_caminhos 0.630396
+ tempo_copia_caminhos 7.06205
+ tempo_sao_disjuntos 7.37856
+Numero de aneis encontrados: 2118
+Algoritmo 2 Linear, Tempo: 72.275s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2118
+Algoritmo 2 Paralelo, Tempo: 25.364s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 2118
+Algoritmo 3 Paralelo, Tempo: 208.382s
+
+Terminou!
+Time difference = 306[s]
+./a.out mbya.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.008668
+ tempo_encontra_anel 0.005747
+ tempo_verifica_anel 0.004283
+ tempo_procura_caminhos 0.075588
+ tempo_copia_caminhos 0.004685
+ tempo_sao_disjuntos 0.004769
+Numero de aneis encontrados: 19
+Algoritmo 2 Linear, Tempo: 1.653s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 19
+Algoritmo 2 Paralelo, Tempo: 1.743s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 19
+Algoritmo 3 Paralelo, Tempo: 1.93s
+
+Terminou!
+Time difference = 5[s]
+./a.out mbya.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 4.20355
+ tempo_encontra_anel 0.888416
+ tempo_verifica_anel 0.028043
+ tempo_procura_caminhos 0.162076
+ tempo_copia_caminhos 0.863332
+ tempo_sao_disjuntos 0.900899
+Numero de aneis encontrados: 620
+Algoritmo 2 Linear, Tempo: 9.811s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 620
+Algoritmo 2 Paralelo, Tempo: 4.385s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 620
+Algoritmo 3 Paralelo, Tempo: 25.392s
+
+Terminou!
+Time difference = 39[s]
+./a.out xv.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.005175
+ tempo_encontra_anel 0.005019
+ tempo_verifica_anel 0.004005
+ tempo_procura_caminhos 0.00995
+ tempo_copia_caminhos 0.003248
+ tempo_sao_disjuntos 0.003471
+Numero de aneis encontrados: 56
+Algoritmo 2 Linear, Tempo: 0.142s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 56
+Algoritmo 2 Paralelo, Tempo: 0.139s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 56
+Algoritmo 3 Paralelo, Tempo: 0.151s
+
+Terminou!
+Time difference = 0[s]
+./a.out xv.txt 2 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(16)
+ tempo_encontra_anel_aux 1.10769
+ tempo_encontra_anel 0.675142
+ tempo_verifica_anel 0.334279
+ tempo_procura_caminhos 0.024356
+ tempo_copia_caminhos 0.23981
+ tempo_sao_disjuntos 0.313084
+Numero de aneis encontrados: 7455
+Algoritmo 2 Linear, Tempo: 2.61s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 7455
+Algoritmo 2 Paralelo, Tempo: 0.844s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (16threads)
+Numero de aneis encontrados: 7455
+Algoritmo 3 Paralelo, Tempo: 4.666s
+
+Terminou!
+Time difference = 8[s]
+./a.out zo.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004344
+ tempo_encontra_anel 0.004485
+ tempo_verifica_anel 0.003706
+ tempo_procura_caminhos 0.015799
+ tempo_copia_caminhos 0.002978
+ tempo_sao_disjuntos 0.003201
+Numero de aneis encontrados: 57
+Algoritmo 2 Linear, Tempo: 0.449s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 57
+Algoritmo 2 Paralelo, Tempo: 0.472s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 57
+Algoritmo 3 Paralelo, Tempo: 0.535s
+
+Terminou!
+Time difference = 1[s]
+./a.out zo.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.64165
+ tempo_encontra_anel 0.290649
+ tempo_verifica_anel 0.120234
+ tempo_procura_caminhos 0.032763
+ tempo_copia_caminhos 0.136214
+ tempo_sao_disjuntos 0.169321
+Numero de aneis encontrados: 2976
+Algoritmo 2 Linear, Tempo: 1.817s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2976
+Algoritmo 2 Paralelo, Tempo: 0.785s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2976
+Algoritmo 3 Paralelo, Tempo: 4.337s
+
+Terminou!
+Time difference = 6[s]
+
+
+********************
+
+
+./a.out ap.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.007489
+ tempo_encontra_anel 0.007407
+ tempo_verifica_anel 0.006397
+ tempo_procura_caminhos 0.04063
+ tempo_copia_caminhos 0.005595
+ tempo_sao_disjuntos 0.005825
+Numero de aneis encontrados: 78
+Algoritmo 2 Linear, Tempo: 1.031s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 78
+Algoritmo 2 Paralelo, Tempo: 0.859s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 78
+Algoritmo 3 Paralelo, Tempo: 0.942s
+
+Terminou!
+Time difference = 2[s]
+./a.out ap.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 1.22262
+ tempo_encontra_anel 0.35422
+ tempo_verifica_anel 0.077947
+ tempo_procura_caminhos 0.060042
+ tempo_copia_caminhos 0.252652
+ tempo_sao_disjuntos 0.285298
+Numero de aneis encontrados: 1885
+Algoritmo 2 Linear, Tempo: 3.328s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1885
+Algoritmo 2 Paralelo, Tempo: 1.649s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 1885
+Algoritmo 3 Paralelo, Tempo: 9.253s
+
+Terminou!
+Time difference = 14[s]
+./a.out Arara4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(6)
+ tempo_encontra_anel_aux 0.005424
+ tempo_encontra_anel 0.019942
+ tempo_verifica_anel 0.015275
+ tempo_procura_caminhos 0.009842
+ tempo_copia_caminhos 0.003407
+ tempo_sao_disjuntos 0.005624
+Numero de aneis encontrados: 520
+Algoritmo 2 Linear, Tempo: 0.22s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 520
+Algoritmo 2 Paralelo, Tempo: 0.279s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (6threads)
+Numero de aneis encontrados: 520
+Algoritmo 3 Paralelo, Tempo: 0.298s
+
+Terminou!
+Time difference = 0[s]
+./a.out Arara4MaqPar.txt 2 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(6)
+ tempo_encontra_anel_aux 0.313307
+ tempo_encontra_anel 5.77956
+ tempo_verifica_anel 4.08967
+ tempo_procura_caminhos 0.013136
+ tempo_copia_caminhos 0.074002
+ tempo_sao_disjuntos 0.655046
+Numero de aneis encontrados: 110590
+Algoritmo 2 Linear, Tempo: 6.48s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 110590
+Algoritmo 2 Paralelo, Tempo: 2.369s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (6threads)
+Numero de aneis encontrados: 110590
+Algoritmo 3 Paralelo, Tempo: 6.369s
+
+Terminou!
+Time difference = 15[s]
+./a.out chacobo_fem.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.011852
+ tempo_encontra_anel 0.053832
+ tempo_verifica_anel 0.040807
+ tempo_procura_caminhos 0.07614
+ tempo_copia_caminhos 0.00451
+ tempo_sao_disjuntos 0.011544
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 7.622s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 9.073s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 9.508s
+
+Terminou!
+Time difference = 26[s]
+./a.out chacobo_mas.txt 1 7
+Inicio
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 2 linear(14)
+ tempo_encontra_anel_aux 0.011934
+ tempo_encontra_anel 0.04836
+ tempo_verifica_anel 0.03669
+ tempo_procura_caminhos 0.077337
+ tempo_copia_caminhos 0.005212
+ tempo_sao_disjuntos 0.011775
+Numero de aneis encontrados: 1614
+Algoritmo 2 Linear, Tempo: 8.105s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 1614
+Algoritmo 2 Paralelo, Tempo: 9.011s
+
+Encontrando os caminhos com 8 threads
+Encontrando os aneis com algoritmo 3 (14threads)
+Numero de aneis encontrados: 1614
+Algoritmo 3 Paralelo, Tempo: 8.965s
+
+Terminou!
+Time difference = 26[s]
+./a.out deni.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.009004
+ tempo_encontra_anel 0.030629
+ tempo_verifica_anel 0.023441
+ tempo_procura_caminhos 0.031051
+ tempo_copia_caminhos 0.004341
+ tempo_sao_disjuntos 0.008044
+Numero de aneis encontrados: 918
+Algoritmo 2 Linear, Tempo: 0.883s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 918
+Algoritmo 2 Paralelo, Tempo: 0.938s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 918
+Algoritmo 3 Paralelo, Tempo: 1.239s
+
+Terminou!
+Time difference = 3[s]
+./a.out deni.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 2.59939
+ tempo_encontra_anel 21.173
+ tempo_verifica_anel 14.3031
+ tempo_procura_caminhos 0.089283
+ tempo_copia_caminhos 0.57638
+ tempo_sao_disjuntos 3.03179
+Numero de aneis encontrados: 320155
+Algoritmo 2 Linear, Tempo: 26.271s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 320155
+Algoritmo 2 Paralelo, Tempo: 8.318s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 320155
+Algoritmo 3 Paralelo, Tempo: 25.373s
+
+Terminou!
+Time difference = 60[s]
+./a.out EN4MaqPar.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.004922
+ tempo_encontra_anel 0.004293
+ tempo_verifica_anel 0.003689
+ tempo_procura_caminhos 0.017025
+ tempo_copia_caminhos 0.003589
+ tempo_sao_disjuntos 0.00365
+Numero de aneis encontrados: 16
+Algoritmo 2 Linear, Tempo: 0.525s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 16
+Algoritmo 2 Paralelo, Tempo: 0.481s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 16
+Algoritmo 3 Paralelo, Tempo: 0.579s
+
+Terminou!
+Time difference = 1[s]
+./a.out EN4MaqPar.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.455716
+ tempo_encontra_anel 0.238119
+ tempo_verifica_anel 0.118518
+ tempo_procura_caminhos 0.029496
+ tempo_copia_caminhos 0.098889
+ tempo_sao_disjuntos 0.123667
+Numero de aneis encontrados: 2539
+Algoritmo 2 Linear, Tempo: 1.484s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2539
+Algoritmo 2 Paralelo, Tempo: 0.743s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2539
+Algoritmo 3 Paralelo, Tempo: 3.115s
+
+Terminou!
+Time difference = 5[s]
+./a.out im.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.005078
+ tempo_encontra_anel 0.007763
+ tempo_verifica_anel 0.005934
+ tempo_procura_caminhos 0.014639
+ tempo_copia_caminhos 0.003358
+ tempo_sao_disjuntos 0.003854
+Numero de aneis encontrados: 120
+Algoritmo 2 Linear, Tempo: 0.38s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 120
+Algoritmo 2 Paralelo, Tempo: 0.38s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 120
+Algoritmo 3 Paralelo, Tempo: 0.411s
+
+Terminou!
+Time difference = 1[s]
+./a.out im.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.50291
+ tempo_encontra_anel 0.416162
+ tempo_verifica_anel 0.233461
+ tempo_procura_caminhos 0.027361
+ tempo_copia_caminhos 0.123662
+ tempo_sao_disjuntos 0.15666
+Numero de aneis encontrados: 6390
+Algoritmo 2 Linear, Tempo: 1.598s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 6390
+Algoritmo 2 Paralelo, Tempo: 0.645s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 6390
+Algoritmo 3 Paralelo, Tempo: 3.544s
+
+Terminou!
+Time difference = 5[s]
+./a.out kraho.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(12)
+ tempo_encontra_anel_aux 0.007244
+ tempo_encontra_anel 0.024259
+ tempo_verifica_anel 0.018633
+ tempo_procura_caminhos 0.069987
+ tempo_copia_caminhos 0.00328
+ tempo_sao_disjuntos 0.006385
+Numero de aneis encontrados: 812
+Algoritmo 2 Linear, Tempo: 2.294s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 812
+Algoritmo 2 Paralelo, Tempo: 2.837s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (12threads)
+Numero de aneis encontrados: 812
+Algoritmo 3 Paralelo, Tempo: 3.167s
+
+Terminou!
+Time difference = 8[s]
+./a.out kraho.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 3.35901
+ tempo_encontra_anel 28.2667
+ tempo_verifica_anel 20.768
+ tempo_procura_caminhos 0.174778
+ tempo_copia_caminhos 0.753153
+ tempo_sao_disjuntos 3.8418
+Numero de aneis encontrados: 353542
+Algoritmo 2 Linear, Tempo: 36.25s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 353542
+Algoritmo 2 Paralelo, Tempo: 11.372s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 353542
+Algoritmo 3 Paralelo, Tempo: 33.566s
+
+Terminou!
+Time difference = 81[s]
+./a.out marcapata.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.015796
+ tempo_encontra_anel 0.007127
+ tempo_verifica_anel 0.003524
+ tempo_procura_caminhos 0.223935
+ tempo_copia_caminhos 0.005287
+ tempo_sao_disjuntos 0.005438
+Numero de aneis encontrados: 30
+Algoritmo 2 Linear, Tempo: 5.872s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 30
+Algoritmo 2 Paralelo, Tempo: 5.967s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 30
+Algoritmo 3 Paralelo, Tempo: 6.09s
+
+Terminou!
+Time difference = 18[s]
+./a.out marcapata.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 33.8889
+ tempo_encontra_anel 6.90012
+ tempo_verifica_anel 0.086148
+ tempo_procura_caminhos 0.604891
+ tempo_copia_caminhos 6.93143
+ tempo_sao_disjuntos 7.10972
+Numero de aneis encontrados: 2118
+Algoritmo 2 Linear, Tempo: 70.156s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2118
+Algoritmo 2 Paralelo, Tempo: 25.379s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 2118
+Algoritmo 3 Paralelo, Tempo: 199.287s
+
+Terminou!
+Time difference = 295[s]
+./a.out mbya.txt 1 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.008846
+ tempo_encontra_anel 0.006272
+ tempo_verifica_anel 0.005037
+ tempo_procura_caminhos 0.066826
+ tempo_copia_caminhos 0.005335
+ tempo_sao_disjuntos 0.005453
+Numero de aneis encontrados: 19
+Algoritmo 2 Linear, Tempo: 1.791s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 19
+Algoritmo 2 Paralelo, Tempo: 1.816s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 19
+Algoritmo 3 Paralelo, Tempo: 1.858s
+
+Terminou!
+Time difference = 5[s]
+./a.out mbya.txt 2 7
+Inicio
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 2 linear(20)
+ tempo_encontra_anel_aux 4.2055
+ tempo_encontra_anel 0.895192
+ tempo_verifica_anel 0.028914
+ tempo_procura_caminhos 0.153987
+ tempo_copia_caminhos 0.861447
+ tempo_sao_disjuntos 0.906778
+Numero de aneis encontrados: 620
+Algoritmo 2 Linear, Tempo: 9.88s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 620
+Algoritmo 2 Paralelo, Tempo: 4.267s
+
+Encontrando os caminhos com 6 threads
+Encontrando os aneis com algoritmo 3 (20threads)
+Numero de aneis encontrados: 620
+Algoritmo 3 Paralelo, Tempo: 24.616s
+
+Terminou!
+Time difference = 38[s]
+./a.out xv.txt 1 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(8)
+ tempo_encontra_anel_aux 0.005484
+ tempo_encontra_anel 0.005451
+ tempo_verifica_anel 0.00464
+ tempo_procura_caminhos 0.009787
+ tempo_copia_caminhos 0.004002
+ tempo_sao_disjuntos 0.004169
+Numero de aneis encontrados: 56
+Algoritmo 2 Linear, Tempo: 0.154s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 56
+Algoritmo 2 Paralelo, Tempo: 0.146s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (8threads)
+Numero de aneis encontrados: 56
+Algoritmo 3 Paralelo, Tempo: 0.149s
+
+Terminou!
+Time difference = 0[s]
+./a.out xv.txt 2 7
+Inicio
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 2 linear(16)
+ tempo_encontra_anel_aux 1.04737
+ tempo_encontra_anel 0.564494
+ tempo_verifica_anel 0.275976
+ tempo_procura_caminhos 0.02816
+ tempo_copia_caminhos 0.227248
+ tempo_sao_disjuntos 0.294775
+Numero de aneis encontrados: 7455
+Algoritmo 2 Linear, Tempo: 2.437s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 7455
+Algoritmo 2 Paralelo, Tempo: 0.79s
+
+Encontrando os caminhos com 4 threads
+Encontrando os aneis com algoritmo 3 (16threads)
+Numero de aneis encontrados: 7455
+Algoritmo 3 Paralelo, Tempo: 5.039s
+
+Terminou!
+Time difference = 8[s]
+./a.out zo.txt 1 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(10)
+ tempo_encontra_anel_aux 0.004197
+ tempo_encontra_anel 0.004287
+ tempo_verifica_anel 0.003591
+ tempo_procura_caminhos 0.016979
+ tempo_copia_caminhos 0.002936
+ tempo_sao_disjuntos 0.003091
+Numero de aneis encontrados: 57
+Algoritmo 2 Linear, Tempo: 0.466s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 57
+Algoritmo 2 Paralelo, Tempo: 0.456s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (10threads)
+Numero de aneis encontrados: 57
+Algoritmo 3 Paralelo, Tempo: 0.544s
+
+Terminou!
+Time difference = 1[s]
+./a.out zo.txt 2 7
+Inicio
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 2 linear(24)
+ tempo_encontra_anel_aux 0.658017
+ tempo_encontra_anel 0.316107
+ tempo_verifica_anel 0.118607
+ tempo_procura_caminhos 0.03736
+ tempo_copia_caminhos 0.140624
+ tempo_sao_disjuntos 0.174468
+Numero de aneis encontrados: 2976
+Algoritmo 2 Linear, Tempo: 1.983s
+
+Encontrando os aneis com algoritmo 2 paralelo
+Encontrando os caminhos com 8 threads
+Numero de aneis encontrados: 2976
+Algoritmo 2 Paralelo, Tempo: 0.829s
+
+Encontrando os caminhos com 7 threads
+Encontrando os aneis com algoritmo 3 (24threads)
+Numero de aneis encontrados: 2976
+Algoritmo 3 Paralelo, Tempo: 4.445s
+
+Terminou!
+Time difference = 7[s]

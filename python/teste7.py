@@ -4,9 +4,8 @@
 #Abre Arquivos e escreve o caminho deles
 
 def escreve(fonte_aneis, fonte_casamentos, destino_acerto, destino_erro, destino_inc):
-    ad = "4"
-    destino_acerto = ad + destino_acerto
-    destino_erro = ad + destino_erro
+    destino_acerto = destino_acerto
+    destino_erro = destino_erro
 
     arq_da = open(destino_acerto, "w")
     arq_de = open(destino_erro, "w")
@@ -89,6 +88,17 @@ def escreve(fonte_aneis, fonte_casamentos, destino_acerto, destino_erro, destino
 
 #escreve("Fonte\\aneis_2_rede_grande.txt", "Fonte\\casamentos_rede_grande_c.txt", "Resultados\\teste7_acerto.txt", "Resultados\\teste7_erro.txt", "Resultados\\teste7_inc.txt")
 
-escreve("teste_acertos.txt", "casamentos_rede_grande_c.txt", "a_soma.txt", "e_soma.txt", "inc.txt")
+#escreve("teste_acertos.txt", "casamentos_rede_grande_c.txt", "a_soma.txt", "e_soma.txt", "inc.txt")
 #escreve("rede_grande_soma.txt", "casamentos_rede_grande_c.txt", "a_soma.txt", "e_soma.txt", "inc.txt")
 #escreve("rede_grande_maior.txt", "casamentos_rede_grande_c.txt", "a_maior.txt", "e_maior.txt", "inc.txt")
+
+
+#escreve("Fonte/a2c2_marcapata_p_grafo.txt", "Fonte/casamentos_rede_grande_c.txt", "a_pgrafo.txt", "e_pgrafo.txt", "inc_pgrafo.txt")
+#escreve("Fonte/a2c2_marcapata_p_grafo_cortados.txt", "Fonte/casamentos_rede_grande_c.txt", "a_pgrafo_cortados.txt", "e_pgrafo_cortados.txt", "inc_pgrafo_cortados.txt")
+#escreve("Fonte/a2c2_marcapata_soma.txt", "Fonte/casamentos_rede_grande_c.txt", "a_soma.txt", "e_soma.txt", "inc_soma.txt")
+#escreve("Fonte/a2c2_marcapata_soma_cortados.txt", "Fonte/casamentos_rede_grande_c.txt", "a_soma_cortados.txt", "e_soma_cortados.txt", "inc_soma_cortados.txt")
+
+#escreve("Fonte/a2c2_marcapata.txt", "Fonte/casamentos_rede_grande_c.txt", "a.txt", "e.txt", "inc.txt")
+escreve("Fonte/teste_geracional.txt", "Fonte/casamentos_rede_grande_c.txt", "a_geral.txt", "e_geral.txt", "inc_geral.txt")
+
+

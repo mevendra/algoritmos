@@ -1,0 +1,15 @@
+digraph {
+0 [label = "2832 & 2905", shape = diamond];
+1 [label = "2906 & 2907", shape = diamond];
+2 [label = "2908 & 2909", shape = diamond];
+3 [label = "2911 & 2913", shape = diamond];
+4 [label = "2912 & 2914", shape = diamond];
+5 [label = "2916 & 2918", shape = diamond];
+1 -> 0;
+2 -> 1;
+6 -> 2;
+2 -> 3;
+2 -> 4;
+4 -> 5;
+6 -> 6;
+}

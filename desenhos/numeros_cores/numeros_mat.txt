@@ -1,0 +1,14 @@
+Numero de Cores, Numero de Aneis
+A2C2:
+1, 925
+2, 23775
+3, 85871
+4, 19
+5, 0
+6, 0
+Numero total: 110590
+A1C1:
+1, 119
+2, 240
+3, 161
+Numero total: 520

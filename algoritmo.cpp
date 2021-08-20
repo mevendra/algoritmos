@@ -376,6 +376,16 @@ void colorir_grafo(Grafo* g)
 		colorir_apartir_de(g, i);
 }
 
+void colorir_grafo(Grafo* g, list<int> vertices)
+{
+	int** grafo = g -> grafo;
+	if (!grafo) throw runtime_error("Erro em colorir_grafo(), matriz invalida");
+
+	//Colore apartir das fontes
+	for (int i: vertices)
+		colorir_apartir_de(g, i);
+}
+
 void busca_fontes(int** grafo, int tamanho, list<int>& destino)
 {
 	bool eh_fonte;
@@ -458,6 +468,18 @@ void colorir_grafo_mat(Grafo* g)
 		colorir_apartir_de_tipo(g, i, 'e');
 }
 
+void colorir_grafo_mat(Grafo* g, list<int> vertices)
+{
+	int** grafo = g -> grafo;
+	if (!grafo) throw runtime_error("Erro em colorir_grafo_mat(), matriz invalida");
+
+	//Colore apartir das fontes
+	for (int i: vertices) {
+		if (g -> encontrar_atributo(i) -> g_tipo() == 'e')
+			colorir_apartir_de_tipo(g, i, 'e');
+	}
+}
+
 void colorir_grafo_pat(Grafo* g)
 {
 	int** grafo = g -> grafo;
@@ -471,6 +493,18 @@ void colorir_grafo_pat(Grafo* g)
 	//Colore apartir das fontes
 	for (int i: fontes)
 		colorir_apartir_de_tipo(g, i, 't');
+}
+
+void colorir_grafo_pat(Grafo* g, list<int> vertices)
+{
+	int** grafo = g -> grafo;
+	if (!grafo) throw runtime_error("Erro em colorir_grafo_pat(), matriz invalida");
+
+	//Colore apartir das fontes
+	for (int i: vertices) {
+		if (g -> encontrar_atributo(i) -> g_tipo() == 't')
+			colorir_apartir_de_tipo(g, i, 't');
+	}
 }
 
 void busca_fontes_tipo(Grafo* g, char tipo, list<int>& destino)
@@ -2019,12 +2053,6 @@ void verifica_anel(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<l
 
 	Anel* novo = new Anel();
 	novo -> adicionar_elemento(caminhos, casamentos, juncoesUtilizadas);
-
-
-	if (novo -> anel.size() == 0) {
-		delete novo;
-		return;
-	}
 
 	destino.push_back(novo);
 	//destino.pop_back();

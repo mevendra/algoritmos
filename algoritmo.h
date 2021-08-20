@@ -110,8 +110,11 @@ void encontra_casamento_irmaos(int** grafo, int tamanho, list<list<int>>& destin
 
 //2
 void colorir_grafo(Grafo* g);
+void colorir_grafo(Grafo* g, list<int> vertices);
 void colorir_grafo_mat(Grafo* g);
+void colorir_grafo_mat(Grafo* g, list<int> vertices);
 void colorir_grafo_pat(Grafo* g);
+void colorir_grafo_pat(Grafo* g, list<int> vertices);
 void descolorir(Grafo* g);
 
 //3

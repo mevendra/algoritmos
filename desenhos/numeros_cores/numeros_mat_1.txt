@@ -1,0 +1,37 @@
+Aneis A1C1
+Número total de Aneis: 520
+Número de aneis com 0 cores: 0
+Número de aneis com 1 cores: 119
+Número de aneis com 2 cores: 240
+Número de aneis com 3 cores: 161
+
+Cores no Grafo:
+#BD9A9A : -1 
+#0000FF : 1002 
+#FF0000 : 1004 
+#00FF00 : 1204 
+#FFFF00 : 1195 
+#FF00FF : 1201 
+
+Número de aparição das cores
+1002 : 439
+1004 : 372
+1195 : 13
+-1 : 258
+
+Número de anéis com 0 cores:0
+
+Número de anéis com 1 cores:119
+Grupo: -1  , Anéis: 1
+Grupo: 1002  , Anéis: 83
+Grupo: 1004  , Anéis: 35
+
+Número de anéis com 2 cores:240
+Grupo: -1  | 1002  , Anéis: 51
+Grupo: -1  | 1004  , Anéis: 45
+Grupo: 1002  | 1004  , Anéis: 135
+Grupo: 1002  | 1195  , Anéis: 9
+
+Número de anéis com 3 cores:161
+Grupo: -1  | 1002  | 1004  , Anéis: 157
+Grupo: -1  | 1002  | 1195  , Anéis: 4

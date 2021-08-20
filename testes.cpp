@@ -52,6 +52,179 @@ int main(int argc, char *argv[]) {
 	else
 		return 1;
 
+	//colorir_grafo_mat(g);
+	colorir_grafo_pat(g);
+
+	list<Anel*> destino_2;
+	list<Anel*> destino_1;
+	encontra_aneis(g, destino_2, 2);
+	encontra_aneis(g, destino_1, 1);
+
+	//escreve_numeros_aneis(g, destino_1, "desenhos/numeros_cores/numeros_mat_1.txt");
+	//escreve_numeros_aneis(g, destino_2, "desenhos/numeros_cores/numeros_mat_2.txt");
+	escreve_numeros_aneis(g, destino_1, "desenhos/numeros_cores/numeros_pat_1.txt");
+	escreve_numeros_aneis(g, destino_2, "desenhos/numeros_cores/numeros_pat_2.txt");
+
+	return 0;
+
+	list<int> numeros;
+	numeros.push_back(1001);
+	numeros.push_back(1002);
+	numeros.push_back(1003);
+	numeros.push_back(1004);
+	numeros.push_back(1005);
+	numeros.push_back(1006);
+	numeros.push_back(1007);
+	numeros.push_back(1008);
+	numeros.push_back(1009);
+	numeros.push_back(1010);
+	numeros.push_back(1011);
+	numeros.push_back(1012);
+	numeros.push_back(1013);
+	numeros.push_back(1014);
+	numeros.push_back(1015);
+	numeros.push_back(1016);
+	numeros.push_back(1017);
+	numeros.push_back(1018);
+	numeros.push_back(1019);
+	numeros.push_back(1024);
+	numeros.push_back(1031);
+	numeros.push_back(1038);
+	numeros.push_back(1043);
+	numeros.push_back(1044);
+	numeros.push_back(1045);
+	numeros.push_back(1060);
+	numeros.push_back(1105);
+	numeros.push_back(1106);
+	numeros.push_back(1107);
+	numeros.push_back(1111);
+	numeros.push_back(1203);
+	numeros.push_back(1204);
+
+	list<int> vertices;
+	for (int i: numeros) {
+		Vertice* x = 0;
+		for (Vertice* v: g -> atributos) {
+			if (v -> g_numero() == i) {
+				x = v;
+				break;
+			}
+		}
+
+		if (x) {
+			vertices.push_back(x -> g_id());
+		} else {
+			cout << "Erro\n\n\n";
+			return 1;
+		}
+	}
+
+	cout << nome_rede << endl;
+	//colorir_grafo(g, vertices);
+	//colorir_grafo_mat(g, vertices);
+	//colorir_grafo_pat(g, vertices);
+
+	//colorir_grafo(g);
+	colorir_grafo_mat(g);
+	//colorir_grafo_pat(g);
+
+	//escreve_grafo_graphviz(g, true, "desenhos/cores_especificos/geral");
+	//escreve_grafo_graphviz(g, true, "desenhos/cores_especificos/mat");
+	//escreve_grafo_graphviz(g, true, "desenhos/cores_especificos/pat");
+
+	//init_map(g);
+	//escreve_lista_cores(g, "desenhos/cores_especificos/geral_lista.txt");
+	//escreve_lista_vertices_formam_cores(g, "desenhos/cores_especificos/geral_cores.txt");
+
+	//list<Anel*> destin;
+	//encontra_aneis(g, destin, 2);
+
+	//escreve_aneis_alternativo(destin, "desenhos/cores_especificos/parentes.txt");
+	//return 0;
+
+	string caminho = "desenhos/numeros_cores/numeros_mat.txt";
+	FILE* arquivo;
+	arquivo = fopen(caminho.c_str(), "w");
+	string lin1 = "Numero de Cores, Numero de Aneis\nA2C2:\n";
+	fputs(lin1.c_str(), arquivo);
+
+	Juncoes* juncoes = new Juncoes(g -> g_numero_vertices());
+	encontra_juncoes(g, juncoes);
+	define_super_sob(g);
+	vector<list<int>> casamentos;
+	encontra_casamentos(g, casamentos);
+	list<list<list<int>>> conjuntos;
+	encontra_combinacoes(casamentos, conjuntos, 2);
+	set<Par*, par_cmp> pares;
+	encontra_pares_vertices(juncoes, conjuntos, pares);
+
+	int numero_threads = 1;	//Maior valor super, numero de threads utilizadas
+	for (Vertice* v: g -> atributos)
+		for (int i: v -> max_cores)
+			numero_threads = i > numero_threads ? i : numero_threads;
+	cout << "Maior valor super: " << numero_threads;
+
+	vector<vector<list<Caminho*>>> caminhos(g -> g_numero_vertices(), vector<list<Caminho*>> (g -> g_numero_vertices()));
+	encontra_caminhos_coloridos(pares, numero_threads, caminhos);
+
+	int m = 0;
+	for (vector<list<Caminho*>> v: caminhos)
+		for (list<Caminho*> l: v)
+			for(Caminho* c: l)
+				m = m > c -> cores.size() ? m : c -> cores.size();
+	numero_threads = numero_threads < m ? numero_threads : m;
+	numero_threads = numero_threads * 2 * 2;
+	numero_threads = numero_threads < g -> map -> tam() ? numero_threads : g -> map -> tam();
+
+	list<Anel*> destinos[numero_threads];
+	for (int i = 1; i <= numero_threads; i++) {
+		encontra_aneis_coloridos_t( g, juncoes, conjuntos, caminhos, destinos[i - 1], i);
+		lin1 = to_string(i);
+		lin1 += ", ";
+		lin1 += to_string(destinos[i - 1].size());
+		lin1 += "\n";
+		fputs(lin1.c_str(), arquivo);
+
+		cout << "Encontrou os aneis com " << i << ", totalizando " << destinos[i - 1].size() << endl;
+	}
+
+	int cont = 0;
+	for (list<Anel*> l: destinos) {
+		cont += l.size();
+	}
+
+	lin1 = "Numero total: ";
+	lin1 += to_string(cont);
+	fputs(lin1.c_str(), arquivo);
+
+	lin1 = "\nA1C1:\n";
+	fputs(lin1.c_str(), arquivo);
+	list<Anel*> dest[m];
+	list<list<list<int>>> conjunt;
+	encontra_combinacoes(casamentos, conjunt, 1);
+	for (int i = 1; i <= m; i++) {
+		encontra_aneis_coloridos_t( g, juncoes, conjunt, caminhos, dest[i - 1], i);
+		lin1 = to_string(i);
+		lin1 += ", ";
+		lin1 += to_string(dest[i - 1].size());
+		lin1 += "\n";
+		fputs(lin1.c_str(), arquivo);
+
+		cout << "Encontrou os aneis com " << i << ", totalizando " << dest[i - 1].size() << endl;
+	}
+
+	cont = 0;
+	for (list<Anel*> l: dest) {
+		cont += l.size();
+	}
+
+	lin1 = "Numero total: ";
+	lin1 += to_string(cont);
+	fputs(lin1.c_str(), arquivo);
+
+
+	return 0;
+
 	Grafo* p_g = p_grafo(g);
 	definir_p_grafo(p_g);
 	geracao_grafo_superior(p_g);

@@ -1,0 +1,11 @@
+Numero de Cores, Numero de Aneis
+1, 1073
+2, 20274
+3, 49872
+4, 35780
+5, 3591
+6, 0
+7, 0
+8, 0
+9, 0
+Numero total: 110590

@@ -1,0 +1,72 @@
+Aneis A2C2
+Número total de Aneis: 110590
+Número de aneis com 0 cores: 0
+Número de aneis com 1 cores: 1073
+Número de aneis com 2 cores: 20274
+Número de aneis com 3 cores: 49872
+Número de aneis com 4 cores: 35780
+Número de aneis com 5 cores: 3591
+
+Cores no Grafo:
+#0000FF : 1001 
+#BD9A9A : -1 
+#FF0000 : 1003 
+#00FF00 : 1105 
+#FFFF00 : 1203 
+#FF00FF : 1106 
+#00FFFF : 1196 
+#808080 : 1194 
+#4682B4 : 1197 
+
+Número de aparição das cores
+1001 : 64974
+1003 : 101024
+1105 : 107436
+1106 : 2829
+1194 : 1321
+1196 : 342
+1203 : 6324
+-1 : 68062
+
+Número de anéis com 0 cores:0
+
+Número de anéis com 1 cores:1073
+Grupo: 1105  , Anéis: 838
+Grupo: 1001  , Anéis: 8
+Grupo: 1003  , Anéis: 1
+Grupo: 1106  , Anéis: 226
+
+Número de anéis com 2 cores:20274
+Grupo: -1  | 1001  , Anéis: 12
+Grupo: -1  | 1105  , Anéis: 164
+Grupo: 1003  | 1105  , Anéis: 15908
+Grupo: 1001  | 1105  , Anéis: 2765
+Grupo: 1001  | 1203  , Anéis: 74
+Grupo: 1001  | 1003  , Anéis: 74
+Grupo: 1001  | 1106  , Anéis: 1007
+Grupo: 1106  | 1194  , Anéis: 227
+Grupo: 1106  | 1196  , Anéis: 37
+Grupo: -1  | 1106  , Anéis: 6
+
+Número de anéis com 3 cores:49872
+Grupo: -1  | 1001  | 1105  , Anéis: 1946
+Grupo: -1  | 1001  | 1203  , Anéis: 37
+Grupo: -1  | 1001  | 1003  , Anéis: 63
+Grupo: -1  | 1003  | 1105  , Anéis: 28200
+Grupo: 1001  | 1003  | 1105  , Anéis: 17809
+Grupo: 1001  | 1105  | 1203  , Anéis: 534
+Grupo: 1001  | 1003  | 1203  , Anéis: 28
+Grupo: 1001  | 1106  | 1196  , Anéis: 225
+Grupo: 1001  | 1106  | 1194  , Anéis: 1014
+Grupo: 1106  | 1194  | 1196  , Anéis: 9
+Grupo: -1  | 1001  | 1106  , Anéis: 7
+
+Número de anéis com 4 cores:35780
+Grupo: -1  | 1001  | 1003  | 1105  , Anéis: 33649
+Grupo: -1  | 1001  | 1105  | 1203  , Anéis: 359
+Grupo: 1001  | 1003  | 1105  | 1203  , Anéis: 1673
+Grupo: -1  | 1001  | 1003  | 1203  , Anéis: 28
+Grupo: 1001  | 1106  | 1194  | 1196  , Anéis: 71
+
+Número de anéis com 5 cores:3591
+Grupo: -1  | 1001  | 1003  | 1105  | 1203  , Anéis: 3591

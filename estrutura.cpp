@@ -1,4 +1,6 @@
 #include "estrutura.h"
+list<string> cores;
+
 string primeira_cor() {
 	if (cores.size() == 0) {
 		printf("Não tem cores suficientes\n");
@@ -385,6 +387,7 @@ void encontrar_caminho(vector<list<Vertice*>> caminho, Vertice* pertence, list<V
 		}
 	}
 }
+
 void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> casamentos_, list<Juncao*> juncoesUtilizadas, bool realizado) {
 	//Adiciona todos os vertices ao anel
 	for (list<Vertice*> lista: caminho)
@@ -395,6 +398,10 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 		vertices.push_back(j -> juncao);
 		juncoes.push_back(j -> juncao);
 	}
+
+	//Adiciona as cores do anel
+	for (Vertice * i: vertices)
+		cores.insert(i -> cor);
 
 	//Adiciona todos os caminhos percorridos pelas juncoes
 	for (Juncao* j: juncoesUtilizadas) {
@@ -477,10 +484,176 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 
 	//Verifica se escolheu o casamento com menor geração
 	if (casamentos.size() == 2 && !realizado) {
-		bool corte_calculo = false;
-		bool corte_p_grafo = false;
+		Corte corte = TODOS;	//SOMA, GERACAO_SUP, GERACAO_INF, P_GRAFO, TODOS
 		bool inverter = false;
 		bool corte_realizado = false;
+		bool realizar_todos = false;
+
+		switch(corte) {
+			case TODOS:
+				realizar_todos = true;
+			case SOMA:
+			{
+				int n_primeiro = 0;
+				int n_segundo = 0;
+				int n_terceiro = 0;
+				int n_quarto = 0;
+
+				for (Vertice* v: anel) {
+					v -> valor_bool = false;
+					v -> valor_bool_2 = false;
+				}
+
+				for (Vertice* v: juncoes)
+					v -> valor_bool = true;
+				for (list<Vertice*> l: casamentos) {
+					l.front() -> valor_bool_2 = true;
+					l.back() -> valor_bool_2 = true;
+				}
+
+				int soma = 0;
+				int contando = 1;	//1 para primeiro, 2 segundo, ...
+				for (Vertice* v: anel) {
+					if (v -> valor_bool && v -> valor_bool_2) {	//juncao e casamento
+						switch(contando) {
+							case(1):
+								if (soma == 0) {
+									n_primeiro = soma;
+									soma = 0;
+									contando = 2;
+								} else {
+									n_primeiro = soma;
+									soma = 0;
+									n_segundo = 0;
+									contando = 3;
+								}
+								break;
+							case(3):
+								n_terceiro = soma;
+								if (soma > 0) {
+									n_quarto = 0;
+									contando = 4;
+									soma = -1;
+								}
+								break;
+							default:
+								throw runtime_error("Caso não conferido na soma do anel");
+						}
+					} else if (v -> valor_bool_2) {	//Casamento
+						switch(contando) {
+							case(1):
+								soma = 0;
+								break;
+							case(2):
+								n_segundo = soma;
+								soma = 0;
+								contando = 3;
+								break;
+							case(3):
+								soma = 0;
+								break;
+							case(4):
+								n_quarto = soma;
+								soma = 0;
+								contando = 5;
+								break;
+							default:
+								throw runtime_error("Caso não conferido na soma do anel");
+						}
+
+					} else if (v -> valor_bool) {	//Juncao
+						switch(contando) {
+							case(1):
+								n_primeiro = soma;
+								soma = 0;
+								contando = 2;
+								break;
+							case(3):
+								n_terceiro = soma;
+								soma = 0;
+								contando = 4;
+								break;
+							default:
+								throw runtime_error("Caso não conferido na soma do anel");
+						}
+
+					}
+					soma++;
+				}
+
+				//Se segundo ego tem geracao maior, inverte a ordem dos casamentos
+				if (n_segundo + n_terceiro > n_primeiro + n_quarto)
+					inverter = true;
+
+				//Verifica se o corte foi realizado (metodo realmente cortou)
+				if (n_segundo + n_terceiro != n_primeiro + n_quarto)
+					corte_realizado = true;
+
+				if (!realizar_todos || corte_realizado)
+					break;
+			}
+
+			case GERACAO_INF://geracao esta em valor_int_2
+			{
+				Vertice* c1 = casamentos.front().front();
+				Vertice* c2 = casamentos.front().back();
+				Vertice* c3 = casamentos.back().front();
+				Vertice* c4 = casamentos.back().back();
+				//Realiza Corte pela geração inferior
+				if (c1 -> valor_int_2 + c2 -> valor_int_2 > c3 -> valor_int_2 + c4 -> valor_int_2) {
+					inverter = true;
+					corte_realizado = true;
+				} else if (c1 -> valor_int_2 + c2 -> valor_int_2 != c3 -> valor_int_2 + c4 -> valor_int_2) {
+					corte_realizado = true;
+				}
+
+				if (!realizar_todos || corte_realizado)
+					break;
+			}
+
+			case GERACAO_SUP://geracao esta em valor_int
+			{
+				Vertice* c1 = casamentos.front().front();
+				Vertice* c2 = casamentos.front().back();
+				Vertice* c3 = casamentos.back().front();
+				Vertice* c4 = casamentos.back().back();
+
+				if (c1 -> valor_int + c2 -> valor_int < c3 -> valor_int + c4 -> valor_int) {
+					inverter = true;
+					corte_realizado = true;
+				} else if (c1 -> valor_int + c2 -> valor_int != c3 -> valor_int + c4 -> valor_int) {
+					corte_realizado = true;
+				}
+
+				if (!realizar_todos || corte_realizado)
+					break;
+			}
+
+			case P_GRAFO:
+			{
+				if (pgrafo) {
+					Vertice* c1 = casamentos.front().front();
+					Vertice* c2 = casamentos.front().back();
+					int geracao_primeiro = geracao_casamento(pgrafo, c1, c2);
+					c1 = casamentos.back().front();
+					c2 = casamentos.back().back();
+					int geracao_segundo = geracao_casamento(pgrafo, c1, c2);
+
+					if (geracao_segundo > geracao_primeiro) {
+						inverter = true;
+					}
+
+					if (geracao_segundo != geracao_primeiro) {
+						corte_realizado = true;
+					}
+				}
+
+				break;
+			}
+			default:
+				throw runtime_error("Modo de corte ainda não implementado");
+		}
+
 		/*if (corte_calculo) {
 			bool primeiro = false;
 			bool segundo = false;
@@ -535,166 +708,7 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 			if (n_segundo + n_terceiro != n_primeiro + aux)
 				corte_realizado = true;
 
-		} else */if (corte_p_grafo && pgrafo) {
-			Vertice* c1 = casamentos.front().front();
-			Vertice* c2 = casamentos.front().back();
-			int geracao_primeiro = geracao_casamento(pgrafo, c1, c2);
-			c1 = casamentos.back().front();
-			c2 = casamentos.back().back();
-			int geracao_segundo = geracao_casamento(pgrafo, c1, c2);
-
-			if (geracao_segundo > geracao_primeiro) {
-				cout << "Corte p_grafo " << geracao_primeiro  << " & "<< geracao_segundo << endl;
-				inverter = true;
-			}
-
-			if (geracao_segundo != geracao_primeiro){
-				corte_realizado = true;
-			} else 
-				cout << "nao cortado\n";
-
-		} else if (corte_calculo) {
-			int n_primeiro = 0;
-			int n_segundo = 0;
-			int n_terceiro = 0;
-			int n_quarto = 0;
-
-			for (Vertice* v: anel) {
-				v -> valor_bool = false;
-				v -> valor_bool_2 = false;
-			}
-
-			for (Vertice* v: juncoes)
-				v -> valor_bool = true;
-			for (list<Vertice*> l: casamentos) {
-				l.front() -> valor_bool_2 = true;
-				l.back() -> valor_bool_2 = true;
-			}
-
-			int soma = 0;
-			int contando = 1;	//1 para primeiro, 2 segundo, ...
-			for (Vertice* v: anel) {
-				if (v -> valor_bool && v -> valor_bool_2) {	//juncao e casamento
-					switch(contando) {
-						case(1):
-							if (soma == 0) {
-								n_primeiro = soma;
-								soma = 0;
-								contando = 2;
-							} else {
-								n_primeiro = soma;
-								soma = 0;
-								n_segundo = 0;
-								contando = 3;
-							}
-							break;
-						case(3):
-							n_terceiro = soma;
-							if (soma > 0) {
-								n_quarto = 0;
-								contando = 4;
-								soma = -1;
-							}
-							break;
-						default:
-							throw runtime_error("Caso não conferido na soma do anel");
-					}
-				} else if (v -> valor_bool_2) {	//Casamento
-					switch(contando) {
-						case(1):
-							soma = 0;
-							break;
-						case(2):
-							n_segundo = soma;
-							soma = 0;
-							contando = 3;
-							break;
-						case(3):
-							soma = 0;
-							break;
-						case(4):
-							n_quarto = soma;
-							soma = 0;
-							contando = 5;
-							break;
-						default:
-							throw runtime_error("Caso não conferido na soma do anel");
-					}
-
-				} else if (v -> valor_bool) {	//Juncao
-					switch(contando) {
-						case(1):
-							n_primeiro = soma;
-							soma = 0;
-							contando = 2;
-							break;
-						case(3):
-							n_terceiro = soma;
-							soma = 0;
-							contando = 4;
-							break;
-						default:
-							throw runtime_error("Caso não conferido na soma do anel");
-					}
-
-				}
-				soma++;
-			}
-
-			//Se segundo ego tem geracao maior, inverte a ordem dos casamentos
-			if (n_segundo + n_terceiro > n_primeiro + n_quarto)
-				inverter = true;
-
-			//Verifica se o corte foi realizado (metodo realmente cortou)
-			if (n_segundo + n_terceiro != n_primeiro + n_quarto)
-				corte_realizado = true;
-		}
-
-		/*if (!corte_realizado) {
-			Vertice* c1 = casamentos.front().front();
-			Vertice* c2 = casamentos.front().back();
-			Vertice* c3 = casamentos.back().front();
-			Vertice* c4 = casamentos.back().back();
-			//Realiza Corte pela geração inferior
-			if (c1 -> valor_int_2 + c2 -> valor_int_2 > c3 -> valor_int_2 + c4 -> valor_int_2) {
-				inverter = true;
-				corte_realizado = true;
-			} else if (c1 -> valor_int_2 + c2 -> valor_int_2 ! c3 -> valor_int_2 + c4 -> valor_int_2) {
-				corte_realizado = true;
-			} else if (c1 -> valor_int + c2 -> valor_int < c3 -> valor_int + c4 -> valor_int) {//Realiza Corte pela Geração superior
-				inverter = true;
-				corte_realizado = true;
-			} else if (c1 -> valor_int + c2 -> valor_int != c3 -> valor_int + c4 -> valor_int) {
-				corte_realizado = true;
-			} else {
-				//Realiza Corte pelo p_grafo
-				int geracao_primeiro = geracao_casamento(pgrafo, c1, c2);
-				int geracao_segundo = geracao_casamento(pgrafo, c3, c4);
-
-				if (geracao_segundo > geracao_primeiro) {
-					cout << "Corte p_grafo " << geracao_primeiro  << " & "<< geracao_segundo << endl;
-					inverter = true;
-				}
-
-				if (geracao_segundo != geracao_primeiro){
-					corte_realizado = true;
-				}
-			}
-
-		}*/
-
-
-		Vertice* c1 = casamentos.front().front();
-		Vertice* c2 = casamentos.front().back();
-		Vertice* c3 = casamentos.back().front();
-		Vertice* c4 = casamentos.back().back();
-
-		if (c1 -> valor_int + c2 -> valor_int < c3 -> valor_int + c4 -> valor_int) {
-			inverter = true;
-			corte_realizado = true;
-		} else if (c1 -> valor_int + c2 -> valor_int != c3 -> valor_int + c4 -> valor_int) {
-			corte_realizado = true;
-		}
+		} */
 
 		if (inverter) {
 			//Geracao do casamento interno tem menos descendentes
@@ -708,12 +722,6 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 			casamentos_.pop_front();
 			this -> adicionar_elemento(caminho, casamentos_, juncoesUtilizadas, true);
 		}
-
-
-		//TODO, RETIRAR DEPOIS
-		if (!corte_realizado)
-			anel.clear();
-
 	}
 
 	//Salva o anel nas strings

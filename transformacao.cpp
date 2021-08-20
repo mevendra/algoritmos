@@ -910,9 +910,10 @@ void escreve_grafo_com_componentes_especiais(Grafo* g, list<list<int>> component
 void escreve_cores_graphviz(Grafo* g, FILE* arquivo) {
 	//Colore os vertices
 	Map* map;
-	if (g -> map)
+	if (g -> map) {
 		map = g -> map;
-	else {
+		cout << "Mapa definido" << endl;
+	} else {
 		if (g -> g_raiz())
 			printf("Criando novo mapa para %d\n",g -> g_raiz() -> g_numero());
 		else
@@ -920,6 +921,8 @@ void escreve_cores_graphviz(Grafo* g, FILE* arquivo) {
 		map = new Map();	//Map que ira guardar as cores relacionadas com cada numero
 		g -> map = map;
 		reinicia_cores();	//Reinicia as cores em list<Cor*> cores
+
+		cout << "Tam cores: " << cores.size() << endl;
 	}
 
 	//Atributos para coloracao
@@ -1268,6 +1271,149 @@ void escreve_aneis_completo(list<Anel*> aneis, char const* caminho) {
 			linha += ", ";
 			linha += to_string(i);
 
+		}
+
+		linha += "\n";
+		fputs(linha.c_str(), arquivo);
+	}
+
+	fclose(arquivo);
+}
+
+void escreve_aneis_alternativo(list<Anel*> aneis, char const* caminho) {
+	if (aneis.empty())
+		return;
+	int tam = aneis.front() -> casamentos.size();
+
+	string linha = "Anel, ";
+	for (int i = 0; i < tam; i++) {
+		linha += "Ego";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+		linha += "SxEgo";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+		linha += "Alter";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+		linha += "SxAlter";
+		if (tam > 1)
+			linha += to_string(i);
+		linha += ", ";
+	}
+
+	linha += "Barry_Percurso, ";
+
+	for (int i = 0; i < tam; i++) {
+		linha += "Percurso_";
+		linha += to_string(i);
+		linha += ", ";
+	}
+	for (int i = 0; i < tam; i++) {
+		linha += "Parente_";
+		linha += to_string(i);
+		linha += ", ";
+	}
+	linha += "\n";
+
+
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	fputs(linha.c_str(), arquivo);
+	int count = 0;
+	for (Anel* a: aneis) {
+		if (a -> anel.size() == 0)
+			continue;
+		count ++;
+		linha = to_string(count);	//Anel
+		linha += ", ";
+
+		for (list<Vertice*> casamentos: a -> casamentos) {
+			if (casamentos.front() -> g_tipo() == 't') {
+				linha += to_string(casamentos.front() -> g_numero());	//EgoX
+				linha += ", ";
+				linha += "m";		//SxEgoX
+				linha += ", ";
+				linha += to_string(casamentos.back() -> g_numero());	//AlterX
+				linha += ", ";
+				linha += "f";		//SxAlterX
+				linha += ", ";
+			} else {
+				linha += to_string(casamentos.back() -> g_numero());	//EgoX
+				linha += ", ";
+				linha += "m";		//SxEgoX
+				linha += ", ";
+				linha += to_string(casamentos.front() -> g_numero());	//AlterX
+				linha += ", ";
+				linha += "f";		//SxAlterX
+				linha += ", ";
+			}
+		}
+
+		//BaryryPercurso
+		for (Vertice* v: a -> anel) {
+			if (contem (v, a -> juncoes)) {
+				linha += "(";
+				if (v -> g_tipo() == 't')
+					linha += "m";
+				else
+					linha += "f";
+				linha += to_string(v -> g_numero());
+				linha += ") ";
+			} else {
+				if (v -> g_tipo() == 't')
+					linha += "m";
+				else
+					linha += "f";
+				linha += to_string(v -> g_numero());
+				linha += " ";
+
+			}
+		}
+		linha += ", ";
+
+		//Percurso
+		Vertice* ultimo = a -> anel.front();
+		for (Vertice* v: a -> anel) {
+			if (contem(v, ultimo -> casados)) {
+				linha += ", ";
+				linha += to_string(v -> g_numero());
+				linha += " ";
+			} else {
+				linha += to_string(v -> g_numero());
+				linha += " ";
+			}
+			ultimo = v;
+		}
+		linha += ", ";
+
+		//Parente
+		ultimo = a -> anel.front();
+		for (Vertice* v: a -> anel) {
+			if (contem(v, ultimo -> filhos)) {
+				if (v -> g_tipo() == 'e') {
+					linha += "D";
+				} else {
+					linha += "S";
+				}
+			} else if (contem(v, ultimo -> pais)) {
+				if (v -> g_tipo() == 'e') {
+					linha += "M";
+				} else {
+					linha += "F";
+				}
+			} else if (contem(v, ultimo -> casados)) {
+				linha += ", ";
+				if (v -> g_tipo() == 'e') {
+					linha += "W";
+				} else {
+					linha += "H";
+				}
+			}
+			ultimo = v;
 		}
 
 		linha += "\n";
@@ -1766,4 +1912,192 @@ void escreve_lista_cores(Grafo* g, char const* caminho)
 		lin += "\n";
 		fputs(lin.c_str(), arquivo);
 	}
+	fclose(arquivo);
 }
+
+void escreve_lista_vertices_formam_cores(Grafo* g, char const* caminho)
+{
+	if (!g -> map)
+		return;
+
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+	string lin = "Numero, primeiro_vertice_cor, segundo_vertice_cor, ...\n";
+	fputs(lin.c_str(), arquivo);
+
+	for (Vertice* v: g -> atributos) {
+		lin = to_string(v -> g_numero());
+		Vertice* cor = 0;
+		for (int i: v -> cor) {
+			cor = g -> encontrar_atributo(i);
+			if (!cor) {
+				throw runtime_error("Erro vertice nao encontrado");
+			}
+
+			lin += ", ";
+			lin += to_string(cor -> g_numero());
+		}
+		lin += "\n";
+		fputs(lin.c_str(), arquivo);
+	}
+	fclose(arquivo);
+}
+
+struct cmp {
+
+	bool operator() (set<set<int>, set_cmp> esquerda, set<set<int>, set_cmp> direita)  {
+		set<set<int>>::iterator it_esq = esquerda.begin();
+		set<set<int>>::iterator it_dir = direita.begin();
+
+		for (; it_esq != esquerda.end() && it_dir != direita.end(); it_esq++, it_dir++) {
+			if (*it_esq == *it_dir)
+				continue;
+			else
+				return false;
+		}
+
+		return esquerda.size() == direita.size();
+	}
+};
+
+class Help {
+public:
+	cmp comparador;
+	vector<set<set<int>, set_cmp>> cores;
+	vector<int> aparicoes;
+
+	Help(){}
+
+	void adicionar(set<set<int>, set_cmp> novo) {
+		for (int i = 0; i < cores.size(); i++) {
+			set<set<int>, set_cmp> s = cores[i];
+			if (comparador.operator()(novo, s)) {
+				aparicoes[i]++;
+				return;
+			}
+		}
+
+		cores.push_back(novo);
+		aparicoes.push_back(1);
+	}
+};
+
+void escreve_numeros_aneis(Grafo * g, list<Anel*> aneis, char const* caminho)
+{
+	FILE* arquivo;
+	arquivo = fopen(caminho, "w");
+
+	int num_casamentos = aneis.front() ? aneis.front() -> casamentos.size() : -1;
+	string lin = "Aneis A" + to_string(num_casamentos) + "C" + to_string(num_casamentos) + "\n";
+	lin += "Número total de Aneis: ";
+	lin += to_string(aneis.size());
+	lin += "\n";
+
+	//Número de aneis com X cores
+	int num = 0;
+	for (Anel* a: aneis)
+		num = num < a->cores.size() ? a->cores.size() : num;
+	vector<int> numero_aneis(num + 1, 0);
+	for (Anel* a: aneis)
+		numero_aneis[a->cores.size()]++;
+	for (int i = 0; i < numero_aneis.size(); i++)
+		lin += "Número de aneis com " + to_string(i) + " cores: " + to_string(numero_aneis[i]) + "\n";
+
+	fputs(lin.c_str(), arquivo);
+
+	//Cores no grafo
+	lin = "\nCores no Grafo:\n";
+	for (int i = 0; i < g -> map -> tam(); i++) {
+		pair<Cor*, set<int>> par = (*(g -> map))[i];
+		Cor * c = par.first;
+		set<int> set = par.second;
+
+		lin += c -> g_rgb();
+		lin += " : ";
+		for (int i : set) {
+			Vertice * atual = g -> encontrar_atributo(i);
+			lin += to_string(atual -> g_numero());
+			lin += " ";
+			if (atual -> g_numero() < 0)
+				delete atual;
+		}
+		lin += "\n";
+	}
+	fputs(lin.c_str(), arquivo);
+
+	//Aparencia das Cores
+	lin = "\nNúmero de aparição das cores\n";
+	vector<int> aparicoes(g -> g_numero_vertices() + 1, 0);
+	for (Anel* a: aneis)
+		for (set<int> set: a -> cores)
+			for (int i: set)
+				if (i >= 0)
+					aparicoes[i]++;
+				else
+					aparicoes[g -> g_numero_vertices()]++;
+
+	for (int i = 0; i < aparicoes.size(); i++)
+		if (aparicoes[i] > 0) {
+			Vertice * atual = g -> encontrar_atributo(i);
+			lin += to_string(atual -> g_numero());
+			lin += " : ";
+			if (atual -> g_numero() < 0) {
+				lin += to_string(aparicoes[g -> g_numero_vertices()]);
+				delete atual;
+			} else
+				lin += to_string(aparicoes[i]);
+			lin += "\n";
+		}
+
+	fputs(lin.c_str(), arquivo);
+
+
+	//Aparencias em conjuntos
+	num = 0;
+	for (Anel* a: aneis)
+		num = num < a->cores.size() ? a->cores.size() : num;
+	num++;	//
+
+	list<Anel*> aneis_ordenados[num];
+	for (Anel* a: aneis)
+		aneis_ordenados[a -> cores.size()].push_back(a);
+
+	lin = "";
+	for (int i = 0; i < num; i++) {
+		lin += "\nNúmero de anéis com " + to_string(i) + " cores:" + to_string(aneis_ordenados[i].size()) + "\n";
+		Help * h = new Help();
+		for (Anel* a: aneis_ordenados[i]) {
+			h -> adicionar(a -> cores);
+		}
+
+		for (int j = 0; j < h -> aparicoes.size(); j++) {
+			lin += "Grupo: ";
+			set<set<int>, set_cmp> s2 = h -> cores[j];
+			int separador = 0;
+			for (set<int> s1: s2) {
+				for (int z: s1) {
+					Vertice * atual = g -> encontrar_atributo(z);
+					lin += to_string(atual -> g_numero()) + " ";
+					if (atual -> g_numero() < 0) {
+						delete atual;
+					}
+				}
+				if (++separador < s2.size())
+					lin += " | ";
+
+			}
+
+			lin += " , Anéis: " + to_string(h -> aparicoes[j]) + "\n";
+		}
+
+
+		delete h;
+	}
+	fputs(lin.c_str(), arquivo);
+
+
+
+	fclose(arquivo);
+}
+
+

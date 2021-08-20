@@ -1,0 +1,44 @@
+Aneis A2C2
+Número total de Aneis: 110590
+Número de aneis com 0 cores: 0
+Número de aneis com 1 cores: 925
+Número de aneis com 2 cores: 23775
+Número de aneis com 3 cores: 85871
+Número de aneis com 4 cores: 19
+
+Cores no Grafo:
+#BD9A9A : -1 
+#0000FF : 1002 
+#FF0000 : 1004 
+#00FF00 : 1204 
+#FFFF00 : 1195 
+#FF00FF : 1201 
+
+Número de aparição das cores
+1002 : 107681
+1004 : 107534
+1195 : 534
+1204 : 65
+-1 : 90350
+
+Número de anéis com 0 cores:0
+
+Número de anéis com 1 cores:925
+Grupo: 1002  , Anéis: 606
+Grupo: 1004  , Anéis: 319
+
+Número de anéis com 2 cores:23775
+Grupo: -1  | 1002  , Anéis: 1904
+Grupo: -1  | 1004  , Anéis: 2590
+Grupo: 1002  | 1004  , Anéis: 19144
+Grupo: 1002  | 1204  , Anéis: 8
+Grupo: 1002  | 1195  , Anéis: 129
+
+Número de anéis com 3 cores:85871
+Grupo: -1  | 1002  | 1004  , Anéis: 85428
+Grupo: 1002  | 1004  | 1204  , Anéis: 34
+Grupo: -1  | 1002  | 1204  , Anéis: 4
+Grupo: -1  | 1002  | 1195  , Anéis: 405
+
+Número de anéis com 4 cores:19
+Grupo: -1  | 1002  | 1004  | 1204  , Anéis: 19

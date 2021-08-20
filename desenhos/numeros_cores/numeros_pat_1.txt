@@ -1,0 +1,59 @@
+Aneis A1C1
+Número total de Aneis: 520
+Número de aneis com 0 cores: 0
+Número de aneis com 1 cores: 105
+Número de aneis com 2 cores: 221
+Número de aneis com 3 cores: 178
+Número de aneis com 4 cores: 16
+
+Cores no Grafo:
+#0000FF : 1001 
+#BD9A9A : -1 
+#FF0000 : 1003 
+#00FF00 : 1105 
+#FFFF00 : 1203 
+#FF00FF : 1106 
+#00FFFF : 1196 
+#808080 : 1194 
+#4682B4 : 1197 
+
+Número de aparição das cores
+1001 : 164
+1003 : 297
+1105 : 369
+1106 : 106
+1194 : 23
+1196 : 7
+1203 : 18
+-1 : 161
+
+Número de anéis com 0 cores:0
+
+Número de anéis com 1 cores:105
+Grupo: 1105  , Anéis: 57
+Grupo: 1001  , Anéis: 9
+Grupo: 1003  , Anéis: 3
+Grupo: 1106  , Anéis: 36
+
+Número de anéis com 2 cores:221
+Grupo: -1  | 1001  , Anéis: 5
+Grupo: 1003  | 1105  , Anéis: 127
+Grupo: 1001  | 1105  , Anéis: 19
+Grupo: 1001  | 1203  , Anéis: 12
+Grupo: 1001  | 1003  , Anéis: 5
+Grupo: -1  | 1105  , Anéis: 2
+Grupo: 1001  | 1106  , Anéis: 40
+Grupo: 1106  | 1196  , Anéis: 2
+Grupo: 1106  | 1194  , Anéis: 9
+
+Número de anéis com 3 cores:178
+Grupo: -1  | 1003  | 1105  , Anéis: 120
+Grupo: -1  | 1001  | 1105  , Anéis: 7
+Grupo: -1  | 1001  | 1203  , Anéis: 6
+Grupo: -1  | 1001  | 1003  , Anéis: 5
+Grupo: 1001  | 1003  | 1105  , Anéis: 21
+Grupo: 1001  | 1106  | 1196  , Anéis: 5
+Grupo: 1001  | 1106  | 1194  , Anéis: 14
+
+Número de anéis com 4 cores:16
+Grupo: -1  | 1001  | 1003  | 1105  , Anéis: 16

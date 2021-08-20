@@ -8,6 +8,7 @@
 #include <string>
 #include <stack>
 #include <queue>
+#include <utility>
 
 #include <math.h>
 #include <iomanip>
@@ -34,7 +35,7 @@ bool contem(T t, list<T> l) {
 }
 
 static Grafo* pgrafo;
-static list<string> cores;
+extern list<string> cores;
 
 string primeira_cor();
 void reinicia_cores();
@@ -130,6 +131,8 @@ class Map {
 		void adicionar_cor(set<int> numero, Cor* cor);
 		void limpar();
 		int tam() { return cores.size(); }
+
+		pair<Cor*, set<int>> operator[](unsigned int i) { return i > tam() ? pair<Cor*, set<int>>(0, set<int>()) : pair<Cor*, set<int>>(cores[i], numeros[i]); }
 };
 
 class Vertice {
@@ -250,6 +253,15 @@ public:
 	void mudar_tamanho(int tamanho);
 };
 
+enum Corte {
+	SOMA,
+	GERACAO_INF,
+	GERACAO_SUP,
+	P_GRAFO,
+	TODOS
+
+};
+
 class Anel {
 public:
 	list<Vertice*> anel;
@@ -258,6 +270,7 @@ public:
 	list<list<Vertice*>> casamentos;
 	list<Vertice*> juncoes;
 	list<Vertice*> ego;
+	set<set<int>, set_cmp> cores;
 
 	string linha_normal;
 	string linha_ordem;

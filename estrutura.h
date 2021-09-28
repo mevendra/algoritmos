@@ -9,6 +9,7 @@
 #include <stack>
 #include <queue>
 #include <utility>
+#include <map>
 
 #include <math.h>
 #include <iomanip>
@@ -126,6 +127,7 @@ class Map {
 		~Map();
 		Cor* encontrar_cor(int numero);
 		Cor* encontrar_cor(set<int> numero);
+		set<int> encontrar_numeros(int indice);
 		int encontrar_indice_cor(set<int> numero);
 		void adicionar_cor(int numero, Cor* cor);
 		void adicionar_cor(set<int> numero, Cor* cor);
@@ -258,8 +260,8 @@ enum Corte {
 	GERACAO_INF,
 	GERACAO_SUP,
 	P_GRAFO,
-	TODOS
-
+	TODOS,
+	NENHUM
 };
 
 class Anel {

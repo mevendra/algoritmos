@@ -1861,6 +1861,20 @@ void encontra_combinacoes_trio(list<list<int>> trio_casamentos, list<list<list<i
 	destino.push_back(linha_8);
 }
 
+void encontra_caminhos1(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_atual, list<list<Vertice*>> &caminhos) {
+	if (fonte == destino) {
+		caminhos.push_back(caminho_atual);
+		return;
+	}
+
+	for (Vertice* filho: fonte -> filhos){
+		if (filho -> min_cores[destino -> g_id()] > 0) {
+			list<Vertice*> caminho_aux(caminho_atual);
+			caminho_aux.push_back(filho);
+			encontra_caminhos(filho, destino, caminho_aux, caminhos);
+		}
+	}
+}
 void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 {
 	destino -> primeiro = juncao -> primeiro;
@@ -1878,15 +1892,17 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 		if (com_cores) {
 			int zi = 0;
 			set<int>  cores;
-			for (int i = 1; i <= juncoes -> max_cores[destino -> primeiro -> g_id()]; i++)
+			for (int i = juncoes -> min_cores[destino -> primeiro -> g_id()]; i <= juncoes -> max_cores[destino -> primeiro -> g_id()]; i++)
 				encontra_caminhos_cores_especificas(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice], cores, i);
 
-			for (int i = 1; i <= juncoes -> max_cores[destino -> segundo -> g_id()]; i++)
-				encontra_caminhos_cores_especificas(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice], cores, i);
+			for (int i =  juncoes -> min_cores[destino -> segundo -> g_id()]; i <= juncoes -> max_cores[destino -> segundo -> g_id()]; i++)
+				encontra_caminhos_cores_especificas(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice], cores, i);	
 		} else {
 /**/
-			encontra_caminhos(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
-			encontra_caminhos(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
+			encontra_caminhos1(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
+			encontra_caminhos1(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
+			//encontra_caminhos(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
+			//encontra_caminhos(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
 		}
 /**/
 

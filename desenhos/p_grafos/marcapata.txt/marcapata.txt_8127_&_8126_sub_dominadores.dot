@@ -1,9 +1,0 @@
-digraph {
-0 [label = "8125 & 8128", shape = diamond];
-1 [label = "8125 & 8437", shape = diamond];
-2 [label = "8126 & 8127", shape = diamond];
-2 -> 0;
-2 -> 1;
-3 -> 2;
-3 -> 3;
-}

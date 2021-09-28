@@ -1535,13 +1535,27 @@ void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* c
 				linha+= ", ";
 				linha += v -> g_tipo() == 't' ? "m" : "f";		//SxEgoX
 				linha += ", ";
-				linha += to_string(map -> encontrar_indice_cor(v -> cor));	//EgoCor
+				for (int i : v -> cor) {	//EgoCor
+					Vertice * atual_cor = g -> encontrar_atributo(i);
+					linha += to_string(atual_cor -> g_numero());
+					linha += " ";
+					if (atual_cor -> g_id() == -1)
+						delete atual_cor;
+				}
+				//linha += to_string(map -> encontrar_indice_cor(v -> cor));	//EgoCor
 				linha += ", ";
 				linha += to_string(u -> g_numero());	//AlterX
 				linha+= ", ";
 				linha += u -> g_tipo() == 't' ? "m" : "f";			//SxAlterX
 				linha += ", ";
-				linha += to_string(map -> encontrar_indice_cor(u -> cor));	//AlterCor
+				for (int i : u -> cor) {	//AlterCor
+					Vertice * atual_cor = g -> encontrar_atributo(i);
+					linha += to_string(atual_cor -> g_numero());
+					linha += " ";
+					if (atual_cor -> g_id() == -1)
+						delete atual_cor;
+				}
+				//linha += to_string(map -> encontrar_indice_cor(u -> cor));	//AlterCor
 				linha += ", ";
 				id++;
 			}
@@ -1583,7 +1597,14 @@ void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* c
 				linha += "(";
 			linha += to_string(v -> g_numero());
 			linha+= "-";
-			linha += to_string(map -> encontrar_indice_cor(v -> cor));
+			for (int i : v -> cor) {	//Cor
+				Vertice * atual_cor = g -> encontrar_atributo(i);
+				linha += to_string(atual_cor -> g_numero());
+				linha += " ";
+				if (atual_cor -> g_id() == -1)
+					delete atual_cor;
+			}
+			//linha += to_string(map -> encontrar_indice_cor(v -> cor));
 			if (jun)
 				linha += ") ";
 			else
@@ -1709,8 +1730,14 @@ void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* c
 
 		//Cores
 		for (int i: cores) {
-			linha += to_string(i);
-			linha += " ";
+			linha += "(";
+			for (int j: map -> encontrar_numeros(i)) {
+				Vertice * atual_cor = g -> encontrar_atributo(j);
+				linha += to_string(atual_cor -> g_numero());
+				if (atual_cor -> g_id() == -1)
+					delete atual_cor;
+			}
+			linha += ") ";
 		}
 
 		if (tam > 1) {
@@ -1960,13 +1987,13 @@ struct cmp {
 	}
 };
 
-class Help {
+class Helper {
 public:
 	cmp comparador;
 	vector<set<set<int>, set_cmp>> cores;
 	vector<int> aparicoes;
 
-	Help(){}
+	Helper(){}
 
 	void adicionar(set<set<int>, set_cmp> novo) {
 		for (int i = 0; i < cores.size(); i++) {
@@ -2065,7 +2092,7 @@ void escreve_numeros_aneis(Grafo * g, list<Anel*> aneis, char const* caminho)
 	lin = "";
 	for (int i = 0; i < num; i++) {
 		lin += "\nNúmero de anéis com " + to_string(i) + " cores:" + to_string(aneis_ordenados[i].size()) + "\n";
-		Help * h = new Help();
+		Helper * h = new Helper();
 		for (Anel* a: aneis_ordenados[i]) {
 			h -> adicionar(a -> cores);
 		}

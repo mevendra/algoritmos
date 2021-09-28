@@ -200,6 +200,13 @@ int Map::encontrar_indice_cor(set<int> numero) {
 	return -1;
 }
 
+set<int> Map::encontrar_numeros(int indice) {
+	if (indice < 0 || indice > numeros.size())
+		return set<int>();
+	else
+		return numeros[indice];
+}
+
 //Vertice
 Vertice::Vertice (int id_, int numero_, char tipo_) {
 	id = id_;
@@ -484,7 +491,7 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 
 	//Verifica se escolheu o casamento com menor geração
 	if (casamentos.size() == 2 && !realizado) {
-		Corte corte = TODOS;	//SOMA, GERACAO_SUP, GERACAO_INF, P_GRAFO, TODOS
+		Corte corte = SOMA;	//SOMA, GERACAO_SUP, GERACAO_INF, P_GRAFO, TODOS, NENHUM
 		bool inverter = false;
 		bool corte_realizado = false;
 		bool realizar_todos = false;
@@ -499,22 +506,22 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 				int n_terceiro = 0;
 				int n_quarto = 0;
 
-				for (Vertice* v: anel) {
-					v -> valor_bool = false;
-					v -> valor_bool_2 = false;
+				map<int, bool> map_casamento;
+				map<int, bool> map_juncao;
+
+				for (Vertice* v: juncoes) {
+					map_juncao[v -> g_id()] = true;
 				}
 
-				for (Vertice* v: juncoes)
-					v -> valor_bool = true;
 				for (list<Vertice*> l: casamentos) {
-					l.front() -> valor_bool_2 = true;
-					l.back() -> valor_bool_2 = true;
+					map_casamento[l.front() -> g_id()] = true;
+					map_casamento[l.back() -> g_id()] = true;
 				}
 
 				int soma = 0;
 				int contando = 1;	//1 para primeiro, 2 segundo, ...
 				for (Vertice* v: anel) {
-					if (v -> valor_bool && v -> valor_bool_2) {	//juncao e casamento
+					if (map_casamento[v -> g_id()] && map_juncao[v -> g_id()]) {	//juncao e casamento
 						switch(contando) {
 							case(1):
 								if (soma == 0) {
@@ -537,9 +544,9 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 								}
 								break;
 							default:
-								throw runtime_error("Caso não conferido na soma do anel");
+								throw runtime_error("Caso não conferido na soma do anel 1");
 						}
-					} else if (v -> valor_bool_2) {	//Casamento
+					} else if (map_casamento[v->g_id()]) {	//Casamento
 						switch(contando) {
 							case(1):
 								soma = 0;
@@ -558,10 +565,10 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 								contando = 5;
 								break;
 							default:
-								throw runtime_error("Caso não conferido na soma do anel");
+								throw runtime_error("Caso não conferido na soma do anel 2");
 						}
 
-					} else if (v -> valor_bool) {	//Juncao
+					} else if (map_juncao[v -> g_id()]) {	//Juncao
 						switch(contando) {
 							case(1):
 								n_primeiro = soma;
@@ -574,7 +581,7 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 								contando = 4;
 								break;
 							default:
-								throw runtime_error("Caso não conferido na soma do anel");
+								throw runtime_error("Caso não conferido na soma do anel 3");
 						}
 
 					}
@@ -650,6 +657,8 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 
 				break;
 			}
+			case NENHUM:
+				break;
 			default:
 				throw runtime_error("Modo de corte ainda não implementado");
 		}
@@ -721,6 +730,8 @@ void Anel::adicionar_elemento(vector<list<Vertice*>> caminho, list<list<int>> ca
 			casamentos_.push_back(casamentos_.front());
 			casamentos_.pop_front();
 			this -> adicionar_elemento(caminho, casamentos_, juncoesUtilizadas, true);
+
+			return;
 		}
 	}
 

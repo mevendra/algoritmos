@@ -42,8 +42,7 @@ int main(int argc, char *argv[]) {
 	} else
 		return -1;
 
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	printf("Inicio\n");
+
 
 	Grafo *g = trabalha_arquivo(entrada.c_str());
 	int **grafo;
@@ -52,16 +51,28 @@ int main(int argc, char *argv[]) {
 	else
 		return 1;
 
-	//colorir_grafo_mat(g);
-	colorir_grafo_pat(g);
+	colorir_grafo_mat(g);
+	//colorir_grafo_pat(g);
 
-	list<Anel*> destino_2;
+	if (k == 1)
+		com_cores = false;
+
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+	printf("Inicio\n");
+	list<Anel*> destino11;
+	encontra_aneis(g, destino11, 2);
+	std::chrono::steady_clock::time_point en1d = std::chrono::steady_clock::now();
+	std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(en1d - begin).count() << "[ms]" << std::endl;
+
+	return 0;
 	list<Anel*> destino_1;
+	list<Anel*> destino_2;
 	encontra_aneis(g, destino_2, 2);
 	encontra_aneis(g, destino_1, 1);
 
 	//escreve_numeros_aneis(g, destino_1, "desenhos/numeros_cores/numeros_mat_1.txt");
 	//escreve_numeros_aneis(g, destino_2, "desenhos/numeros_cores/numeros_mat_2.txt");
+	escreve_aneis_coloridos_completo(g, destino_2, "aneis/aneis_2_coloridos.txt");
 	escreve_numeros_aneis(g, destino_1, "desenhos/numeros_cores/numeros_pat_1.txt");
 	escreve_numeros_aneis(g, destino_2, "desenhos/numeros_cores/numeros_pat_2.txt");
 

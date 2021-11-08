@@ -23,10 +23,12 @@ void escreve_grafo_com_componentes_especiais_graphviz(Grafo* g, list<list<int>> 
 
 void escreve_cores(Grafo* g, char const* caminho);
 void escreve_max_cores(Grafo* g, char const* caminho);
+void escreve_juncoes(list<Anel_aux*> aneis, Grafo* g, char const* caminho);
 void escreve_aneis(list<Anel*> aneis, Grafo* g, char const* caminho);
 void escreve_aneis_ordem(list<Anel*> aneis, Grafo* g, char const* caminho);
 void escreve_aneis_completo(list<Anel*> aneis, char const* caminho);
 void escreve_aneis_alternativo(list<Anel*> aneis, char const* caminho);
+void escreve_aneis_coloridos(Grafo* g, list<Anel*> aneis, char const* caminho);
 void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* caminho);
 void escreve_comum_entre_grafos(vector<Grafo*> grafos, char const* caminho);
 void escreve_informacao_grafos(Grafo* g, vector<Grafo*> grafos, char const* caminho);

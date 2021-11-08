@@ -51,8 +51,110 @@ int main(int argc, char *argv[]) {
 	else
 		return 1;
 
-	colorir_grafo_mat(g);
-	//colorir_grafo_pat(g);
+	//colorir_grafo_mat(g);
+	colorir_grafo_pat(g);
+	list<Anel*> deaa;
+
+	std::chrono::steady_clock::time_point begindeaa = std::chrono::steady_clock::now();
+	//encontra_aneis_coloridos_algo3_pool(g, deaa, 2, 8, 40);
+	//encontra_aneis(g, deaa, 2);
+	//encontra_aneis_paralelos_vetor(g, deaa, 2, 8, 40);
+	com_cores = false;
+	encontra_aneis_paralelos_procurando(g, deaa, 2, 8, 40);
+	std::chrono::steady_clock::time_point enddeaa = std::chrono::steady_clock::now();
+	std::cout << "Time difference1 = " << std::chrono::duration_cast<std::chrono::milliseconds>(enddeaa - begindeaa).count() << "[ms]" << std::endl;
+
+	cout << "Aneis encontrados" << deaa.size() << endl;
+	return 0;
+
+	com_cores = false;
+
+	list<Anel_aux*> an;
+	Juncoes* juncoesa = new Juncoes(g -> g_numero_vertices());
+	encontra_juncoes(g, juncoesa);
+
+	cout << "ENcontrou juncoes" << endl;
+	for (Vertice* va: g -> atributos) {
+		for (Vertice* vb: g -> atributos) {
+			if (va != vb && va && vb) {
+				Anel_aux* novo = new Anel_aux();
+				an.push_back(novo);
+				JuncoesDe* par_juncao = juncoesa -> juncoes[va -> g_id()][vb -> g_id()];
+
+				if (par_juncao)
+					define_anel_aux(par_juncao, novo);
+			}
+		}
+	}
+	cout << "Escrevendo" << endl;
+	cout << an.size() << endl;
+	escreve_juncoes(an, g, "aneis/caminhos_juncoes");
+	
+	return 0;
+
+	list<list<Vertice*>> caminhosc;
+	list<Vertice*> caminho_atual;
+	Vertice* destinoz;
+	int fontenum = 1105;
+	int destinonum = 1021;
+	Vertice* fontez;
+	for (Vertice* xz: g -> atributos)
+		if (xz)
+			if (xz -> g_numero() == fontenum)
+				fontez = xz;
+			else if (xz -> g_numero() == destinonum)
+				destinoz = xz;
+
+	cout << "Busca caminhos\n";
+	encontra_caminhos(fontez, destinoz,caminho_atual, caminhosc);
+
+	for (list<Vertice*> cam: caminhosc) {
+		cout << "Caminho: ";
+		for (Vertice* v: cam) {
+			cout << " " << v -> g_numero();
+		}
+		cout << endl;
+	}
+
+	cout << "Terminou\n";
+
+	return 0;
+
+	std::chrono::steady_clock::time_point beginn = std::chrono::steady_clock::now();
+	printf("Inicio\n");
+	list<Anel*> de;
+	encontra_aneis(g, de, 2);
+	std::chrono::steady_clock::time_point endd = std::chrono::steady_clock::now();
+	std::cout << "Time difference1 = " << std::chrono::duration_cast<std::chrono::milliseconds>(endd - beginn).count() << "[ms]" << std::endl;
+
+	com_cores = !com_cores;
+
+	beginn = std::chrono::steady_clock::now();
+	encontra_aneis(g, de, 2);
+	endd = std::chrono::steady_clock::now();
+	std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(endd - beginn).count() << "[ms]" << std::endl;
+
+	return 0;
+
+	list<Anel*> dest_2;
+	encontra_aneis(g, dest_2, 2);
+
+	list<Anel*> dest_1;
+	encontra_aneis(g, dest_1, 1);
+
+	list<Anel*> espec_2;
+	encontra_aneis_NOME_A_DEFINIR(dest_2, espec_2, 2);
+	list<Anel*> espec_1;
+	encontra_aneis_NOME_A_DEFINIR(dest_1, espec_1, 1);
+
+	cout << "Tamanho 2: " << espec_2.size() << endl;
+	escreve_aneis_coloridos(g, espec_2, "aneis/Aneis_A2C2_Especiais_pat");
+	cout << "Tamanho 1: " << espec_1.size() << endl;
+	escreve_aneis_coloridos(g, espec_1, "aneis/Aneis_A1C1_Especiais_pat");
+
+	cout << "Terminou\n";
+
+	return 0;
 
 	if (k == 1)
 		com_cores = false;
@@ -64,7 +166,6 @@ int main(int argc, char *argv[]) {
 	std::chrono::steady_clock::time_point en1d = std::chrono::steady_clock::now();
 	std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(en1d - begin).count() << "[ms]" << std::endl;
 
-	return 0;
 	list<Anel*> destino_1;
 	list<Anel*> destino_2;
 	encontra_aneis(g, destino_2, 2);

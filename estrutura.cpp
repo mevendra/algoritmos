@@ -102,12 +102,6 @@ Cor::Cor(string rgb_) {
 	}
 }
 Cor::Cor(Cor* cor) {
-	/*
-	int c_ = cor -> to_int();
-	int r_ = (c_ >> 8) & 256;
-	int g_ = (c_ >> 16) & 256;
-	int b_ = c_ & 256;
-*/
 	Cor(cor -> g_rgb());
 }
 
@@ -131,13 +125,11 @@ void Cor::soma(Cor* c) {
 	rgb += stream.str();
 }
 
-int Cor::to_int() {
+unsigned int Cor::to_int() {
 	int ret = r;
 	ret = (ret << 8) + g;
 	ret = (ret << 8) + b;
 
-	if (ret < 0)	//MUDAR
-		ret = ret * -1;
 	return ret;
 }
 
@@ -201,7 +193,7 @@ int Map::encontrar_indice_cor(set<int> numero) {
 }
 
 set<int> Map::encontrar_numeros(int indice) {
-	if (indice < 0 || indice > numeros.size())
+	if (indice < 0 || indice >= numeros.size())
 		return set<int>();
 	else
 		return numeros[indice];
@@ -230,25 +222,6 @@ void Vertice::adicionar_filho(Vertice* filho) {
 	filhos.push_back(filho);
 }
 
-void Vertice::resetar() {
-	cor_int = 0;
-	cores_ate_folha = 1;
-	cor.clear();
-	cores.clear();
-	min_cores.clear();
-	max_cores.clear();
-
-	geracao = -1;
-	valor_int = -1;
-	valor_int_2 = -1;
-	valor_bool = false;
-	valor_bool_2 = false;
-	if (ponteiro) {
-		//delete ponteiro;
-		ponteiro = 0;
-	}
-}
-
 //Grafo
 Grafo::Grafo(int numero_vertices_, vector<Vertice*> atributos_, int** grafo_) {
 	numero_vertices = numero_vertices_;
@@ -265,60 +238,35 @@ Grafo::Grafo(int numero_vertices_, vector<Vertice*> atributos_, Vertice* raiz_, 
 
 Grafo::~Grafo() {
 	for (Vertice* v: atributos)
-		if (v)
-			delete v;
+		delete v;
+	if (erro)
+		delete erro;
+	if (raiz)
+		delete raiz;
 
 	delete grafo;
 }
 
 Vertice* Grafo::encontrar_atributo(int i) {
-	if (i >= atributos.size() || i < 0)
-		return new Vertice(-1, -1, 'e');
-	else
+	if (i >= atributos.size() || i < 0) {
+		if (!erro)
+			erro = new Vertice(-1, -1, 'e');
+
+		return erro;
+	} else
 		return atributos[i];
 }
 
-void Grafo::resetar() {
-	for (Vertice* v: atributos)
-		if (v)
-			v -> resetar();
-	if (map)
-		map -> limpar();
-}
+Vertice* Grafo::g_raiz() { 
+	if (!raiz) {
+		 raiz = new Vertice(-1, -1, 'r');
 
-void Grafo::adicionar_vertice(Vertice* v, bool eh_raiz) {
-	//Matriz é ajustada no inicio, não pode ser aumentada
-	//atributos[numero_vertices] = v;	todo
-	if (v -> g_id() == numero_vertices) {
-		atributos.push_back(v);
-		numero_vertices++;
-		if (eh_raiz)
-			raiz = v;
-	} else {
-		printf("Em Grafo::adicionar_vertice, vértice com id invalido adicionado(%d) (esperado = %d)", v->g_id(), numero_vertices);
-		throw runtime_error("Em Grafo::adicionar_vertice, vértice com id invalido adicionado");
-	}
-}
-
-void Grafo::remover_vertice(Vertice* v) {
-	if (!v)
-		return;
-	Vertice* aux = encontrar_atributo(v -> g_id());
-	if (aux == v) {
-		numero_vertices--;
-		atributos[v -> g_id()] = 0;
-
-		for (Vertice* x: v -> pais)
-			x -> filhos.remove(v);
-		for (Vertice* x: v -> filhos)
-			x -> pais.remove(v);
-		for (Vertice* x: v -> casados)
-			x -> casados.remove(v);
-
-		v -> pais.clear();
-		v -> filhos.clear();
-		v -> casados.clear();
-	}
+		 for (Vertice* v: atributos)
+		 	if (v -> pais.size() == 0)
+				raiz -> filhos.push_back(v);
+	}	
+	
+	return raiz; 
 }
 
 //Nodo

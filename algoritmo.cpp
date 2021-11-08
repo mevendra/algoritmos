@@ -611,26 +611,22 @@ void define_super_sob(Grafo* g)
 
 	//Cria raiz inicial para copia( se não houver)
 	Vertice* raiz = copia -> g_raiz();
-	if (!raiz) {
-		//Encontra raizes
-		list<Vertice*> raizes;
-		encontra_raizes(copia, raizes);
-
-		raiz = new Vertice(g -> g_numero_vertices(), -1, 'r');
-		for (Vertice* v: raizes) {
-			raiz -> adicionar_filho(v);
+	if (raiz -> g_tipo() == 'r') {
+		for (Vertice* v: raiz -> filhos) {
 			v -> adicionar_pais(raiz);
 		}
-		raiz -> adicionar_cor(raiz -> g_id());
-		copia -> adicionar_vertice(raiz, true);
+		
+		if (raiz -> cor.size() == 0) 
+			raiz -> adicionar_cor(raiz -> g_id());
 	}
-
 
 	//Inicializa os atributos de copia
 	for (Vertice* v: copia -> atributos) {
 		v -> min_cores = vector<int>(copia -> g_numero_vertices(), INT_MAX);
 		v -> max_cores = vector<int>(copia -> g_numero_vertices(), 0);
 	}
+	raiz -> min_cores = vector<int>(copia -> g_numero_vertices(), INT_MAX);
+	raiz -> max_cores = vector<int>(copia -> g_numero_vertices(), 0);
 
 	//Encontra super e sob para folhas e as retira do grafo
 	while (raiz -> filhos.size() > 0) {
@@ -652,11 +648,14 @@ void define_super_sob(Grafo* g)
 		podar_folhas(copia);
 	}
 
+	int super = 1;
 	for (Vertice* v: g -> atributos)
 		for (int i = 0; i < g -> g_numero_vertices(); i++) {
+			super = super > v -> max_cores[i] ? super : v -> max_cores[i];
 			if (v -> min_cores[i] == INT_MAX)
 				v -> min_cores[i] = 0;
 		}
+	g -> s_max_super(super);
 
 	delete copia;
 }
@@ -731,7 +730,18 @@ void podar_folhas(Grafo* g)
 			}
 
 	for (Vertice* v: retirar) {
-		g -> remover_vertice(v);
+		g -> atributos[v -> g_id()] = 0;
+
+		for (Vertice* x: v -> pais)
+			x -> filhos.remove(v);
+		for (Vertice* x: v -> filhos)
+			x -> pais.remove(v);
+		for (Vertice* x: v -> casados)
+			x -> casados.remove(v);
+
+		v -> pais.clear();
+		v -> filhos.clear();
+		v -> casados.clear();
 		delete v;
 	}
 }
@@ -816,12 +826,11 @@ void define_max_cores(Grafo* g)
 	bool raiz_artificial = false;
 	if (raizes.size() > 1) {
 		raiz_artificial = true;
-		raiz = new Vertice(g -> g_numero_vertices(), -1, 'u');
+		raiz = new Vertice(g -> g_numero_vertices(), -1, 'r');
 		for (Vertice* v: raizes) {
 			raiz -> adicionar_filho(v);
 			v -> adicionar_pais(raiz);
 		}
-		g -> adicionar_vertice(raiz);
 	} else if (raizes.size() == 1)
 		raiz = raizes.front();
 	else
@@ -874,7 +883,6 @@ void define_max_cores(Grafo* g)
 
 	//Se raiz artificial foi criada, a exclui
 	if (raiz_artificial) {
-		g -> remover_vertice(raiz);
 		for (Vertice* v: raizes) {
 			raiz -> filhos.remove(v);
 			v -> pais.remove(raiz);
@@ -1132,14 +1140,13 @@ void encontra_juncoes(Grafo* g, Juncoes* destino)
 void encontra_arvore_dominadores(Grafo* g, vector<Vertice*> &dominadores_imediatos)
 {
 	//Criação de atributo "Raiz" que se liga aos raizes de g
-	Vertice* root = new Vertice(g -> atributos.size(), g -> g_numero_vertices(), 'z');
+	Vertice* root = new Vertice(g -> atributos.size(), -1, 'r');
 	list<Vertice*> raizes_g;
 	encontra_raizes(g, raizes_g);
 	for (Vertice* v: raizes_g) {
 		v -> adicionar_pais(root);
 		root -> adicionar_filho(v);
 	}
-	g -> adicionar_vertice(root);
 
 	//Algoritmo que chama recursivamente
 	for (Vertice* v: g -> atributos) {
@@ -1150,10 +1157,10 @@ void encontra_arvore_dominadores(Grafo* g, vector<Vertice*> &dominadores_imediat
 	procedimento_dominadores(g, g -> atributos, root, dominadores_imediatos);
 
 	//Retorna g ao normal
-	g -> remover_vertice(root);
 	for (Vertice* v: raizes_g) {
 		v -> pais.remove(root);
 	}
+	delete root;
 }
 
 void procedimento_dominadores(Grafo *g, vector<Vertice*> u, Vertice* s, vector<Vertice*> &dominadores_imediatos)
@@ -1871,10 +1878,11 @@ void encontra_caminhos1(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_
 		if (filho -> min_cores[destino -> g_id()] > 0) {
 			list<Vertice*> caminho_aux(caminho_atual);
 			caminho_aux.push_back(filho);
-			encontra_caminhos(filho, destino, caminho_aux, caminhos);
+			encontra_caminhos1(filho, destino, caminho_aux, caminhos);
 		}
 	}
 }
+
 void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 {
 	destino -> primeiro = juncao -> primeiro;
@@ -1899,10 +1907,13 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 				encontra_caminhos_cores_especificas(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice], cores, i);	
 		} else {
 /**/
-			encontra_caminhos1(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
-			encontra_caminhos1(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
-			//encontra_caminhos(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
-			//encontra_caminhos(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
+			//Encontra caminhos 1 utiliza somente informacao de minimo
+			//encontra_caminhos1(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
+			//encontra_caminhos1(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
+
+			//Encontra caminhos nao utiliza informacoes de cores
+			encontra_caminhos(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
+			encontra_caminhos(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
 		}
 /**/
 
@@ -2881,5 +2892,120 @@ void thread_encontra_aneis_procurando(Grafo* g, Juncoes* juncoes, list<list<list
 			encontra_aneis_a2(g, juncoes, atual, destino);
 		else
 			encontra_aneis_a3(g, juncoes, atual, destino);
+	}
+}
+
+void encontra_aneis_coloridos_algo3_pool(Grafo* g, list<Anel*>& destino, int numero_casamentos, int num_threads, int grao)
+{
+	cout << "Encontrando os aneis com algoritmo 3 paralelo alterado" << endl;
+	numero_aneis = 0;
+	if (numero_casamentos > 3 || numero_casamentos < 1)
+		return;
+
+	//Encontra Junções
+	cout << "Encontrando Juncoes " << endl;
+	Juncoes* juncoes = new Juncoes(g -> g_numero_vertices());
+	encontra_juncoes(g, juncoes);
+
+	//Encontra super e sob das cores
+	cout<<"Encontrando super e sob\n";
+	define_super_sob(g);
+
+	//Encontra todos os casamentos
+	cout<<"Encontrando os casamentos\n";
+	vector<list<int>> casamentos;
+	encontra_casamentos(g, casamentos);
+
+	//Encontra todas as combinacoes
+	cout<<"Encontrando as combinacoes destes casamentos: " << casamentos.size() << endl;
+	list<list<list<int>>> conjuntos;
+	encontra_combinacoes(casamentos, conjuntos, numero_casamentos);
+
+	//Encontra todos os pares de vertices utilizados
+	set<Par*, par_cmp> pares;
+	encontra_pares_vertices(juncoes, conjuntos, pares);
+	cout<<"Pares de vertices encontrados: " << pares.size() << endl;
+
+	//Encontra todos os caminhos entre os pares de vertices
+	cout<<"Encontrando os caminhos com " << num_threads << " threads" << endl;
+	vector<vector<list<Caminho*>>> caminhos(g -> g_numero_vertices(), vector<list<Caminho*>> (g -> g_numero_vertices()));
+	encontra_caminhos_coloridos(pares, num_threads, caminhos);
+
+	//Calcula o maior numero de cores possiveis em um anel
+	int max_cores = 0;
+	for (vector<list<Caminho*>> v: caminhos)
+		for (list<Caminho*> l: v)
+			for(Caminho* c: l)
+				max_cores = max_cores > c -> cores.size() ? max_cores : c -> cores.size();
+	max_cores = max_cores * 2 * numero_casamentos;
+	max_cores = max_cores < g -> map -> tam() ? max_cores : g -> map -> tam();
+
+
+	cout << "Encontrando os aneis" << endl;
+	thread threads[num_threads];
+	list<Anel*> destinos[num_threads];
+	for (int i = 0; i < num_threads; i++) {
+		cout << "Inicioando thread " << i << endl;
+		threads[i] = thread(thread_encontra_aneis_coloridos_algo3_pool, g, juncoes, ref(conjuntos), ref(caminhos), ref(destinos[i]), grao, max_cores);
+	}
+
+	for (int i = 0; i < num_threads; i++) {
+		cout << "Esperando por thread " << i << endl;
+		threads[i].join();
+	}
+
+	for (int i = 0; i < num_threads; i++) {
+		destino.merge(destinos[i]);
+	}
+
+	//Deleta estruturas criadas
+	delete juncoes;
+	for (Par* par: pares)
+		delete par;
+	for (vector<list<Caminho*>> v: caminhos)
+		for (list<Caminho*> l: v)
+			for (Caminho* c: l)
+				delete c;
+
+	cout << "Numero de aneis encontrados: " << destino.size() << endl;
+}
+
+void thread_encontra_aneis_coloridos_algo3_pool(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int grao, int max_cores)
+{
+	while(conjuntos.size() > 0) {
+		list<list<list<int>>> atual;
+		m_listas.lock();
+		for (int i = 0; i < grao && conjuntos.size() > 0; i++) {
+			atual.push_back(conjuntos.front());
+			conjuntos.pop_front();
+		}
+		m_listas.unlock();
+
+		for (int i = 1; i < max_cores; i++)
+			encontra_aneis_coloridos_t(g, juncoes, atual, caminhos, destino, i);
+	}
+}
+
+//Encontra os aneis de "fonte" que tenham "num_cores" cores e que as cores estejam dividas pelas juncoes
+void encontra_aneis_NOME_A_DEFINIR(list<Anel*> fonte, list<Anel*> &destino, int num_cores)
+{
+	cout << "NOME A DEFINIR :)\n";
+	for (Anel* anel: fonte) {
+		if (anel -> cores.size() != num_cores)
+			continue;
+		bool adicionar = true;
+		for (list<Vertice*> lista: anel -> caminhos) {
+			int cor_atual = lista.front() -> cor_int;
+			for (Vertice* v: lista) {
+				if (cor_atual != v -> cor_int) {
+					adicionar = false;
+					break;
+				}
+			}
+			if (!adicionar)
+				break;
+		}
+		if (adicionar)
+			destino.push_back(anel);
 	}
 }

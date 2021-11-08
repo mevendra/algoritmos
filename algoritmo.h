@@ -96,6 +96,7 @@ void encontra_aneis_coloridos_t(Grafo* g, Juncoes* juncoes, list<list<list<int>>
 //10
 void thread_encontra_aneis_vetor(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int grao);
 void thread_encontra_aneis_procurando(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, list<Anel*> &destino, int grao);
+void thread_encontra_aneis_coloridos_algo3_pool(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int grao, int max_cores);
 
 //Metodos "Finais"
 //0
@@ -149,6 +150,10 @@ void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamen
 //10
 void encontra_aneis_paralelos_procurando(Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
 void encontra_aneis_paralelos_vetor (Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
+void encontra_aneis_coloridos_algo3_pool(Grafo* g, list<Anel*>& destino, int numero_casamentos, int num_threads = 8, int grao = 40);
+
+//11
+void encontra_aneis_NOME_A_DEFINIR(list<Anel*> fonte, list<Anel*> &destino, int num_cores);
 
 //teste
 void colorir_grafo_esp(Grafo* g, int n);

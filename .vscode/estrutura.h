@@ -42,6 +42,10 @@ string primeira_cor();
 void reinicia_cores();
 string proxima_cor_aleatoria();
 
+//Vértice de p_g tem ponteiro == par e geracao calculada em valor int
+int geracao_casamento(Grafo* p_g, Vertice* c1, Vertice* c2);
+void definir_p_grafo(Grafo* g);
+
 struct Atributos_largura_lista {
 	int cor;
 	Nodo* nodo;
@@ -66,7 +70,6 @@ struct Atributos_componentes {
 	int tem_set;
 };
 
-//set da esquerda é menor que o da direita?
 struct set_cmp {
 	bool operator() (const set<int>& esquerda,const set<int>& direita) const {
 		set<int>::iterator it_esq = esquerda.begin();
@@ -83,7 +86,6 @@ struct set_cmp {
 	}
 };
 
-//set da esquerda é igual ao da direita?
 struct cor_cmp {
 	bool operator() (set<int> esquerda, set<int> direita)  {
 		set<int>::iterator it_esq = esquerda.begin();
@@ -112,7 +114,7 @@ public:
 	Cor(Cor* cor);
 
 	void soma(Cor* c);
-	unsigned int to_int();
+	int to_int();
 	string g_rgb() { return rgb; }
 };
 
@@ -123,10 +125,10 @@ class Map {
 	public:
 		Map() {}
 		~Map();
-		Cor* encontrar_cor(int numero);			//0 Para não encontrado
-		Cor* encontrar_cor(set<int> numero);	//0 Para não encontrado
-		set<int> encontrar_numeros(int indice);	//Set vazio para não encontrado
-		int encontrar_indice_cor(set<int> numero);	//-1 Para não encontrado
+		Cor* encontrar_cor(int numero);
+		Cor* encontrar_cor(set<int> numero);
+		set<int> encontrar_numeros(int indice);
+		int encontrar_indice_cor(set<int> numero);
 		void adicionar_cor(int numero, Cor* cor);
 		void adicionar_cor(set<int> numero, Cor* cor);
 		void limpar();
@@ -149,10 +151,10 @@ class Vertice {
 		int cores_ate_folha = 1;	//Maximo de cores até alguma folha
 		set<int> cor;	//Representa a cor do vertice
 		set<set<int>, set_cmp> cores;	//Cores até as folhas
-		vector<int> min_cores;	//Mínimo de cores até Outros vértices
-		vector<int> max_cores;	//Maximo de cores até Outros vértices
+		vector<int> min_cores;
+		vector<int> max_cores;
 
-		//Valores auxiliares utilizados pelos metodos
+		//Valores auxiliares utilizados por metodos
 		int geracao = -1;
 		int valor_int = -1;
 		int valor_int_2 = -1;
@@ -166,6 +168,7 @@ class Vertice {
 		void remover_casamento(Vertice* casamento);
 		void adicionar_pais(Vertice* pai);
 		void adicionar_filho(Vertice* filho);
+		void resetar();
 
 		int g_id() { return id; }
 		int g_numero() { return numero; }
@@ -175,7 +178,6 @@ class Vertice {
 class Grafo {
 	int numero_vertices;
 	int max_super = 0;
-	Vertice* erro = 0;
 	Vertice* raiz = 0;
 
 	public:
@@ -186,11 +188,12 @@ class Grafo {
 		Grafo(int numero_vertices_, vector<Vertice*> atributos_, int** grafo_);
 		Grafo(int numero_vertices_, vector<Vertice*> atributos_, Vertice* raiz, int** grafo_);
 		~Grafo();
-		Vertice* encontrar_atributo(int i);		//Define e retorna erro se não encontrado
-		void s_max_super(int super) { max_super = super; }
-		int g_max_super() { return max_super; }
+		Vertice* encontrar_atributo(int i);
+		void adicionar_vertice(Vertice* v, bool eh_raiz = false);
+		void remover_vertice(Vertice* v);
+		void resetar();
 		int g_numero_vertices() { return numero_vertices; }
-		Vertice* g_raiz();
+		Vertice* g_raiz() { return raiz; }
 };
 
 class Nodo {
@@ -305,9 +308,5 @@ struct par_cmp {
 			return fonte_e < fonte_d;
 	}
 };
-
-//Vértice de p_g tem ponteiro == par e geracao calculada em valor int
-int geracao_casamento(Grafo* p_g, Vertice* c1, Vertice* c2);
-void definir_p_grafo(Grafo* g);
 
 #endif /* ESTRUTURA_H */

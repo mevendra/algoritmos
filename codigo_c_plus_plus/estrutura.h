@@ -145,6 +145,9 @@ class Vertice {
 		list<Vertice*> filhos;
 		list<Vertice*> casados;
 
+		
+		vector<int> alcancaveis;
+
 		int cor_int = 0;	//obtido atraves do map em grafos utilizando set<int> cor
 		int cores_ate_folha = 1;	//Maximo de cores até alguma folha
 		set<int> cor;	//Representa a cor do vertice

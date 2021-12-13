@@ -1,0 +1,114 @@
+{% extends "template.html" %}
+{% block conteudo %}
+<form enctype = "multipart/form-data" class="form-horizontal" action="{{ url_for('encontrar_aneis') }}" method="post">
+    <fieldset>    
+    <!-- Multiple Radios (inline) -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="radios">Tipo de Anel</label>
+      <div class="col-md-4"> 
+        <label class="radio-inline" for="radios-0">
+          <input type="radio" name="radio_anel" id="radios-0" value="1" checked="checked">
+          A1C1
+        </label> 
+        <label class="radio-inline" for="radios-1">
+          <input type="radio" name="radio_anel" id="radios-1" value="2">
+          A2C2
+        </label> 
+        <label class="radio-inline" for="radios-2">
+          <input type="radio" name="radio_anel" id="radios-2" value="3">
+          A3C3
+        </label>
+      </div>
+    </div>
+    
+    <!-- Multiple Radios (inline) -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="radios">Algoritmo</label>
+      <div class="col-md-4"> 
+        <label class="radio-inline" for="radios-0">
+          <input type="radio" name="radio_algo" id="radios-0" value="0" checked="checked">
+          A1P
+        </label> 
+        <label class="radio-inline" for="radios-1">
+          <input type="radio" name="radio_algo" id="radios-1" value="1">
+          A1LSC
+        </label> 
+        <label class="radio-inline" for="radios-2">
+          <input type="radio" name="radio_algo" id="radios-2" value="2">
+          A1LCC
+        </label> 
+        <label class="radio-inline" for="radios-3">
+          <input type="radio" name="radio_algo" id="radios-3" value="3">
+          A2P
+        </label> 
+        <label class="radio-inline" for="radios-4">
+          <input type="radio" name="radio_algo" id="radios-4" value="4">
+          A2L
+        </label> 
+        <label class="radio-inline" for="radios-5">
+          <input type="radio" name="radio_algo" id="radios-5" value="5">
+          A3
+        </label>
+      </div>
+    </div>
+    
+    <!-- Multiple Radios -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="radios">Escrever Cores?</label>
+      <div class="col-md-4">
+      <div class="radio">
+        <label for="radios-0">
+          <input type="radio" name="radio_cor" id="radios-0" value="1" checked="checked">
+          Sim
+        </label>
+        </div>
+      <div class="radio">
+        <label for="radios-1">
+          <input type="radio" name="radio_cor" id="radios-1" value="2">
+          Não
+        </label>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Número maximo de threads</label>  
+      <div class="col-md-2">
+      <input id="max_threads" name="max_threads" type="text" value='8' class="form-control input-md" required="">
+        
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Grao das Threads</label>  
+      <div class="col-md-4">
+      <input id="grao" name="grao" type="text" value='40' class="form-control input-md" required="">
+        
+      </div>
+    </div>
+
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Arquivo Com a Rede:</label>  
+      <div class="col-md-4">
+        <input type="file" name="filename"/>
+        
+      </div>
+    </div>
+    
+    
+    <!-- Button (Double) -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="button1id"></label>
+      <div class="col-md-8">
+        <button type="submit" id="button1id" name="button1id" class="btn btn-primary">Procurar Aneis</button>
+        <button type="submit" formaction="{{ url_for('encontrar_juncoes') }}" id="button2id" name="button2id" class="btn btn-primary">Procurar Todas Juncoes</button>
+      </div>
+    </div>
+    
+    </fieldset>
+    </form>
+    
+{% endblock %}

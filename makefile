@@ -1,44 +1,36 @@
-executar: a.out
-ifdef NOME		#Nome da rede de entrada entrada/$(NOME).txt
-ifdef NUMERO	#Número de anéis
-ifdef TIPO		#Tipo de Execucao, 0 = todas, 1 = A1LSC, 2 = A1LCC, 3 = A1P, 4 = A2L, 5 = A2P, 6 = A3, 7 = funções
-ifdef GRAO		#Tamanho do grao em buscas paralelas
-ifdef THREADS	#Maior número de threads possível em buscas paralelas
-	./a.out $(NOME) $(NUMERO) $(TIPO) $(GRAO) $(THREADS)
-else
-	./a.out $(NOME) $(NUMERO) $(TIPO) $(GRAO)
+executar: arquivos_prog/a.out
+ifdef WEB		#Executa server
+	make web
 endif
-else
-	./a.out $(NOME) $(NUMERO) $(TIPO)
+
+ifdef PROG		#Executa programa	
+	make prog
 endif
-else
-	./a.out $(NOME) $(NUMERO)
-endif
-else
-	./a.out $(NOME)
-endif
-else
-	./a.out
-endif
+
+web: arquivos_prog/a.out codigo_interface/web.py
+	python codigo_interface/web.py
+
+prog: arquivos_prog/a.out codigo_interface/prog.py
+	python codigo_interface/prog.py
 
 limpar:
-	rm *.h.gch
-	rm a.out
+	-rm codigo_c_plus_plus/*.h.gch
+	-rm arquivos_prog/a.out
 
 remover:
-	limpar
+	make limpar
 	rm desenhos/*
 	rm outros/*
 	rm aneis/*
 
-a.out: *.h *.cpp
+arquivos_prog/a.out: codigo_c_plus_plus/*.h codigo_c_plus_plus/*.cpp
 	make compilar
 
-compilar: *.h *.cpp
-	g++ -O3 -pthread -std=c++11 *.h *.cpp
+compilar: codigo_c_plus_plus/*.h codigo_c_plus_plus/*.cpp
+	g++ -o arquivos_prog/a.out -O3 -pthread -std=c++11 codigo_c_plus_plus/*.h codigo_c_plus_plus/*.cpp
 
-debug: *.h *.cpp
-	g++ -g -O3 -pthread -std=c++11 *.h *.cpp
+debug: codigo_c_plus_plus/*.h codigo_c_plus_plus/*.cpp
+	g++ -o arquivos_prog/a.out -g -O3 -pthread -std=c++11 codigo_c_plus_plus/*.h codigo_c_plus_plus/*.cpp
 
 dot: desenhos/*.dot
 	dot -Tpdf -O desenhos/*.dot

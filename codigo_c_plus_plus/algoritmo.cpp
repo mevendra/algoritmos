@@ -1875,7 +1875,7 @@ void encontra_caminhos1(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_
 	}
 
 	for (Vertice* filho: fonte -> filhos){
-		if (filho -> min_cores[destino -> g_id()] > 0) {
+		if (filho -> alcancaveis[destino -> g_id()] != 0) {
 			list<Vertice*> caminho_aux(caminho_atual);
 			caminho_aux.push_back(filho);
 			encontra_caminhos1(filho, destino, caminho_aux, caminhos);
@@ -1907,13 +1907,13 @@ void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
 				encontra_caminhos_cores_especificas(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice], cores, i);	
 		} else {
 /**/
-			//Encontra caminhos 1 utiliza somente informacao de minimo
-			//encontra_caminhos1(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
-			//encontra_caminhos1(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
+			//Encontra caminhos 1 utiliza somente informacao de alcancaveis
+			encontra_caminhos1(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
+			encontra_caminhos1(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
 
 			//Encontra caminhos nao utiliza informacoes de cores
-			encontra_caminhos(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
-			encontra_caminhos(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
+			//encontra_caminhos(juncoes, destino -> primeiro, caminho_atual, caminhos_front[indice]);
+			//encontra_caminhos(juncoes, destino -> segundo, caminho_atual, caminhos_back[indice]);
 		}
 /**/
 
@@ -3009,3 +3009,69 @@ void encontra_aneis_NOME_A_DEFINIR(list<Anel*> fonte, list<Anel*> &destino, int 
 			destino.push_back(anel);
 	}
 }
+
+//Melhorar
+int** multiplica_matrizes(int** m1, int** m2, int n) {
+	int ** retorno = new int*[n];
+	for (int i = 0; i < n; i++)
+		retorno[i] = new int[n];
+
+	for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            retorno[i][j] = 0;
+
+            for (int k = 0; k < n; k++) {
+                if (m1[i][k] * m2[k][j]) {
+					retorno[i][j] = 1;
+					break;
+				}
+				//retorno[i][j] += m1[i][k] * m2[k][j];
+            }
+        }
+    }
+
+	return retorno;
+}
+
+//Melhorar
+int** encontra_alcancaveis(int** grafo, int n) {
+	int** proxima = multiplica_matrizes(grafo, grafo, n);
+
+	int i = n / 2;
+	while(i > 0) {
+		int** aux = proxima;
+		proxima = multiplica_matrizes(proxima, proxima, n);
+
+		delete aux;
+		i = i / 2;
+	}
+
+	return proxima;
+}
+
+void dfs(Vertice* v) {
+	v -> valor_bool = true;
+	for (Vertice* u: v -> filhos) {
+		if (!u -> valor_bool) {
+			dfs(u);
+		}
+	}
+}
+
+void encontra_alcancaveis_dfs(Grafo* g) {
+	for (Vertice* v: g -> atributos) {
+		v -> valor_bool = false;
+		v -> alcancaveis = vector<int>(g -> g_numero_vertices(), 0);
+	}
+
+	for (Vertice* v: g -> atributos) {
+		dfs(v);
+		for (Vertice* u: g -> atributos) {
+			if (u -> valor_bool) {
+				u -> valor_bool = false;
+				v -> alcancaveis[u -> g_id()] = 1;
+			}
+		}
+	}
+}
+

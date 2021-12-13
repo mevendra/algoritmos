@@ -1,0 +1,27 @@
+*Arara
+*Vertices
+1 1001 triangle
+2 1002 ellipse
+3 1003 triangle
+4 1004 ellipse
+5 1005 triangle
+6 1006 ellipse
+7 1007 triangle
+8 1008 triangle
+9 1009 ellipse
+10 1010 ellipse
+*Edges
+1 2
+3 4
+7 4
+7 6
+7 9
+2 8
+2 9
+2 10
+*Arcs
+4 5
+6 7
+10 9
+8 7
+2 4

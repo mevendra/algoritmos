@@ -1060,6 +1060,8 @@ void escreve_juncoes(list<Anel_aux*> aneis, Grafo* g, char const* caminho)
 
 		for (int i = 0; i < anel -> juncoes.size(); i++) {
 			for (int j = 0; j < anel -> caminhos_primeiro[i].size(); j++) {
+				if (anel -> caminhos_primeiro[i][j].size() == 0 || anel -> caminhos_segundo[i][j].size() == 0)
+					continue;
 				string percurso = "";
 				string parente = "";
 				for (Vertice* v: anel -> caminhos_primeiro[i][j]) {

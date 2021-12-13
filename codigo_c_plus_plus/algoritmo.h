@@ -157,5 +157,7 @@ void encontra_aneis_NOME_A_DEFINIR(list<Anel*> fonte, list<Anel*> &destino, int 
 
 //teste
 void colorir_grafo_esp(Grafo* g, int n);
+int** encontra_alcancaveis(int** grafo, int n);
+void encontra_alcancaveis_dfs(Grafo* g);
 
 #endif /* ALGORITMO_H*/

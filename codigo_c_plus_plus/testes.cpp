@@ -11,14 +11,15 @@ int main(int argc, char *argv[]) {
 	int execucao = 0;	//0 = aneis, 1 = juncoes
 	bool p = false;		//p = true para colorir grafo com max num cores e executar paralelo
 	int algoritmo = 0;	//0 = A1P, 1 = A1LSC, 2 = A1LCC, 3 = A2P, 4 = A2L, 5 = A3
+	int coloracao = 0;	//0 = Coloração do arquivo, 1 = Coloração MAterna, 2 = Coloração Paterna, 3 = Coloração Geral
 
 	for (int i = 1; i < argc; i++) {
 		cout << "argv[" << i << "]: " << argv[i] << endl;
 	}
 
 	if (argc == 1) {
-		entrada = "./arquivos_prog/temp_1";
-		execucao = 1;
+		entrada = "./arquivos_prog/temp_0";
+		execucao = 0;
 		nome_rede = "";
 		destino = "./aneis/teste.txt";
 	} else if (argc == 5) { //	./programa.out nome_arquivo tipo_execução nome_Rede
@@ -37,6 +38,18 @@ int main(int argc, char *argv[]) {
 			p = true;
 		nome_rede = string(argv[8]);
 		destino = string(argv[9]);
+	} else if (argc == 11) {//	./programa.out Nome_Rede.txt tipo_execucao numero_casamentos algoritmo max_threads grao escrever_cores nome_Rede coloração
+		entrada = argv[1];
+		execucao = atoi(argv[2]);
+		k = atoi(argv[3]);
+		algoritmo = atoi(argv[4]);
+		num = atoi(argv[5]);
+		grao = atoi(argv[6]);
+		if (atoi(argv[7]))
+			p = true;
+		nome_rede = string(argv[8]);
+		destino = string(argv[9]);
+		coloracao = atoi(argv[10]);
 	}else {
 		cout << "Entrada com número de argumentos não previstos, retornando\n";
 		return 1;
@@ -44,7 +57,7 @@ int main(int argc, char *argv[]) {
 
 	if (execucao == 0)
 		cout << "Nome da Rede: " << nome_rede << " Num_Casamentos: " << k << " Algoritmo: " << algoritmo
-		<< " Num Max Thread: " << num << " Grao: " << grao << endl;
+		<< " Num Max Thread: " << num << " Grao: " << grao << " Tipo_Coloracao:" << coloracao << endl;
 	else
 		cout << "Nome da Rede: " << nome_rede << " Execução: " << execucao << endl;
 
@@ -56,6 +69,26 @@ int main(int argc, char *argv[]) {
 		cout << "Entrada errada, retornando\n";
 		return 1;
 	}
+
+	switch (coloracao) {
+		case (1): {
+			descolorir(g);
+			colorir_grafo_mat(g);
+			break;
+		}
+		case (2): {
+			descolorir(g);
+			colorir_grafo_pat(g);
+			break;
+		}
+		case (3): {
+			descolorir(g);
+			colorir_grafo(g);
+			break;
+		}
+		default:
+			break;
+	}
 		
 	//Procura por anéis	= 0
 	//escreve_juncoes = 1
@@ -65,27 +98,38 @@ int main(int argc, char *argv[]) {
 		case (0):	//Procura por aneis
 		{
 			cout << "Procurando por aneis c++\n";
-			//0 = A1P, 1 = A1LSC, 2 = A1LCC, 3 = A2P, 4 = A2L, 5 = A3
+			//0 = A1P, 1 = A1LSC, 2 = A1LCC, 3 = A2P, 4 = A2L, 5 = A3	
 			list<Anel*> aneis;
 			switch(algoritmo) {
 				case (1):
 					com_cores = false;
+					encontra_alcancaveis_dfs(g);
 					encontra_aneis(g, aneis, k);
 					com_cores = true;
 					break;
 				case (2):
+					define_min_max_cores(g);
+					//define_super_sob(g);
 					encontra_aneis(g, aneis, k);
 					break;
 				case (3):
+					define_min_max_cores(g);
+					//define_super_sob(g);
 					encontra_aneis_paralelos_vetor(g, aneis, k, num, grao);
 					break;
 				case (4):
+					define_min_max_cores(g);
+					//define_super_sob(g);
 					encontra_aneis_coloridos(g, aneis, k, false);
 					break;
 				case (5):
+					define_min_max_cores(g);
+					//define_super_sob(g);
 					encontra_aneis_coloridos_algo3_pool(g, aneis, k, num, grao);
 					break;
 				default:	//A1P
+					define_min_max_cores(g);
+					//define_super_sob(g);
 					encontra_aneis_paralelos_procurando(g, aneis, k, num, grao);
 			}
 

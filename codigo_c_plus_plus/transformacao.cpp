@@ -244,10 +244,13 @@ Grafo* trabalha_arquivo(char const* caminho)
 	//Atributos a serem utilizados
 	bool esta_em_segunda_coluna = false;
 	bool esta_em_terceira_coluna = false;
+	bool esta_em_quarta_coluna = false;
 	char primeira_coluna[MAX_COLUNA_ARQUIVO];
 	char segunda_coluna[MAX_COLUNA_ARQUIVO];
+	char terceira_coluna[MAX_COLUNA_ARQUIVO];
 	int indice_primeira_coluna = 0;
 	int indice_segunda_coluna = 0;
+	int indice_terceira_coluna = 0;
 	int id_vertice = -1;
 	int numero_vertice = -1;
 	char tipo_vertice = ' ';
@@ -268,16 +271,34 @@ Grafo* trabalha_arquivo(char const* caminho)
 				//Reseta variaveis
 				esta_em_segunda_coluna = false;
 				esta_em_terceira_coluna = false;
+				esta_em_quarta_coluna = false;
 				for (int i = 0; i < indice_segunda_coluna; i++)
 					segunda_coluna[i] = ' ';
 				indice_segunda_coluna = 0;
+				for (int i = 0; i < indice_terceira_coluna; i++)
+					terceira_coluna[i] = ' ';
+				indice_terceira_coluna = 0;
 
 				//Interage com a linha
 				for (int i = 0; i < MAX_COLUNA_ARQUIVO; i++)
 				{
-					if (esta_em_terceira_coluna) {
-						if (linha[i] == 'e') {tipo_vertice = 'e'; break;}
-						else if (linha[i] == 't') {tipo_vertice = 't'; break;}
+					if (esta_em_quarta_coluna) {
+						if (linha[i] == '\n') {break;}
+						else if (linha[i] == ' ') {continue;}
+						terceira_coluna[indice_terceira_coluna++] = linha[i];
+
+					} else if (esta_em_terceira_coluna) {
+						if (linha[i] == 'e') {
+							tipo_vertice = 'e'; 
+							i += 6;	//Para proxima indice representar " " ou "\n"
+							esta_em_quarta_coluna = true;
+							continue;
+						} else if (linha[i] == 't') {
+							tipo_vertice = 't';
+							i += 7;	//Para proxima indice representar " " ou "\n"
+							esta_em_quarta_coluna = true;
+							continue;
+						}
 						printf("Erro ao ler arquivo, Vertices numero: %d\nLinha: %s", numero_vertices,linha);
 						break;
 					} else if (esta_em_segunda_coluna) {
@@ -292,6 +313,10 @@ Grafo* trabalha_arquivo(char const* caminho)
 				id_vertice = numero_vertices - 1;
 				numero_vertice = atoi(segunda_coluna);
 				atributo = new Vertice(id_vertice, numero_vertice, tipo_vertice);
+				if (indice_terceira_coluna > 0) {
+					int cor = atoi(terceira_coluna);
+					atributo->adicionar_cor(cor);
+				}
 				atributos.push_back(atributo);
 				break;
 			}
@@ -1713,11 +1738,8 @@ void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* c
 				linha += v -> g_tipo() == 't' ? "m" : "f";		//SxEgoX
 				linha += ", ";
 				for (int i : v -> cor) {	//EgoCor
-					Vertice * atual_cor = g -> encontrar_atributo(i);
-					linha += to_string(atual_cor -> g_numero());
+					linha += to_string(i);
 					linha += " ";
-					if (atual_cor -> g_id() == -1)
-						delete atual_cor;
 				}
 				//linha += to_string(map -> encontrar_indice_cor(v -> cor));	//EgoCor
 				linha += ", ";
@@ -1726,11 +1748,8 @@ void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* c
 				linha += u -> g_tipo() == 't' ? "m" : "f";			//SxAlterX
 				linha += ", ";
 				for (int i : u -> cor) {	//AlterCor
-					Vertice * atual_cor = g -> encontrar_atributo(i);
-					linha += to_string(atual_cor -> g_numero());
+					linha += to_string(i);
 					linha += " ";
-					if (atual_cor -> g_id() == -1)
-						delete atual_cor;
 				}
 				//linha += to_string(map -> encontrar_indice_cor(u -> cor));	//AlterCor
 				linha += ", ";
@@ -1773,13 +1792,10 @@ void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* c
 			if (jun)
 				linha += "(";
 			linha += to_string(v -> g_numero());
-			linha+= "-";
+			linha+= "- ";
 			for (int i : v -> cor) {	//Cor
-				Vertice * atual_cor = g -> encontrar_atributo(i);
-				linha += to_string(atual_cor -> g_numero());
+				linha += to_string(i);
 				linha += " ";
-				if (atual_cor -> g_id() == -1)
-					delete atual_cor;
 			}
 			//linha += to_string(map -> encontrar_indice_cor(v -> cor));
 			if (jun)
@@ -1907,12 +1923,10 @@ void escreve_aneis_coloridos_completo(Grafo* g, list<Anel*> aneis, char const* c
 
 		//Cores
 		for (int i: cores) {
-			linha += "(";
+			linha += "( ";
 			for (int j: map -> encontrar_numeros(i)) {
-				Vertice * atual_cor = g -> encontrar_atributo(j);
-				linha += to_string(atual_cor -> g_numero());
-				if (atual_cor -> g_id() == -1)
-					delete atual_cor;
+				linha += to_string(j);
+				linha += " ";
 			}
 			linha += ") ";
 		}

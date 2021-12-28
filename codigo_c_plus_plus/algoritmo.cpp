@@ -1418,13 +1418,11 @@ void encontra_aneis(Grafo* g, list<Anel*> & destino, int numero_casamentos)
 	//Encontra combinacoes
 	list<list<list<int>>> conjuntos;
 	encontra_combinacoes(casamentos, conjuntos, numero_casamentos);
-
-	//define_min_max_cores(g);
-	define_super_sob(g);
+	//printf("Encontrou encontra_combinacoes\n");
 
 	//Geracap inferior em Vertice -> valor int 2 e superior em valor int
-	geracao_grafo_inferior(g);
-	geracao_grafo_superior(g);
+	//geracao_grafo_inferior(g);
+	//geracao_grafo_superior(g);
 
 	//3.3
 	//Define os conjuntos a serem trabalhados e operam encontrando os aneis sobre eles
@@ -1884,7 +1882,7 @@ void encontra_caminhos1(Vertice* fonte, Vertice* destino,list<Vertice*> caminho_
 }
 
 void define_anel_aux(JuncoesDe* juncao, Anel_aux* destino)
-{
+{	
 	destino -> primeiro = juncao -> primeiro;
 	destino -> segundo = juncao -> segundo;
 
@@ -2112,10 +2110,6 @@ void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamen
 	//cout << "Encontrando Juncoes " << endl;
 	Juncoes* juncoes = new Juncoes(g -> g_numero_vertices());
 	encontra_juncoes(g, juncoes);
-
-	//Encontra super e sob das cores
-	//cout<<"Encontrando super e sob\n";
-	define_super_sob(g);
 
 	//Encontra todos os casamentos
 	//cout<<"Encontrando os casamentos\n";
@@ -2756,10 +2750,6 @@ void encontra_aneis_paralelos_vetor (Grafo* g, list<Anel*>& destino, int numero_
 	Juncoes* juncoes = new Juncoes(g -> g_numero_vertices());
 	encontra_juncoes(g, juncoes);
 
-	//Encontra super e sob das cores
-	//cout<<"Encontrando super e sob\n";
-	define_super_sob(g);
-
 	//Encontra todos os casamentos
 	//cout<<"Encontrando os casamentos\n";
 	vector<list<int>> casamentos;
@@ -2838,10 +2828,6 @@ void encontra_aneis_paralelos_procurando(Grafo* g, list<Anel*>& destino, int num
 	Juncoes* juncoes = new Juncoes(g -> g_numero_vertices());
 	encontra_juncoes(g, juncoes);
 
-	//Encontra super e sob das cores
-	//cout<<"Encontrando super e sob\n";
-	define_super_sob(g);
-
 	//Encontra todos os casamentos
 	//cout<<"Encontrando os casamentos\n";
 	vector<list<int>> casamentos;
@@ -2907,10 +2893,6 @@ void encontra_aneis_coloridos_algo3_pool(Grafo* g, list<Anel*>& destino, int num
 	Juncoes* juncoes = new Juncoes(g -> g_numero_vertices());
 	encontra_juncoes(g, juncoes);
 
-	//Encontra super e sob das cores
-	cout<<"Encontrando super e sob\n";
-	define_super_sob(g);
-
 	//Encontra todos os casamentos
 	cout<<"Encontrando os casamentos\n";
 	vector<list<int>> casamentos;
@@ -2945,12 +2927,12 @@ void encontra_aneis_coloridos_algo3_pool(Grafo* g, list<Anel*>& destino, int num
 	thread threads[num_threads];
 	list<Anel*> destinos[num_threads];
 	for (int i = 0; i < num_threads; i++) {
-		cout << "Inicioando thread " << i << endl;
+		//cout << "Inicioando thread " << i << endl;
 		threads[i] = thread(thread_encontra_aneis_coloridos_algo3_pool, g, juncoes, ref(conjuntos), ref(caminhos), ref(destinos[i]), grao, max_cores);
 	}
 
 	for (int i = 0; i < num_threads; i++) {
-		cout << "Esperando por thread " << i << endl;
+		//cout << "Esperando por thread " << i << endl;
 		threads[i].join();
 	}
 

@@ -51,23 +51,42 @@
         </label>
       </div>
     </div>
+  
+    <!-- Multiple Radios (inline) -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="radios">Tipo de Coloração</label>
+      <div class="col-md-4"> 
+        <label class="radio-inline" for="radios-0">
+          <input type="radio" name="radio_cores" id="radios-0" value="0" checked="checked">
+          Arquivo
+        </label> 
+        <label class="radio-inline" for="radios-1">
+          <input type="radio" name="radio_cores" id="radios-1" value="1">
+          Materna
+        </label>
+        <label class="radio-inline" for="radios-2">
+          <input type="radio" name="radio_cores" id="radios-2" value="2">
+          Paterna
+        </label>
+        <label class="radio-inline" for="radios-3">
+          <input type="radio" name="radio_cores" id="radios-3" value="3">
+          Geral
+        </label>
+      </div>
+    </div>
     
     <!-- Multiple Radios -->
     <div class="form-group">
       <label class="col-md-4 control-label" for="radios">Escrever Cores?</label>
       <div class="col-md-4">
-      <div class="radio">
-        <label for="radios-0">
+        <label class="radio-inline" for="radios-0">
           <input type="radio" name="radio_cor" id="radios-0" value="1" checked="checked">
           Sim
         </label>
-        </div>
-      <div class="radio">
-        <label for="radios-1">
-          <input type="radio" name="radio_cor" id="radios-1" value="2">
+        <label class="radio-inline" for="radios-1">
+          <input type="radio" name="radio_cor" id="radios-1" value="0">
           Não
         </label>
-        </div>
       </div>
     </div>
     
@@ -82,7 +101,7 @@
     
     <!-- Text input-->
     <div class="form-group">
-      <label class="col-md-4 control-label" for="textinput">Grao das Threads</label>  
+      <label class="col-md-4 control-label" for="textinput">Grão das Threads</label>  
       <div class="col-md-4">
       <input id="grao" name="grao" type="text" value='40' class="form-control input-md" required="">
         
@@ -103,12 +122,66 @@
     <div class="form-group">
       <label class="col-md-4 control-label" for="button1id"></label>
       <div class="col-md-8">
-        <button type="submit" id="button1id" name="button1id" class="btn btn-primary">Procurar Aneis</button>
-        <button type="submit" formaction="{{ url_for('encontrar_juncoes') }}" id="button2id" name="button2id" class="btn btn-primary">Procurar Todas Juncoes</button>
+        <button type="submit" id="button1id" name="button1id" class="btn btn-primary">Procurar Anéis</button>
+        <button type="submit" formaction="{{ url_for('encontrar_juncoes') }}" id="button2id" name="button2id" class="btn btn-primary">Procurar Todas Juncões</button>
       </div>
     </div>
     
     </fieldset>
     </form>
+
+  </br>
+  </br>
+  </br>
+  </br>
+  Formato da rede:  </br>
+  *Nome da rede  </br>
+  *Vertices  </br>
+  Indice Identificador Triangle/ellipse Cor(Número)  </br>
+  ...  </br>
+  *Edges  </br>
+  Indice Indice  </br>
+  ...  </br>
+  *Arcs  </br>
+  Indice Indice  </br>
+  ...  </br>
+
+  </br>
+  </br>
+  <a href="https://github.com/mevendra/algoritmos">Código fonte</a></br>
+  </br>
+
+  <table class = "table table-bordered">
+    <thread class="thread-dark">
+      <tr>
+        <th scope="col">Algoritmo</th>
+        <th scope="col">Abreviatura</th>
+      </tr>
+    </thread>
+    <tr>
+      <td>Algoritmo 1 Paralelo</td>
+      <td>A1P</td>
+    </tr>
+    <tr>
+      <td>Algoritmo 1 Linear Sem Cores</td>
+      <td>A1LSC</td>
+    </tr>
+    <tr>
+      <td>Algoritmo 1 Linear Com Cores</td>
+      <td>A1LCC</td>
+    </tr>
+    <tr>
+      <td>Algoritmo 2 Paralelo</td>
+      <td>A2P</td>
+    </tr>
+    <tr>
+      <td>Algoritmo 2 Linear</td>
+      <td>A2L</td>
+    </tr>
+    <tr>
+      <td>Algoritmo 3</td>
+      <td>A3</td>
+    </tr>
+  </table>
     
 {% endblock %}

@@ -14,6 +14,7 @@ menu_def = [['Arquivo', ['Abrir', 'Salvar', 'Salvar em Novo']]]
 
 aneis_def = [
                 [sg.T("Algoritmo:", size=(15,1)),sg.Radio("A1P", "RadioAneis", key="A1P", enable_events=True, default=True, size=(4,1)), sg.Radio("A1LSC", "RadioAneis", key="A1LSC", enable_events=True, size=(6,1)), sg.Radio("A1LCC", "RadioAneis", key="A1LCC", size=(6,1)), sg.Radio("A2P", "RadioAneis", key="A2P", size=(4,1)), sg.Radio("A2L", "RadioAneis", key="A2L", size=(4,1)), sg.Radio("A3", "RadioAneis", key="A3", size=(4,1))],
+                [sg.T("Tipo de Coloração:", size=(15,1)), sg.Radio("Arquivo", "RadioCores", key="Arquivo", default=True,size=(10,1)), sg.Radio("Materna", "RadioCores", key="Materna",size=(10,1)), sg.Radio("Paterna", "RadioCores", key="Paterna",size=(10,1)),sg.Radio("Geral", "RadioCores", key="Geral",size=(10,1))],
                 [sg.T("Escrever Cores?", size=(15,1)), sg.Radio("Sim", "RCE", key="Sim", enable_events=True, size=(4,1)), sg.Radio("Não", "RCE", key="Nao", default=True, size=(4,1)), sg.T("| Número máximo de threads:", size=(26,1)), sg.In(key="NumThreads", default_text="8", enable_events=True, size=(6,1))],
                 [sg.T("", size=(31,1)),sg.T(" Grão das Threads", size=(26,1)), sg.In(key="GraoThreads", default_text="40", enable_events=True, size=(6,1))],
                 [sg.Button("Procurar aneis",auto_size_button=True), sg.Radio("A1C1", "RTIP", key="A1C1", default=True), sg.Radio("A2C2", "RTIP", key="A2C2"), sg.Radio("A3C3", "RTIP", key="A3C3")]
@@ -118,9 +119,10 @@ while True:
             tipo_anel = '3' if window['A3C3'].get() else '2' if window['A2C2'].get() else '1'   
             #0 = A1P, 1 = A1LSC, 2 = A1LCC, 3 = A2P, 4 = A2L, 5 = A3
             algoritmo = '0' if window['A1P'].get() else '1' if window['A1LSC'].get() else '2' if window['A1LCC'].get() else '3' if window['A2P'].get() else '4' if window['A2L'].get() else '5'
+            #0 = Coloração do arquivo, 1 = Coloração MAterna, 2 = Coloração Paterna, 3 = Coloração Geral
+            coloracao = '0' if window['Arquivo'].get() else '1' if window['Materna'].get() else '2' if window['Paterna'].get() else '3'
             escreve_cores = '1' if window['Sim'].get() else '0'
             max_threads = window['NumThreads'].get()
-
 
             if filename:
                 filename_mod = filename.split(os.sep)
@@ -131,7 +133,7 @@ while True:
             caminho_programa = "." + os.sep +'arquivos_prog' + os.sep + 'a.out'
             caminho_destino='aneis' + os.sep + filename_mod + "_aneis.txt"
                 
-            args = [caminho_programa, caminho_entrada, "0", tipo_anel, algoritmo, max_threads, grao, escreve_cores, filename_mod, caminho_destino]
+            args = [caminho_programa, caminho_entrada, "0", tipo_anel, algoritmo, max_threads, grao, escreve_cores, filename_mod, caminho_destino,coloracao]
             thread = aux.executar_c_plusplus(args)
             
     elif event == 'juncoes':

@@ -7,19 +7,20 @@ import time
 import os
 
 app = Flask(__name__)
-app.secret_key = 'a'
+app.secret_key = 'b'
 app.config['UPLOAD_FOLDER'] = 'arquivos_prog'
 app.config['DOWNLOAD_FOLDER'] = 'aneis'
 app.config['SESSION_PERMANENT'] = False
-app.config['PERMANENT_SESSION_LIFETIME'] = 3600
+app.config['PERMANENT_SESSION_LIFETIME'] = 60   #3600
 
 caminho_programa = os.path.join(app.config['UPLOAD_FOLDER'], "a.out")
 i = 1
 
 NUMERO_MAXIMO_THREADS=2
 NUMERO_MAXIMO_THREADS_PROGRAMA_C=8
-TEMPO_TIMEOUT_THREAD=3600
 TEMPO_TIMEOUT_SEMAPHORE=15
+TEMPO_TIMEOUT_THREAD=app.config['PERMANENT_SESSION_LIFETIME']
+TEMPO_SALVAR_ARQUIVOS=app.config['PERMANENT_SESSION_LIFETIME']
 
 semaphore = th.Semaphore(NUMERO_MAXIMO_THREADS)
 
@@ -30,6 +31,10 @@ def novo_anel():
         local_i = i
         i = i + 1
         session['id'] = str(local_i)
+
+        timer = th.Timer(TEMPO_SALVAR_ARQUIVOS, apagar_arquivos, args=(session['id']))
+        #timer = th.Timer(2, apagar_arquivos, args=(session['id']))
+        timer.start()
 
     return render_template('index.html', titulo='MaqPar')
 
@@ -108,9 +113,12 @@ def encontrar_aneis():
         return render_template('erro.html', titulo='Leitura de dados!', tipo_erro='O grão não é um inteiro!')
     elif int(grao) < 0:
         return render_template('erro.html', titulo='Leitura de dados!', tipo_erro='O grão é menor que 0!')
-    escreve_cores = escreve_cores = '1' if request.form['radio_cor'] == 1 else '0'
 
-    args = [caminho_programa, caminho_arquivo, "0", tipo_anel, algoritmo, max_threads, grao, escreve_cores, filename_mod, caminho_destino]
+    escreve_cores = request.form['radio_cor']
+
+    coloracao = request.form['radio_cores']
+
+    args = [caminho_programa, caminho_arquivo, "0", tipo_anel, algoritmo, max_threads, grao, escreve_cores, filename_mod, caminho_destino, coloracao]
 
     adquiriu = semaphore.acquire(timeout=TEMPO_TIMEOUT_SEMAPHORE)
     if not adquiriu:
@@ -129,7 +137,7 @@ def encontrar_aneis():
     if result == 0:
         session['caminho_destino'] = caminho_destino
         session['nome_arquivo'] = nome_novo_arq
-        return render_template('download.html', titulo='Aneis Encontrados!')
+        return render_template('download.html', titulo='Anéis Encontrados!')
     elif result == 1:
         return render_template('erro.html', titulo='Erro!', tipo_erro='Erro na execução do programa (Leitura da entrada)!')
     elif result == 2:
@@ -178,7 +186,7 @@ def encontrar_juncoes():
     if result == 0:
         session['caminho_destino'] = caminho_destino
         session['nome_arquivo'] = nome_novo_arq
-        return render_template('download.html', titulo='Juncoes Encontradas!')
+        return render_template('download.html', titulo='Juncões Encontradas!')
     elif result == 1:
         return render_template('erro.html', titulo='Erro!', tipo_erro='Erro na execução do programa (Leitura da entrada)!')
     elif result == 2:
@@ -190,7 +198,7 @@ def encontrar_juncoes():
 @app.route('/getArquivo', methods=['POST',])
 def getArquivo():
     print('GetArquivo')
-    if 'caminho_destino' not in session:
+    if 'caminho_destino' not in session or 'nome_arquivo' not in session:
         return render_template('erro.html', titulo='Erro no nome do arquivo!')
     elif not os.path.isfile(session['caminho_destino']):
         return render_template('erro.html', titulo='Erro, arquivo não encontrado!')
@@ -198,5 +206,16 @@ def getArquivo():
     nome_arquivo = session['nome_arquivo']
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], nome_arquivo, as_attachment=True, environ=request.environ)
 
+def apagar_arquivos(idUsuario):
+    print("Apagando os arquivos do usuario", idUsuario)
+
+    for file in os.listdir(app.config['DOWNLOAD_FOLDER']):
+        if file.endswith("_" + idUsuario + "_aneis.txt") or file.endswith("_" + idUsuario + "_juncoes.txt"):
+            os.remove(os.path.join(app.config['DOWNLOAD_FOLDER'], file))
+
+
 app.run(host='localhost', port = 8080, debug=True)
 #app.run(host='localhost', port = 8080)
+
+
+print("Fim")

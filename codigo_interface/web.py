@@ -11,7 +11,7 @@ app.secret_key = 'b'
 app.config['UPLOAD_FOLDER'] = 'arquivos_prog'
 app.config['DOWNLOAD_FOLDER'] = 'aneis'
 app.config['SESSION_PERMANENT'] = False
-app.config['PERMANENT_SESSION_LIFETIME'] = 60   #3600
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600   #3600
 
 caminho_programa = os.path.join(app.config['UPLOAD_FOLDER'], "a.out")
 i = 1
@@ -19,8 +19,8 @@ i = 1
 NUMERO_MAXIMO_THREADS=2
 NUMERO_MAXIMO_THREADS_PROGRAMA_C=8
 TEMPO_TIMEOUT_SEMAPHORE=15
-TEMPO_TIMEOUT_THREAD=app.config['PERMANENT_SESSION_LIFETIME']
-TEMPO_SALVAR_ARQUIVOS=app.config['PERMANENT_SESSION_LIFETIME']
+TEMPO_TIMEOUT_THREAD=1
+TEMPO_SALVAR_ARQUIVOS=app.config['PERMANENT_SESSION_LIFETIME'] + 10
 
 semaphore = th.Semaphore(NUMERO_MAXIMO_THREADS)
 
@@ -31,7 +31,6 @@ def novo_anel():
         local_i = i
         i = i + 1
         session['id'] = str(local_i)
-
         timer = th.Timer(TEMPO_SALVAR_ARQUIVOS, apagar_arquivos, args=(session['id']))
         #timer = th.Timer(2, apagar_arquivos, args=(session['id']))
         timer.start()
@@ -125,8 +124,12 @@ def encontrar_aneis():
         return render_template('erro.html', titulo='Timeout!', tipo_erro='O servidor está sobrecarregado!')
 
     try:
+        #Resetando timer
         thread = aux.executar_c_plusplus(args)
-        thread.join()
+        thread.join(timeout=TEMPO_TIMEOUT_THREAD)
+        if thread.is_alive:     #Timeout]
+            return render_template('erro.html', titulo='Timeout!', tipo_erro='A busca demorou mais que o tempo máximo!')
+
     except:
         return render_template('erro.html', titulo='Erro!', tipo_erro='Erro na thread!')
     finally:
@@ -174,7 +177,9 @@ def encontrar_juncoes():
 
     try:
         thread = aux.executar_c_plusplus(args)
-        thread.join()
+        thread.join(timeout=TEMPO_TIMEOUT_THREAD)
+        if thread.is_alive:     #Timeout
+            return render_template('erro.html', titulo='Timeout!', tipo_erro='A busca demorou mais que o tempo máximo!')
     except:
         return render_template('erro.html', titulo='Erro!', tipo_erro='Erro na thread!')
     finally:
@@ -207,11 +212,15 @@ def getArquivo():
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], nome_arquivo, as_attachment=True, environ=request.environ)
 
 def apagar_arquivos(idUsuario):
-    print("Apagando os arquivos do usuario", idUsuario)
+    print("Apagando os arquivos do usuario: ", idUsuario)
 
     for file in os.listdir(app.config['DOWNLOAD_FOLDER']):
         if file.endswith("_" + idUsuario + "_aneis.txt") or file.endswith("_" + idUsuario + "_juncoes.txt"):
             os.remove(os.path.join(app.config['DOWNLOAD_FOLDER'], file))
+
+    for file in os.listdir(app.config['UPLOAD_FOLDER']):
+        if file.endswith(idUsuario):
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file))
 
 
 app.run(host='localhost', port = 8080, debug=True)

@@ -1,0 +1,2 @@
+Anel, Ego, SxEgo, CorEgo, Alter, SxAlter, CorAlter, Percurso, BarryPercurso,PercursoColorido, Parente, Casal, Geração, Lateral, Cnx, Numero de Cores, Cores
+1, 1007, m, 7 , 1006, f, 6 , 1006, f, 6 , 1007, m, 7 , 1007 1006 , m1007 (f1006) , 1007- 7  (1006- 6 ) , W, 1006-5 1007-6, G-1, 0, 1, 2, ( 6 ) ( 7 ) 

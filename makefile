@@ -34,3 +34,9 @@ debug: codigo_c_plus_plus/*.h codigo_c_plus_plus/*.cpp
 
 dot: desenhos/*.dot
 	dot -Tpdf -O desenhos/*.dot
+
+compilar_windows: codigo_c_plus_plus/*.h codigo_c_plus_plus/*.cpp
+	g++ -o arquivos_prog/a.exe -O3 -pthread -std=c++11 codigo_c_plus_plus/*.h codigo_c_plus_plus/*.cpp
+
+prog_windows: arquivos_prog/a.exe codigo_interface/prog.py
+	python codigo_interface/prog.py

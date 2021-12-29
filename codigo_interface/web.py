@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session,redirect, flash, url_for
+from flask import Flask, render_template, request, session,redirect
 from werkzeug.utils import secure_filename, send_from_directory
 
 import funcoes_aux as aux
@@ -7,7 +7,7 @@ import time
 import os
 
 app = Flask(__name__)
-app.secret_key = 'b'
+app.secret_key = 'a'
 app.config['UPLOAD_FOLDER'] = 'arquivos_prog'
 app.config['DOWNLOAD_FOLDER'] = 'aneis'
 app.config['SESSION_PERMANENT'] = False
@@ -19,7 +19,7 @@ i = 1
 NUMERO_MAXIMO_THREADS=2
 NUMERO_MAXIMO_THREADS_PROGRAMA_C=8
 TEMPO_TIMEOUT_SEMAPHORE=15
-TEMPO_TIMEOUT_THREAD=1
+TEMPO_TIMEOUT_THREAD=10
 TEMPO_SALVAR_ARQUIVOS=app.config['PERMANENT_SESSION_LIFETIME'] + 10
 
 semaphore = th.Semaphore(NUMERO_MAXIMO_THREADS)
@@ -127,7 +127,7 @@ def encontrar_aneis():
         #Resetando timer
         thread = aux.executar_c_plusplus(args)
         thread.join(timeout=TEMPO_TIMEOUT_THREAD)
-        if thread.is_alive:     #Timeout]
+        if thread.is_alive():     #Timeout
             return render_template('erro.html', titulo='Timeout!', tipo_erro='A busca demorou mais que o tempo máximo!')
 
     except:
@@ -178,7 +178,7 @@ def encontrar_juncoes():
     try:
         thread = aux.executar_c_plusplus(args)
         thread.join(timeout=TEMPO_TIMEOUT_THREAD)
-        if thread.is_alive:     #Timeout
+        if thread.is_alive():     #Timeout
             return render_template('erro.html', titulo='Timeout!', tipo_erro='A busca demorou mais que o tempo máximo!')
     except:
         return render_template('erro.html', titulo='Erro!', tipo_erro='Erro na thread!')

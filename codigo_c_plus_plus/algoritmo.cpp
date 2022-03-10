@@ -2080,12 +2080,14 @@ void verifica_anel(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<l
 	novo -> adicionar_elemento(caminhos, casamentos, juncoesUtilizadas);
 
 	destino.push_back(novo);
-	//destino.pop_back();
-	//delete novo;
+	destino.pop_back();
+	delete novo;
 
-	//m_numero_aneis.lock();
+	m_numero_aneis.lock();
 	numero_aneis++;
-	//m_numero_aneis.unlock();
+	m_numero_aneis.unlock();
+
+	cout << "\n\n\n NAO ARMAZENANDO OS ANEIS \n\n\n";
 
 	//Para escrever sempre que encontrar um anel
 /*
@@ -2455,8 +2457,9 @@ void encontra_caminhos_coloridos_task(set<Par*, par_cmp> &pares, set<Par*, par_c
 			list<Vertice*> caminho_atual;
 			list<Caminho*> c_destino;
 			set<int> cores;
-			for (int i = 1; i <= fonte -> max_cores[dest -> g_id()]; i++)
+			for (int i = 1; i <= fonte -> max_cores[dest -> g_id()]; i++) {
 				encontra_caminhos_cores_especificas(fonte, dest, caminho_atual, c_destino, cores, i);
+			}
 			c_atuais.push_back(c_destino);
 		}
 
@@ -3057,3 +3060,322 @@ void encontra_alcancaveis_dfs(Grafo* g) {
 	}
 }
 
+//Encontra os aneis de g com algoritmo 3 sequencial
+void encontra_aneis_coloridos_algo3_sequencial(Grafo* g, list<Anel*>& destino, int numero_casamentos)
+{
+	if (numero_casamentos > 3 || numero_casamentos < 1)
+		return;
+
+	//Encontra Junções
+	Juncoes* juncoes = new Juncoes(g -> g_numero_vertices());
+	encontra_juncoes(g, juncoes);
+
+	//Encontra todos os casamentos
+	vector<list<int>> casamentos;
+	encontra_casamentos(g, casamentos);
+
+	//Encontra todas as combinacoes
+	list<list<list<int>>> conjuntos;
+	encontra_combinacoes(casamentos, conjuntos, numero_casamentos);
+
+	//Encontra todos os pares de vertices utilizados
+	set<Par*, par_cmp> pares;
+	encontra_pares_vertices(juncoes, conjuntos, pares);
+
+	//Encontra todos os caminhos entre os pares de vertices
+	int numero_threads = 1;	//Maior valor super, numero de threads utilizadas
+	for (Vertice* v: g -> atributos)
+		for (int i: v -> max_cores)
+			numero_threads = i > numero_threads ? i : numero_threads;
+	cout<<"Encontrando os caminhos com " << numero_threads << " threads" << endl;
+
+	clock_t inicio_ = clock();
+	vector<vector<list<Caminho*>>> caminhos(g -> g_numero_vertices(), vector<list<Caminho*>> (g -> g_numero_vertices()));
+	encontra_caminhos_coloridos(pares, numero_threads, caminhos);
+	tempo_procura_caminhos += clock() - inicio_;
+
+	//Define o número de threads
+	int m = 0;
+	for (vector<list<Caminho*>> v: caminhos)
+		for (list<Caminho*> l: v)
+			for(Caminho* c: l)
+				m = m > c -> cores.size() ? m : c -> cores.size();
+	numero_threads = numero_threads < m ? numero_threads : m;
+	numero_threads = numero_threads * 2 * numero_casamentos;
+	numero_threads = numero_threads < g -> map -> tam() ? numero_threads : g -> map -> tam();
+
+	//Encontra os aneis
+ 	cout << "Encontrando linearmente pelo algoritmo paralelo\n";
+	for (int i = 1; i <= numero_threads; i++) {
+		cout << "Inicializando thread " << i << endl;
+		encontra_aneis_coloridos_t(g, juncoes, conjuntos, caminhos, destino, i);
+		cout << "Fim  " << destino.size() << endl;
+	}
+
+	//Deleta estruturas criadas
+	delete juncoes;
+	for (Par* par: pares)
+		delete par;
+	for (vector<list<Caminho*>> v: caminhos)
+		for (list<Caminho*> l: v)
+			for (Caminho* c: l)
+				delete c;
+
+	cout << "Numero de aneis encontrados: " << destino.size() << endl;
+}
+
+
+int get_num_aneis() { return numero_aneis; }
+void clear_num_aneis() { numero_aneis = 0; }
+
+void encontra_aneis_coloridos_algo3_pool_FIX_EXCLUIR(Grafo* g, list<Anel*>& destino, int numero_casamentos, int num_threads, int grao)
+{
+	cout << "Encontrando os aneis com algoritmo 3 paralelo alterado" << endl;
+	numero_aneis = 0;
+	if (numero_casamentos > 3 || numero_casamentos < 1)
+		return;
+
+	//Encontra Junções
+	cout << "Encontrando Juncoes " << endl;
+	Juncoes* juncoes = new Juncoes(g -> g_numero_vertices());
+	encontra_juncoes(g, juncoes);
+
+	//Encontra todos os casamentos
+	cout<<"Encontrando os casamentos\n";
+	vector<list<int>> casamentos;
+	encontra_casamentos(g, casamentos);
+
+	//Encontra todas as combinacoes
+	cout<<"Encontrando as combinacoes destes casamentos: " << casamentos.size() << endl;
+	list<list<list<int>>> conjuntos;
+	encontra_combinacoes(casamentos, conjuntos, numero_casamentos);
+
+	//Encontra todos os pares de vertices utilizados
+	set<Par*, par_cmp> pares;
+	encontra_pares_vertices(juncoes, conjuntos, pares);
+	cout<<"Pares de vertices encontrados: " << pares.size() << endl;
+
+	//Encontra todos os caminhos entre os pares de vertices
+	cout<<"Encontrando os caminhos com " << num_threads << " threads" << endl;
+	vector<vector<list<Caminho*>>> caminhos(g -> g_numero_vertices(), vector<list<Caminho*>> (g -> g_numero_vertices()));
+	encontra_caminhos_coloridos(pares, num_threads, caminhos);
+
+	//Calcula o maior numero de cores possiveis em um anel
+	int max_cores = 0;
+	for (vector<list<Caminho*>> v: caminhos)
+		for (list<Caminho*> l: v)
+			for(Caminho* c: l)
+				max_cores = max_cores > c -> cores.size() ? max_cores : c -> cores.size();
+	max_cores = max_cores * 2 * numero_casamentos;
+	max_cores = max_cores < g -> map -> tam() ? max_cores : g -> map -> tam();
+
+
+	cout << "Encontrando os aneis" << endl;
+	thread threads[num_threads];
+	list<Anel*> destinos[num_threads];
+	for (int i = 0; i < num_threads; i++) {
+		//cout << "Inicioando thread " << i << endl;
+		threads[i] = thread(thread_encontra_aneis_coloridos_algo3_pool_FIX_EXCLUIR, g, juncoes, ref(conjuntos), ref(caminhos), ref(destinos[i]), grao, max_cores);
+	}
+
+	for (int i = 0; i < num_threads; i++) {
+		//cout << "Esperando por thread " << i << endl;
+		threads[i].join();
+	}
+
+	for (int i = 0; i < num_threads; i++) {
+		destino.merge(destinos[i]);
+	}
+
+	//Deleta estruturas criadas
+	delete juncoes;
+	for (Par* par: pares)
+		delete par;
+	for (vector<list<Caminho*>> v: caminhos)
+		for (list<Caminho*> l: v)
+			for (Caminho* c: l)
+				delete c;
+
+	cout << "Numero de aneis encontrados: " << destino.size() << endl;
+}
+
+void thread_encontra_aneis_coloridos_algo3_pool_FIX_EXCLUIR(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int grao, int max_cores)
+{
+	while(conjuntos.size() > 0) {
+		list<list<list<int>>> atual;
+		m_listas.lock();
+		for (int i = 0; i < grao && conjuntos.size() > 0; i++) {
+			atual.push_back(conjuntos.front());
+			conjuntos.pop_front();
+		}
+		m_listas.unlock();
+
+		for (int i = 1; i < max_cores; i++)
+			encontra_aneis_coloridos_FIX_EXCLUIR(g, juncoes, atual, caminhos, destino, i);
+	}
+}
+
+void encontra_aneis_coloridos_FIX_EXCLUIR(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int numero_cores)
+{
+	//Para todos conjuntos de casamentos
+	for (list<list<int>> conjunto_c: conjuntos) {
+		//Encontra combinacoes entre os casamentos
+		list<list<list<int>>> combinacoes;
+		switch(conjunto_c.size()) {
+		case(1):
+				combinacoes.push_back(conjunto_c);
+				break;
+		case(2):
+				encontra_combinacoes_dupla(conjunto_c, combinacoes);
+				break;
+		case(3):
+				encontra_combinacoes_trio(conjunto_c, combinacoes);
+				break;
+		default:
+				return;
+		}
+
+		//Para todas combinacoes
+		for (list<list<int>> c: combinacoes) {
+			list<JuncoesDe*> juncoes_c;
+			list<Anel_aux*> aneis_aux;
+			bool adicionar = true;
+			int maior_caminho = 1;
+			int menor_caminho = INT_MAX;
+			//Para todos os pares da combinacao
+			for (list<int> par: c) {
+				int id_front = par.front();
+				int id_back = par.back();
+				JuncoesDe* par_juncao = 0;
+
+				//MUDAR (retirar para encontrar AxCk, x != k
+				if (id_front == id_back) {
+					adicionar = false;
+					break;
+				}
+
+				//Adiciona a juncao do par
+				par_juncao = juncoes -> juncoes[id_front][id_back];
+				if (!par_juncao) {
+					adicionar = false;
+					break;
+				}
+				juncoes_c.push_back(par_juncao);
+			}
+
+			//Se todos os pares tem juncao, cria aneis aux
+			if (adicionar) {
+				for (JuncoesDe* j: juncoes_c) {
+					Anel_aux* aux = new Anel_aux();
+					aneis_aux.push_back(aux);
+					define_anel_aux_coloridos_t(j, aux, caminhos);
+					maior_caminho = maior_caminho > aux -> maior_numero_cores ? maior_caminho : aux -> maior_numero_cores;
+					menor_caminho = menor_caminho < aux -> menor_numero_cores ? menor_caminho : aux -> menor_numero_cores;
+				}
+			} else
+				continue;
+
+			if (menor_caminho <= numero_cores) {
+				list<Juncao*> juncoesUtilizadas;
+				vector<list<Vertice*>> atual;
+				set<int> cores;
+				encontra_aneis_coloridos_FIX_EXCLUIR(aneis_aux, atual, destino, conjunto_c, juncoesUtilizadas, numero_cores, cores, maior_caminho, menor_caminho);
+			}
+
+			for (Anel_aux* a: aneis_aux)
+				delete a;
+		}
+	}
+
+	sem_post(&s_thread);
+	//cout << "Terminou de encontrar aneis com " << numero_cores << " cores\n";
+}
+
+void encontra_aneis_coloridos_FIX_EXCLUIR(list<Anel_aux*> aux, vector<list<Vertice*>> &atual, list<Anel*> & destino, list<list<int>> &casamentos, list<Juncao*> &juncoesUtilizadas, int numero_cores, set<int> &cores,int maior_caminho, int menor_caminho)
+{
+	//Chegou ao ultimo grupo da combinação
+	if (aux.size() == 0) {
+		if (cores.size() == numero_cores)
+			verifica_anel_FIX_EXCLUIR(atual, destino, casamentos, juncoesUtilizadas);
+
+		return;
+	}
+
+	//Remove proximo da lista
+	Anel_aux* anel_a = aux.front();
+	aux.pop_front();
+
+	//Se proximo da lista tem elementos iguais
+	if (anel_a -> primeiro == anel_a -> segundo) {
+		return;	//Mudar p incluir AxCk, x != k
+	}
+
+
+	Juncao* novaJuncao = 0;
+	for (int i = 0; i < anel_a -> juncoes.size(); i++) {
+		list<Juncao*> juncoes_aux(juncoesUtilizadas);
+		novaJuncao = new Juncao(anel_a -> primeiro, anel_a -> segundo, anel_a -> juncoes[i]);
+		juncoes_aux.push_back(novaJuncao);
+
+		for (int y = 0; y < anel_a -> caminhos_primeiro[i].size(); y++) {
+			if (anel_a -> caminhos_primeiro[i][y].size() == 0 && anel_a -> caminhos_segundo[i][y].size() == 0)
+				break;
+
+			vector<list<Vertice*>> atual_aux(atual);
+			set<int> cores_aux = soma(anel_a -> cores[i][y], cores);
+			//Cor de nova junção ja está na lista de cores
+
+			if (cores_aux.size() > numero_cores)
+				continue;
+			if (aux.size() * maior_caminho + cores_aux.size() < numero_cores) {
+				continue;
+			}
+
+			atual_aux.push_back(anel_a -> caminhos_primeiro[i][y]);
+			atual_aux.push_back(anel_a -> caminhos_segundo[i][y]);
+
+			encontra_aneis_coloridos_FIX_EXCLUIR(aux, atual_aux, destino, casamentos, juncoes_aux, numero_cores, cores_aux, maior_caminho, menor_caminho);
+		}
+
+		delete novaJuncao;
+	}
+}
+void verifica_anel_FIX_EXCLUIR(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas)
+{
+	clock_t inicio = clock();
+	//Verifica se Alguma juncao é repetida ou esta em algum caminho
+	list<Vertice*> aux;
+	for (Juncao* j: juncoesUtilizadas) {
+		for (Vertice* v: aux)
+			if (v == j -> juncao)
+				return;
+
+		aux.push_back(j -> juncao);
+	}
+	for (list<Vertice*> l: caminhos)
+		for (Vertice* v: l)
+			for (Vertice* v1: aux)
+				if (v == v1)
+					return;
+
+
+
+
+	tempo_verifica_anel += clock() - inicio;
+	inicio = clock();
+	//verifica se intersecção é vazia
+	for (int i = 0; i < caminhos.size(); i++) {
+		for (int y = i + 1; y < caminhos.size(); y++) {
+			if (!sao_disjuntos(caminhos[i], caminhos[y])) {
+				tempo_sao_disjuntos += clock() - inicio;
+				return;
+			}
+		}
+	}
+	tempo_sao_disjuntos += clock() - inicio;
+
+	Anel* novo = new Anel();
+	novo -> adicionar_elemento(caminhos, casamentos, juncoesUtilizadas);
+
+	destino.push_back(novo);
+}

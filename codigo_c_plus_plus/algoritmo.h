@@ -151,6 +151,7 @@ void encontra_aneis_coloridos(Grafo* g, list<Anel*>& destino, int numero_casamen
 void encontra_aneis_paralelos_procurando(Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
 void encontra_aneis_paralelos_vetor (Grafo* g, list<Anel*>& destino, int numero_casamentos, int numero_threads_total, int grao);
 void encontra_aneis_coloridos_algo3_pool(Grafo* g, list<Anel*>& destino, int numero_casamentos, int num_threads = 8, int grao = 40);
+void encontra_aneis_coloridos_algo3_sequencial(Grafo* g, list<Anel*>& destino, int numero_casamentos);
 
 //11
 void encontra_aneis_NOME_A_DEFINIR(list<Anel*> fonte, list<Anel*> &destino, int num_cores);
@@ -160,4 +161,13 @@ void colorir_grafo_esp(Grafo* g, int n);
 int** encontra_alcancaveis(int** grafo, int n);
 void encontra_alcancaveis_dfs(Grafo* g);
 
+int get_num_aneis();
+void clear_num_aneis();
+
+
+void encontra_aneis_coloridos_algo3_pool_FIX_EXCLUIR(Grafo* g, list<Anel*>& destino, int numero_casamentos, int num_threads = 8, int grao = 40);
+void thread_encontra_aneis_coloridos_algo3_pool_FIX_EXCLUIR(Grafo* g, Juncoes* juncoes, list<list<list<int>>> &conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int grao, int max_cores);
+void encontra_aneis_coloridos_FIX_EXCLUIR(Grafo* g, Juncoes* juncoes, list<list<list<int>>> conjuntos, vector<vector<list<Caminho*>>> &caminhos, list<Anel*> &destino, int numero_cores);
+void encontra_aneis_coloridos_FIX_EXCLUIR(list<Anel_aux*> aux, vector<list<Vertice*>> &atual, list<Anel*> & destino, list<list<int>> &casamentos, list<Juncao*> &juncoesUtilizadas, int numero_cores, set<int> &cores,int maior_caminho, int menor_caminho);
+void verifica_anel_FIX_EXCLUIR(vector<list<Vertice*>> caminhos, list<Anel*> &destino, list<list<int>> casamentos, list<Juncao*> juncoesUtilizadas);
 #endif /* ALGORITMO_H*/

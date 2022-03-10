@@ -1,6 +1,10 @@
 #include "testes.h"
 
 int main(int argc, char *argv[]) {
+	executar_escience(argc, argv);
+	cout << "Exit não funcionou, retornando" << endl;
+	return 1;
+
 	//Primeiro argumento = nome arquivo, segundo = numero de casamentos para testar aneis
 	cout << "Oi, sou um programa em c++\n";
 	string entrada = "";
@@ -50,7 +54,7 @@ int main(int argc, char *argv[]) {
 		nome_rede = string(argv[8]);
 		destino = string(argv[9]);
 		coloracao = atoi(argv[10]);
-	}else {
+	} else {
 		cout << "Entrada com número de argumentos não previstos, retornando\n";
 		return 1;
 	}
@@ -606,4 +610,156 @@ void m_escreve_informacao_grafos(Grafo* g, string caminho)
 
 	escreve_informacao_grafos(g, sub, caminho.c_str());
 	printf("Terminou!\n");
+}
+
+void desabilitar_cout() {
+	cout.setstate(ios_base::failbit);
+}
+
+void reabilitar_cout() {
+	cout.clear();
+}
+
+void executar_funcao_escience(Grafo* g, int numero_casamentos, int num_threads, int grao, int num_execucoes, string nome_rede) {
+	list<Anel*> destino;
+	
+	//Algo 3 sequencial
+	double total = 0;
+	double max = 0;
+	double min = INT_MAX;
+	for (int i = 0; i < num_execucoes; i++) {
+		cout << "Execucao " << i + 1 << " procura anéis coloridos com algo 3 sequencial" << endl;
+		desabilitar_cout();
+
+		auto init = chrono::steady_clock::now();
+		encontra_aneis_coloridos_algo3_sequencial(g, destino, numero_casamentos);
+		auto end = chrono::steady_clock::now();
+
+		reabilitar_cout();
+		chrono::duration<double> diff = end - init;
+		double tempo = diff.count();
+		total += tempo;
+		cout << "Tempo da execucao: " << tempo << endl;
+		cout << "Número de anéis encontrados: " << get_num_aneis() << endl;
+		clear_num_aneis();
+		if (tempo > max) 
+			max = tempo;
+		if (tempo < min)
+			min = tempo;
+	}
+	cout << "Tempo total execução anéis coloridos com algo 3 sequencial em " << num_execucoes << " execuções: " << total << 
+		", Max: " << max << ", Min: " << min << ", Média: " << total / num_execucoes << endl << endl;
+
+	//Algo 3 paralelo
+	total = 0;
+	max = 0;
+	min = INT_MAX;
+	for (int i = 0; i < num_execucoes; i++) {
+		cout << "Execucao " << i + 1 << " procura anéis coloridos com algo 3 paralelo" << endl;
+		desabilitar_cout();
+
+		auto init = chrono::steady_clock::now();
+		encontra_aneis_coloridos_algo3_pool(g, destino, numero_casamentos, num_threads, grao);
+		auto end = chrono::steady_clock::now();
+
+		reabilitar_cout();
+		chrono::duration<double> diff = end - init;
+		double tempo = diff.count();
+		total += tempo;
+		cout << "Tempo da execucao: " << tempo << endl;
+		cout << "Número de anéis encontrados: " << get_num_aneis() << endl;
+		clear_num_aneis();
+
+		if (tempo > max) 
+			max = tempo;
+		if (tempo < min)
+			min = tempo;
+	}
+	cout << "Tempo total execução anéis coloridos com algo 3 paralelo em " << num_execucoes << " execuções: " << total << 
+		", Max: " << max << ", Min: " << min << ", Média: " << total / num_execucoes << endl;
+
+	int numero_cores = g -> map ? g -> map -> tam() : 0 ;
+	cout << "Numero de cores no grafo:" << numero_cores << endl;
+
+
+	if (numero_casamentos == 1) {
+		desabilitar_cout();
+		encontra_aneis_coloridos_algo3_pool_FIX_EXCLUIR(g, destino, numero_casamentos, num_threads, grao);
+		reabilitar_cout();
+
+		list<Anel*> aneis;
+		encontra_aneis_NOME_A_DEFINIR(destino, aneis, 2);
+		cout << "NUmero aneis: " << destino.size() << endl;
+		cout << "Numero aneis com 2 cores divididas pelas juncoes: " << aneis.size() << endl;
+
+		string caminho = "escience/" + nome_rede;
+		escreve_numeros_aneis(g, destino, caminho.c_str());
+	} else if (numero_casamentos == 2) {
+		desabilitar_cout();
+		encontra_aneis_coloridos_algo3_pool_FIX_EXCLUIR(g, destino, numero_casamentos, num_threads, grao);
+		reabilitar_cout();
+
+		list<Anel*> aneis;
+		encontra_aneis_NOME_A_DEFINIR(destino, aneis, 4);
+		cout << "NUmero aneis: " << destino.size() << endl;
+		cout << "Numero aneis com 4 cores divididas pelas juncoes: " << aneis.size() << endl;
+	}
+}
+
+void executar_escience(int argc, char *argv[]) {
+	cout << "Execução E-Science" << endl;
+	string nome_rede;
+	int numero_casamentos;
+	int num_threads;
+	int grao;
+	int num_execucoes;
+	int tipo_coloracao;
+	Grafo * g;
+	if (argc == 7) { //	./programa.out nome_arquivo numero_casamentos num_threads grao num_execucoes tipo_coloracao
+		nome_rede = string(argv[1]);
+		numero_casamentos = atoi(argv[2]);
+		num_threads = atoi(argv[3]);
+		grao = atoi(argv[4]);
+		num_execucoes = atoi(argv[5]);
+		tipo_coloracao = atoi(argv[6]);
+	} else {
+		for (int i = 1; i < argc; i++) {
+			cout << "argv[" << i << "]: " << argv[i] << endl;
+		}
+		cout << "Informações não foram fornecidas, saindo..." << endl;
+		exit(1);
+	}
+
+	g = trabalha_arquivo(nome_rede.c_str());
+	int **grafo;
+	if (g)
+		grafo = g->grafo;
+	else {
+		cout << "Entrada errada, retornando\n";
+		exit(1);
+	}
+
+	if (tipo_coloracao == 0)
+		colorir_grafo(g);
+	else if (tipo_coloracao == 1)
+		colorir_grafo_pat(g);
+	else
+		colorir_grafo_mat(g);
+
+	define_min_max_cores(g);
+	//define_super_sob(g);
+
+	executar_funcao_escience(g, numero_casamentos, num_threads, grao, num_execucoes, nome_rede);
+	exit(0);
+}
+
+//T utiliza size, front e pop_Front
+template<typename T>
+void clear(T& estrutura) {
+	while(estrutura.size() > 0) {
+		auto elemento = estrutura.front();
+		estrutura.pop_front();
+
+		delete elemento;
+	}
 }

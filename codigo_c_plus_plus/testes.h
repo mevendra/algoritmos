@@ -63,4 +63,13 @@ void m_escreve_aneis_coloridos_completo(Grafo* g, int numero_casamentos = 2, str
 void m_escreve_comum_entre_grafos(Grafo* g, string caminho = "outros/" + nome_rede + "_comum.txt");
 void m_escreve_informacao_grafos(Grafo* g, string caminho = "outros/" + nome_rede + "_info.txt");
 
+void desabilitar_cout();
+void reabilitar_cout();
+
+//EScience
+void executar_funcao_escience(Grafo* g, int numero_casamentos, int num_threads, int grao, int num_execucoes, string nome_rede);
+void executar_escience(int argc, char *argv[]);
+template<typename T>
+void clear(T& estrutura);
+
 #endif /* TESTES_H */

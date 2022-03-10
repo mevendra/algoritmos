@@ -2200,8 +2200,15 @@ public:
 
 void escreve_numeros_aneis(Grafo * g, list<Anel*> aneis, char const* caminho)
 {
+
+	cout << "escreve_numeros_aneis" << endl;
 	FILE* arquivo;
 	arquivo = fopen(caminho, "w");
+	if (!arquivo) {
+		cout << "Erro ao abrir arquivo com caminho: " << caminho << endl;
+		return;
+	}
+	
 
 	int num_casamentos = aneis.front() ? aneis.front() -> casamentos.size() : -1;
 	string lin = "Aneis A" + to_string(num_casamentos) + "C" + to_string(num_casamentos) + "\n";

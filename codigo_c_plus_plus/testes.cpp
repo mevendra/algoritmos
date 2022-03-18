@@ -689,10 +689,10 @@ void executar_funcao_escience(Grafo* g, int numero_casamentos, int num_threads, 
 
 		list<Anel*> aneis;
 		encontra_aneis_NOME_A_DEFINIR(destino, aneis, 2);
-		cout << "NUmero aneis: " << destino.size() << endl;
+		cout << "Numero aneis: " << destino.size() << endl;
 		cout << "Numero aneis com 2 cores divididas pelas juncoes: " << aneis.size() << endl;
 
-		string caminho = "escience/" + nome_rede;
+		string caminho = "escience/1_" + nome_rede;
 		escreve_numeros_aneis(g, destino, caminho.c_str());
 	} else if (numero_casamentos == 2) {
 		desabilitar_cout();
@@ -701,9 +701,14 @@ void executar_funcao_escience(Grafo* g, int numero_casamentos, int num_threads, 
 
 		list<Anel*> aneis;
 		encontra_aneis_NOME_A_DEFINIR(destino, aneis, 4);
-		cout << "NUmero aneis: " << destino.size() << endl;
-		cout << "Numero aneis com 4 cores divididas pelas juncoes: " << aneis.size() << endl;
+		cout << "Numero aneis: " << destino.size() << endl;
+		cout << "Numero aneis com 4 cores divididas pelas juncoes: " << aneis.size() << endl;		
+		
+		string caminho = "escience/2_" + nome_rede;
+		escreve_numeros_aneis(g, destino, caminho.c_str());
 	}
+
+	cout << "*************************FIM EXECUCAO: " << nome_rede << ", " << numero_casamentos << " *************************" << endl;
 }
 
 void executar_escience(int argc, char *argv[]) {
